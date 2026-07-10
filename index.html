@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#050814">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ほしぞらさんぽ">
+<meta name="description" content="こどもとおとなのWebプラネタリウム。実際の日時・場所の星空と星座のおはなし。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-180.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>ほしぞらさんぽ — Webプラネタリウム</title>
+<style>
+  /* ============ tokens (planetarium: deliberate single dark theme) ============ */
+  :root{
+    --sky-zenith:#050814;
+    --sky-horizon:#0d1731;
+    --ink:#e8ecf7;
+    --ink-dim:#9aa5c4;
+    --gold:#f0c86e;
+    --line:#7fd4e8;
+    --panel:rgba(11,16,34,.88);
+    --panel-edge:rgba(127,212,232,.22);
+    --serif:"Hiragino Mincho ProN","Yu Mincho","BIZ UDMincho","MS PMincho",serif;
+    --sans:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+  }
+  html,body{height:100%;background:#050814;}
+  #app{position:fixed;inset:0;overflow:hidden;font-family:var(--sans);color:var(--ink);
+       -webkit-user-select:none;user-select:none;background:#050814;}
+  #sky{position:absolute;inset:0;touch-action:none;cursor:grab;}
+  #sky.drag{cursor:grabbing;}
+
+  /* ---- header plate ---- */
+  #plate{position:absolute;top:12px;left:14px;pointer-events:none;z-index:5;
+         text-shadow:0 1px 8px rgba(0,0,0,.8);}
+  #plate h1{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.14em;
+            color:var(--gold);margin:0;}
+  #plate .sub{font-size:11.5px;color:var(--ink-dim);margin-top:3px;letter-spacing:.05em;
+              font-variant-numeric:tabular-nums;}
+  #plate .sub b{color:var(--ink);font-weight:600;}
+
+  #helpBtn{position:absolute;top:12px;right:14px;z-index:6;width:34px;height:34px;border-radius:50%;
+           border:1px solid var(--panel-edge);background:var(--panel);color:var(--ink-dim);
+           font-size:16px;font-family:var(--serif);cursor:pointer;}
+  #helpBtn:focus-visible{outline:2px solid var(--gold);}
+
+  /* ---- quiz bar ---- */
+  #quizBar{position:absolute;top:60px;left:50%;transform:translateX(-50%);z-index:6;display:none;
+           background:var(--panel);border:1px solid var(--gold);border-radius:999px;
+           padding:9px 18px;font-size:14px;white-space:nowrap;max-width:92vw;overflow:hidden;
+           text-overflow:ellipsis;box-shadow:0 4px 24px rgba(0,0,0,.5);}
+  #quizBar b{color:var(--gold);font-family:var(--serif);font-size:15px;}
+  #quizBar .qn{color:var(--ink-dim);font-size:12px;margin-right:8px;font-variant-numeric:tabular-nums;}
+
+  /* ---- dock ---- */
+  #dock{position:absolute;left:0;right:0;bottom:0;z-index:6;display:flex;gap:8px;
+        padding:10px 12px calc(10px + env(safe-area-inset-bottom));overflow-x:auto;
+        -webkit-overflow-scrolling:touch;scrollbar-width:none;
+        background:linear-gradient(to top, rgba(4,6,15,.92), rgba(4,6,15,0));}
+  #dock::-webkit-scrollbar{display:none;}
+  .pill{flex:0 0 auto;border:1px solid var(--panel-edge);background:var(--panel);color:var(--ink);
+        border-radius:999px;padding:9px 15px;font-size:13px;font-family:var(--sans);cursor:pointer;
+        letter-spacing:.03em;line-height:1;transition:border-color .15s, color .15s;}
+  .pill.on{border-color:var(--gold);color:var(--gold);}
+  .pill:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+  /* ---- time panel ---- */
+  #timePanel{position:absolute;left:50%;transform:translateX(-50%);bottom:64px;z-index:6;display:none;
+             width:min(480px, calc(100vw - 24px));background:var(--panel);
+             border:1px solid var(--panel-edge);border-radius:16px;padding:14px 16px;
+             box-shadow:0 8px 32px rgba(0,0,0,.55);}
+  #timePanel.open{display:block;}
+  #tpNow{font-family:var(--serif);font-size:17px;color:var(--gold);text-align:center;
+         letter-spacing:.06em;font-variant-numeric:tabular-nums;}
+  #tpSlider{width:100%;margin:12px 0 4px;accent-color:var(--gold);}
+  #tpHint{font-size:10.5px;color:var(--ink-dim);text-align:center;margin-bottom:10px;}
+  .tpRow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+  .tbtn{border:1px solid var(--panel-edge);background:transparent;color:var(--ink);
+        border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer;}
+  .tbtn.gold{border-color:var(--gold);color:var(--gold);}
+  .tbtn:focus-visible{outline:2px solid var(--gold);}
+
+  /* ---- info sheet ---- */
+  #sheet{position:absolute;left:50%;transform:translate(-50%,105%);bottom:0;z-index:7;
+         width:min(560px,100vw);max-height:62vh;overflow-y:auto;
+         background:var(--panel);backdrop-filter:blur(10px);
+         border:1px solid var(--panel-edge);border-bottom:none;border-radius:20px 20px 0 0;
+         padding:18px 22px calc(20px + env(safe-area-inset-bottom));
+         transition:transform .28s cubic-bezier(.3,1,.4,1);box-shadow:0 -8px 40px rgba(0,0,0,.6);}
+  #sheet.open{transform:translate(-50%,0);}
+  @media (prefers-reduced-motion:reduce){#sheet{transition:none;}}
+  #sheetClose{position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;
+              border:none;background:rgba(255,255,255,.08);color:var(--ink-dim);font-size:15px;cursor:pointer;}
+  .sh-kana{font-size:11px;color:var(--ink-dim);letter-spacing:.35em;}
+  .sh-name{font-family:var(--serif);font-size:26px;color:var(--gold);letter-spacing:.1em;
+           margin:2px 0 2px;font-weight:600;text-wrap:balance;}
+  .sh-en{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--ink-dim);}
+  .sh-chips{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap;}
+  .chip{font-size:10.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--panel-edge);
+        color:var(--ink-dim);letter-spacing:.06em;}
+  .chip.season{border-color:rgba(240,200,110,.5);color:var(--gold);}
+  .chip.up{border-color:rgba(140,230,170,.5);color:#9fe6b8;}
+  .sh-story{font-size:14px;line-height:2;margin-top:10px;font-family:var(--serif);}
+  .sh-story.kids{font-size:16px;line-height:2.15;font-family:var(--sans);}
+  .sh-fun{margin-top:12px;padding:11px 13px;border-left:2px solid var(--gold);
+          background:rgba(240,200,110,.06);font-size:12.5px;line-height:1.9;color:#e6d9b8;border-radius:0 8px 8px 0;}
+  .sh-fun b{color:var(--gold);font-family:var(--serif);letter-spacing:.1em;}
+  .sh-stars{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+  .star-chip{display:flex;align-items:center;gap:7px;border:1px solid var(--panel-edge);
+             border-radius:10px;padding:7px 11px;font-size:11.5px;color:var(--ink);}
+  .star-chip .dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 6px currentColor;}
+  .star-chip small{color:var(--ink-dim);font-variant-numeric:tabular-nums;}
+  .tempbar{margin-top:14px;}
+  .tempbar .bar{position:relative;height:10px;border-radius:5px;
+    background:linear-gradient(90deg,#8fb0ff,#dfe6ff,#fff6e0,#ffc98a,#ff8a5c);}
+  .tempbar .mk{position:absolute;top:-4px;width:4px;height:18px;background:#fff;border-radius:2px;
+               box-shadow:0 0 6px #fff;transform:translateX(-50%);}
+  .tempbar .lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-dim);margin-top:5px;}
+
+  /* ---- help overlay ---- */
+  #help{position:absolute;inset:0;z-index:9;background:rgba(3,5,12,.78);display:none;
+        align-items:center;justify-content:center;padding:20px;}
+  #help.open{display:flex;}
+  #helpCard{max-width:400px;background:var(--panel);border:1px solid var(--panel-edge);
+            border-radius:20px;padding:26px 26px 22px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.7);}
+  #helpCard h2{font-family:var(--serif);color:var(--gold);letter-spacing:.2em;font-size:20px;
+               margin:0 0 4px;font-weight:600;}
+  #helpCard .tag{font-size:10.5px;color:var(--ink-dim);letter-spacing:.3em;}
+  #helpCard ul{list-style:none;padding:0;margin:18px 0;text-align:left;display:grid;gap:11px;}
+  #helpCard li{font-size:13px;line-height:1.7;display:flex;gap:12px;align-items:baseline;}
+  #helpCard li .k{flex:0 0 74px;color:var(--gold);font-family:var(--serif);font-size:12.5px;
+                  letter-spacing:.08em;text-align:right;}
+  #helpStart{margin-top:4px;border:1px solid var(--gold);background:rgba(240,200,110,.12);
+             color:var(--gold);border-radius:999px;padding:11px 34px;font-size:14px;
+             font-family:var(--serif);letter-spacing:.25em;cursor:pointer;}
+
+  /* ---- toast ---- */
+  #toast{position:absolute;top:60px;left:50%;transform:translateX(-50%);z-index:8;
+         background:var(--panel);border:1px solid var(--panel-edge);border-radius:12px;
+         padding:10px 18px;font-size:12.5px;opacity:0;transition:opacity .3s;pointer-events:none;
+         max-width:88vw;text-align:center;line-height:1.6;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+  #toast.show{opacity:1;}
+
+  @media (max-width:420px){
+    #plate h1{font-size:17px;}
+    .sh-name{font-size:22px;}
+  }
+</style>
+</head>
+<body style="margin:0">
+<div id="app">
+  <canvas id="sky"></canvas>
+
+  <div id="plate">
+    <h1>ほしぞらさんぽ</h1>
+    <div class="sub"><b id="pTime">--</b><br><span id="pLoc">東京</span>の空 ・ <span id="pDir">南</span>を向いています</div>
+  </div>
+  <button id="helpBtn" aria-label="つかいかた">?</button>
+
+  <div id="quizBar"><span class="qn" id="qNum"></span><span id="qText"></span></div>
+
+  <div id="timePanel">
+    <div id="tpNow">--</div>
+    <input id="tpSlider" type="range" min="-720" max="720" step="10" value="0" aria-label="時間を動かす">
+    <div id="tpHint">← 12時間まえ　｜　スライダーで時間たび　｜　12時間あと →</div>
+    <div class="tpRow">
+      <button class="tbtn" data-d="-30">−1ヶ月</button>
+      <button class="tbtn" data-d="-1">−1日</button>
+      <button class="tbtn gold" id="tpNowBtn">いまに戻る</button>
+      <button class="tbtn" data-d="1">＋1日</button>
+      <button class="tbtn" data-d="30">＋1ヶ月</button>
+      <button class="tbtn" id="tpPlay">▶ 早送り</button>
+    </div>
+  </div>
+
+  <nav id="dock">
+    <button class="pill on" id="bLines">星座線</button>
+    <button class="pill on" id="bNames">名まえ</button>
+    <button class="pill" id="bAst">大三角</button>
+    <button class="pill" id="bTime">時間たび</button>
+    <button class="pill" id="bLoc">場所: 東京</button>
+    <button class="pill" id="bQuiz">クイズ</button>
+    <button class="pill" id="bKids">ひらがなモード</button>
+  </nav>
+
+  <section id="sheet" aria-live="polite">
+    <button id="sheetClose" aria-label="とじる">✕</button>
+    <div id="sheetBody"></div>
+  </section>
+
+  <div id="help">
+    <div id="helpCard">
+      <h2>ほしぞらさんぽ</h2>
+      <div class="tag">WEB PLANETARIUM</div>
+      <ul>
+        <li><span class="k">ドラッグ</span><span>空を見まわす（スマホは指でスワイプ）</span></li>
+        <li><span class="k">ピンチ / ホイール</span><span>ズームイン・ズームアウト</span></li>
+        <li><span class="k">星座をタップ</span><span>星座の由来やお話がひらくよ</span></li>
+        <li><span class="k">時間たび</span><span>時間をうごかすと、星と太陽がうごく！</span></li>
+        <li><span class="k">場所</span><span>シドニーに行くと南十字星がみえる</span></li>
+      </ul>
+      <button id="helpStart">はじめる</button>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+'use strict';
+/* =================================================================
+   ほしぞらさんぽ — self-contained web planetarium
+   星データ: 主要恒星の J2000 赤経(時)・赤緯(度)・実視等級・B-V。
+   教育用プロトタイプにつき、暗い星の一部座標は近似。
+   ================================================================= */
+const DEG = Math.PI/180, TAU = Math.PI*2;
+const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
+const lerp  = (a,b,t)=>a+(b-a)*t;
+const smooth= (a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);};
+
+/* ---------------- constellation catalog ----------------
+   ss: [ra(h), dec(deg), mag, bv, name?, 光年?, flag?]  flag: 'cl'=星団 'neb'=散開ぼんやり */
+const CONS = [
+{id:'ori',jp:'オリオン座',kana:'おりおん',en:'Orion',season:'冬',
+ ss:[[5.919,7.407,0.45,1.85,'ベテルギウス',500],[5.242,-8.202,0.13,-0.03,'リゲル',860],
+     [5.418,6.350,1.64,-0.22,'ベラトリックス',250],[5.533,-0.299,2.23,-0.22,'ミンタカ',1200],
+     [5.604,-1.202,1.69,-0.18,'アルニラム',2000],[5.679,-1.943,1.77,-0.20,'アルニタク',1250],
+     [5.796,-9.670,2.09,-0.17,'サイフ',650],[5.585,9.934,3.39,-0.16,'メイサ']],
+ ln:[[0,2],[0,7],[2,7],[2,3],[0,5],[3,4],[4,5],[3,1],[5,6],[1,6]],
+ kid:'みっつ ならんだ ほしの ベルトが めじるし。かりゅうど オリオンの すがただよ。ひだりうえの あかい ほしと みぎしたの あおい ほし、いろが ちがうの わかるかな？',
+ adl:'ギリシャ神話の狩人オリオン。サソリの毒で命を落としたため、さそり座が東から昇るとオリオン座は逃げるように西へ沈む、と語り継がれています。三つ星の下には肉眼でも見えるオリオン大星雲があり、いまも新しい星が生まれています。',
+ fun:'赤いベテルギウスは太陽の約900倍もある超巨星。星としての一生の終わりが近く、いつ超新星爆発してもおかしくないといわれています。'},
+{id:'tau',jp:'おうし座',kana:'おうし',en:'Taurus',season:'冬',
+ ss:[[4.599,16.509,0.85,1.54,'アルデバラン',67],[5.438,28.608,1.68,-0.13,'エルナト',134],
+     [5.627,21.143,3.01,-0.15],[4.330,15.627,3.65,0.99],[4.382,17.543,3.77,0.98],
+     [4.477,19.180,3.53,1.01],[4.011,12.490,3.47,-0.12],
+     [3.791,24.105,1.6,-0.05,'すばる（プレアデス星団）',440,'cl']],
+ ln:[[6,3],[3,0],[3,4],[4,5],[5,1],[0,2]],
+ kid:'オリオンに つっこんでいく うしさん。めの ところに あかい ほし アルデバラン、せなかには ほしの あつまり「すばる」が キラキラ！',
+ adl:'大神ゼウスが白い牡牛に変身し、王女エウロパを背に乗せて海を渡った姿とされます。顔にはヒアデス星団、肩にはプレアデス星団（すばる）と、星団を2つも持つ豪華な星座です。',
+ fun:'「すばる」は日本の古いことば。清少納言も枕草子で「星はすばる」と書いています。目のいい人なら6〜7個の星に見えるよ。'},
+{id:'gem',jp:'ふたご座',kana:'ふたご',en:'Gemini',season:'冬',
+ ss:[[7.755,28.026,1.14,1.00,'ポルックス',34],[7.577,31.888,1.58,0.03,'カストル',51],
+     [6.629,16.399,1.93,0.00,'アルヘナ'],[6.383,22.514,2.87,1.64],[6.732,25.131,2.98,1.40],
+     [7.335,21.982,3.53,0.34],[7.301,16.540,3.58,0.11],[6.754,12.896,3.35,0.44]],
+ ln:[[0,1],[1,4],[4,3],[0,5],[5,6],[5,2],[2,7]],
+ kid:'なかよし ふたごの カストルと ポルックス。ならんだ ふたつの あかるい ほしが、ふたごの あたまだよ。',
+ adl:'ゼウスの双子カストルとポルックス。兄カストルが命を落としたとき、不死の弟ポルックスが「二人で一緒にいたい」と願い、星座になったと伝えられる兄弟愛の象徴です。',
+ fun:'毎年12月なかばの「ふたご座流星群」は、一年でいちばんたくさん流れ星が見える流星群のひとつ。'},
+{id:'cnc',jp:'かに座',kana:'かに',en:'Cancer',season:'冬〜春',
+ ss:[[8.275,9.186,3.52,1.48],[8.745,18.154,3.94,1.08],[8.777,28.766,4.02,1.01],
+     [8.975,11.858,4.25,0.14],[8.721,21.469,4.66,0.01],
+     [8.670,19.670,3.7,0.6,'プレセペ星団',600,'neb']],
+ ln:[[2,4],[4,1],[1,0],[1,3]],
+ kid:'よこあるきの カニさん。ほしは くらいけど、まんなかに「プレセペ」という ほしの あつまりが、ぼんやり みえるよ。',
+ adl:'英雄ヘラクレスがヒドラと戦ったとき、女神ヘラが送りこんだ化けガニ。あえなく踏みつぶされましたが、ヘラが星座にしました。中央のプレセペ星団は「飼い葉おけ」の意味です。',
+ fun:'プレセペ星団は約600光年先の星の大集団。古代の人は正体がわからず、雲のような不思議なものと考えていました。'},
+{id:'leo',jp:'しし座',kana:'しし',en:'Leo',season:'春',
+ ss:[[10.139,11.967,1.35,-0.09,'レグルス',79],[11.818,14.572,2.14,0.09,'デネボラ',36],
+     [10.333,19.842,2.08,1.15,'アルギエバ'],[10.279,23.417,3.44,0.31],[9.879,26.007,3.88,1.22],
+     [9.764,23.774,2.98,0.81],[10.122,16.763,3.52,-0.03],[11.237,15.430,3.34,-0.01],
+     [11.235,20.524,2.56,0.13]],
+ ln:[[0,6],[6,2],[2,3],[3,4],[4,5],[2,8],[8,1],[1,7],[7,0]],
+ kid:'「？」を うらがえした みたいな ほしの ならびが ライオンの あたま。しんぞうの ところに あかるい ほし レグルスが かがやくよ。',
+ adl:'ヘラクレスが最初に退治した、ネメアの谷の不死身のライオン。矢も剣も通じず、素手で締め上げて倒したといいます。レグルスはラテン語で「小さな王」という意味です。',
+ fun:'レグルスはものすごい速さで自転していて、赤道方向にふくらんだミカンのような形をしていると考えられています。'},
+{id:'vir',jp:'おとめ座',kana:'おとめ',en:'Virgo',season:'春',
+ ss:[[13.420,-11.161,0.97,-0.24,'スピカ',250],[12.694,-1.449,2.74,0.36,'ポリマ'],
+     [13.036,10.959,2.83,0.93],[12.927,3.397,3.38,1.58],[11.845,1.765,3.60,0.55],
+     [12.332,-0.667,3.89,0.02],[13.578,-0.596,3.37,0.11]],
+ ln:[[0,1],[1,5],[5,4],[1,3],[3,2],[0,6],[6,3]],
+ kid:'はるの そらに すーっと たつ めがみさま。てに もっている むぎの ほが、あかるい ほし スピカだよ。',
+ adl:'豊穣の女神デメテルの姿とも、正義の女神アストライアの姿ともいわれます。娘が冥界にいる季節はデメテルが悲しみ、大地が実らなくなる——季節のはじまりを語る神話と結びついた星座です。',
+ fun:'スピカは2つの高温の星がまわり合う連星で、表面は約2万度。青白いかがやきは日本で「真珠星」とも呼ばれました。'},
+{id:'lib',jp:'てんびん座',kana:'てんびん',en:'Libra',season:'初夏',
+ ss:[[14.848,-16.042,2.75,0.15,'ズベンエルゲヌビ'],[15.283,-9.383,2.61,-0.07,'ズベンエスカマリ'],
+     [15.067,-25.282,3.29,1.70],[15.592,-14.789,3.91,1.01]],
+ ln:[[0,1],[1,3],[3,0],[0,2]],
+ kid:'てんびんの おさらが ゆらゆら。おとめざの めがみさまが、ひとの こころを はかる ための てんびんだよ。',
+ adl:'正義の女神アストライアが人の心の善悪を量った天秤とされます。かつてはさそり座の一部で、α星とβ星には今も「南の爪」「北の爪」という意味の名前が残っています。',
+ fun:'β星ズベンエスカマリは「肉眼で緑色に見える」といわれてきた珍しい星。ほんとうに緑に見えるか、ためしてみて。'},
+{id:'sco',jp:'さそり座',kana:'さそり',en:'Scorpius',season:'夏',
+ ss:[[16.490,-26.432,1.06,1.83,'アンタレス',550],[16.091,-19.805,2.62,-0.07],
+     [16.006,-22.622,2.29,-0.12],[15.981,-26.114,2.89,-0.19],[16.353,-25.593,2.89,0.13],
+     [16.598,-28.216,2.82,-0.25],[16.836,-34.293,2.29,1.15],[16.864,-38.047,3.00,-0.20],
+     [16.906,-42.361,3.62,1.40],[17.202,-43.239,3.33,0.44],[17.622,-42.998,1.86,0.40,'サルガス'],
+     [17.793,-40.127,2.99,0.51],[17.708,-39.030,2.39,-0.17],[17.560,-37.104,1.62,-0.22,'シャウラ',700],
+     [17.513,-37.296,2.70,-0.21]],
+ ln:[[1,2],[2,3],[2,4],[4,0],[0,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14]],
+ kid:'おおきな「エス」の じが サソリの しっぽ！しんぞうには あかい ほし アンタレス。なつの みなみの ひくい そらで さがしてみよう。',
+ adl:'狩人オリオンを刺した毒サソリが、その功績で星座になりました。アンタレスは「火星（アレス）に対抗するもの」の意味。数年に一度、火星が近くを通ると赤さくらべが見られます。',
+ fun:'アンタレスは太陽の約700倍の赤色超巨星。日本では「赤星」や「酒酔い星」という愛称で呼ばれていました。'},
+{id:'sgr',jp:'いて座',kana:'いて',en:'Sagittarius',season:'夏',
+ ss:[[18.403,-34.385,1.85,-0.03,'カウス・アウストラリス'],[18.921,-26.297,2.02,-0.13,'ヌンキ'],
+     [19.043,-29.880,2.60,0.06],[18.350,-29.828,2.70,1.38],[18.466,-25.421,2.81,1.04],
+     [18.096,-30.424,2.99,1.00],[18.762,-26.990,3.17,-0.11],[19.115,-27.670,3.32,1.19]],
+ ln:[[5,3],[3,0],[0,2],[2,6],[6,3],[6,1],[1,7],[7,2],[4,3],[4,6]],
+ kid:'ゆみやを かまえた ケンタウロス。あかるい ほしを つなぐと「ティーポット」の かたちにも みえるよ。おちゃが でそう！',
+ adl:'賢者ケイロンの姿ともいわれる射手で、弓矢はさそり座の心臓アンタレスに向けられています。この方向には天の川銀河の中心があり、夏の天の川がいちばん濃く見える場所です。',
+ fun:'いて座の方向・約2万6千光年先が銀河系の中心。そこには太陽の400万倍も重い巨大ブラックホールがひそんでいます。'},
+{id:'cap',jp:'やぎ座',kana:'やぎ',en:'Capricornus',season:'秋',
+ ss:[[20.350,-14.781,3.05,0.79],[20.301,-12.545,3.57,0.94],[21.784,-16.127,2.85,0.29],
+     [21.668,-16.662,3.69,0.32],[21.444,-22.411,3.77,1.00],[20.768,-25.271,4.13,0.43],
+     [20.864,-26.919,4.12,1.64],[21.099,-17.233,4.07,0.06]],
+ ln:[[1,0],[0,5],[5,6],[6,4],[4,2],[2,3],[1,7],[7,2]],
+ kid:'うえはんぶんは ヤギ、したはんぶんは さかなの、ふしぎな いきもの。にっこり わらった くちみたいな かたちだよ。',
+ adl:'牧神パンが怪物テュポンにおどろいて川へ飛びこんだとき、あわてて下半身だけ魚に変身してしまった姿。逆三角形の星の並びは「天空の笑い口」とも呼ばれます。',
+ fun:'約2000年前、冬至の太陽はやぎ座にありました。地球の「南回帰線」は英語で Tropic of Capricorn ——やぎ座の名前が残っています。'},
+{id:'aqr',jp:'みずがめ座',kana:'みずがめ',en:'Aquarius',season:'秋',
+ ss:[[22.096,-0.320,2.95,0.98,'サダルメリク'],[21.526,-5.571,2.90,0.83,'サダルスウド'],
+     [22.361,-1.387,3.86,-0.05],[22.911,-15.821,3.27,0.07],[22.877,-7.580,3.73,1.63],
+     [20.794,-9.496,3.78,0.01],[22.589,-0.117,4.04,-0.09],[22.480,-0.020,3.65,0.39]],
+ ln:[[1,5],[1,0],[0,2],[2,7],[7,6],[0,4],[4,3]],
+ kid:'みずがめから みずを ざあざあ ながす おとこのこ。みずは、したに いる おさかなの くちまで つづいているんだよ。',
+ adl:'大神ゼウスに気に入られ、オリンポスで神々に水をそそぐ役目をあたえられた美少年ガニュメデスの姿とされます。流れる水の先には一等星フォーマルハウトが待っています。',
+ fun:'秋の南の空にぽつんと光るフォーマルハウトは「秋のひとつ星」。まわりに明るい星が少ないので、さびしがりやの星に見えます。'},
+{id:'psc',jp:'うお座',kana:'うお',en:'Pisces',season:'秋',
+ ss:[[23.286,3.282,3.70,0.92],[23.466,6.379,4.28,1.07],[23.665,5.626,4.13,0.51],
+     [23.702,1.780,4.49,0.20],[23.448,1.256,4.94,0.03],[23.988,6.864,4.03,0.42],
+     [0.811,7.585,4.44,1.50],[1.049,7.890,4.27,0.96],[1.690,5.487,4.44,1.36],
+     [2.034,2.764,3.82,0.03,'アルレシャ'],[1.756,9.158,4.26,0.96],[1.525,15.346,3.62,0.97]],
+ ln:[[0,1],[1,2],[2,3],[3,4],[4,0],[2,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]],
+ kid:'リボンで むすばれた にひきの おさかな。おやこで、はなればなれに ならないように してるんだって。',
+ adl:'怪物テュポンにおどろいた美の女神アフロディテと息子エロスが、魚に変身して川へ逃げた姿。はぐれないように、おたがいをひもで結んだといわれます。',
+ fun:'いま「春分点」（春分の日に太陽がいる場所）はうお座にあります。星占いの星座と実際の空が約2000年分ずれている理由です。'},
+{id:'ari',jp:'おひつじ座',kana:'おひつじ',en:'Aries',season:'秋〜冬',
+ ss:[[2.120,23.463,2.00,1.15,'ハマル',66],[1.911,20.808,2.64,0.13,'シェラタン'],[1.884,19.294,3.88,-0.04]],
+ ln:[[0,1],[1,2]],
+ kid:'そらを とべる きんいろの ひつじ。カーブした ほしの ならびが、りっぱな ツノだよ。',
+ adl:'継母に殺されそうになった王子を背に乗せ、空を飛んで救った金色の毛の羊。のちにその毛皮「金羊毛」は、英雄イアソンとアルゴー号の冒険の目的になりました。',
+ fun:'約2000年前は春分点がおひつじ座にありました。そのなごりで、星占いは今も「おひつじ座」からはじまります。'},
+{id:'cma',jp:'おおいぬ座',kana:'おおいぬ',en:'Canis Major',season:'冬',
+ ss:[[6.752,-16.716,-1.46,0.00,'シリウス',8.6],[6.378,-17.956,1.98,-0.24,'ミルザム'],
+     [6.977,-28.972,1.50,-0.21,'アダーラ'],[7.140,-26.393,1.84,0.68],[7.401,-29.303,2.45,-0.08]],
+ ln:[[0,1],[0,3],[3,2],[3,4]],
+ kid:'オリオンの かりの いぬ。くびもとには、よぞらで いちばん あかるい ほし シリウスが ギラギラ！',
+ adl:'狩人オリオンの猟犬。シリウスは全天でもっとも明るい恒星で、名前はギリシャ語の「焼きこがすもの」。古代エジプトでは、シリウスの動きでナイル川の増水の時期を予測していました。',
+ fun:'シリウスまでは8.6光年で、宇宙では「ご近所さん」。白色矮星という小さな相棒の星シリウスBを連れています。'},
+{id:'cmi',jp:'こいぬ座',kana:'こいぬ',en:'Canis Minor',season:'冬',
+ ss:[[7.655,5.225,0.34,0.42,'プロキオン',11.5],[7.453,8.289,2.89,-0.10,'ゴメイサ']],
+ ln:[[0,1]],
+ kid:'ちいさな いぬさん。あかるい ほし プロキオンと、もう ひとつの ほしだけで できた、シンプルな せいざだよ。',
+ adl:'プロキオンは「犬（シリウス）に先立つもの」の意味。シリウスより少し早く昇ることから名づけられました。ベテルギウス・シリウスと結ぶと「冬の大三角」になります。',
+ fun:'プロキオンも11.5光年と近くの星。シリウスとおなじく、白色矮星の相棒をもっています。'},
+{id:'aur',jp:'ぎょしゃ座',kana:'ぎょしゃ',en:'Auriga',season:'冬',
+ ss:[[5.278,45.998,0.08,0.80,'カペラ',43],[5.992,44.947,1.90,0.03,'メンカリナン'],
+     [5.995,37.213,2.65,-0.08],[4.950,33.166,2.69,1.53],[5.033,43.823,2.99,0.54],
+     [5.438,28.608,1.68,-0.13,'エルナト（おうし座と共有）']],
+ ln:[[0,4],[4,3],[3,5],[5,2],[2,1],[1,0]],
+ kid:'ごかくけいの おうちみたいな かたち。いちばん あかるい カペラは「こヤギを だっこした ほし」なんだよ。',
+ adl:'戦車（チャリオット）を発明したアテネの王の姿といわれます。カペラは「雌の子ヤギ」の意味で、御者が子ヤギをかかえた姿で描かれます。一等星の中ではもっとも北にあり、日本からは一年の多くの時期に見えます。',
+ fun:'カペラは実は4つの星のセット。大きな巨星2つと、小さな赤い星2つがまわり合っています。'},
+{id:'uma',jp:'おおぐま座',kana:'おおぐま',en:'Ursa Major',season:'春（北の空）',
+ ss:[[11.062,61.751,1.79,1.07,'ドゥーベ',123],[11.031,56.382,2.37,0.03,'メラク'],
+     [11.897,53.695,2.44,0.04],[12.257,57.033,3.31,0.08],[12.900,55.960,1.77,-0.02,'アリオト'],
+     [13.399,54.925,2.27,0.06,'ミザール',83],[13.792,49.313,1.86,-0.10,'アルカイド',104]],
+ ln:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]],
+ kid:'きたの そらの おおきな クマ。しっぽの ななつの ほしは、おなべみたいな かたちの「ほくとしちせい」だよ。',
+ adl:'ゼウスに愛されたニンフ・カリストが、嫉妬した女神ヘラにクマの姿に変えられたもの。北斗七星の柄の2番目ミザールのそばには小さな星アルコルがあり、昔は兵士の視力検査に使われたといいます。',
+ fun:'北斗七星のひしゃくの先の2星をのばすと北極星に、柄のカーブをのばすと「春の大曲線」でアークトゥルス→スピカにたどりつきます。'},
+{id:'umi',jp:'こぐま座',kana:'こぐま',en:'Ursa Minor',season:'一年中（北の空）',
+ ss:[[2.530,89.264,1.98,0.60,'ポラリス（北極星）',430],[14.845,74.155,2.08,1.47,'コカブ'],
+     [15.345,71.834,3.05,0.05],[17.537,86.586,4.36,0.02],[16.766,82.037,4.23,0.89],
+     [15.734,77.795,4.32,0.04],[16.291,75.755,4.95,0.37]],
+ ln:[[0,3],[3,4],[4,5],[5,1],[1,2],[2,6],[6,5]],
+ kid:'ちいさな クマの しっぽの さきが「ほっきょくせい」。いつも ほとんど うごかないで、きたの ほうこうを おしえてくれる ほしだよ。',
+ adl:'クマにされたカリストの息子アルカスの姿。北極星ポラリスは地球の自転軸のほぼ延長上にあるため動かず、大昔から旅人や船乗りの道しるべでした。時間を早送りして、まわりの星が北極星を中心に回るのを見てみてください。',
+ fun:'北極星は永遠ではありません。地球のコマのような首ふり運動のせいで、約1万2千年後には、こと座のベガが北極星になります。'},
+{id:'cas',jp:'カシオペヤ座',kana:'かしおぺや',en:'Cassiopeia',season:'一年中（北の空）',
+ ss:[[0.153,59.150,2.27,0.34,'カフ'],[0.675,56.537,2.24,1.17,'シェダル'],
+     [0.945,60.717,2.47,-0.15],[1.430,60.235,2.68,0.13],[1.907,63.670,3.38,-0.15]],
+ ln:[[0,1],[1,2],[2,3],[3,4]],
+ kid:'アルファベットの「W」の かたち！みつけやすいから、きたの そらの めじるしに ぴったりだよ。',
+ adl:'エチオピア王妃カシオペヤ。「娘のアンドロメダは海の妖精より美しい」と自慢して海神の怒りを買い、罰として椅子にしばられたまま天をまわりつづけている、といわれます。',
+ fun:'北斗七星が低いときはカシオペヤ座から北極星をさがせます。日本では形から「錨星（いかりぼし）」「山形星」とも呼ばれました。'},
+{id:'cyg',jp:'はくちょう座',kana:'はくちょう',en:'Cygnus',season:'夏',
+ ss:[[20.690,45.280,1.25,0.09,'デネブ',1400],[20.371,40.257,2.20,0.68,'サドル'],
+     [20.770,33.970,2.46,1.03],[19.749,45.131,2.87,-0.03],[19.512,27.960,3.08,1.09,'アルビレオ',430]],
+ ln:[[0,1],[1,2],[1,3],[1,4]],
+ kid:'はねを ひろげて あまのがわの うえを とぶ はくちょう。おおきな じゅうじの かたちだよ。',
+ adl:'大神ゼウスが白鳥に変身した姿とされます。しっぽのデネブは夏の大三角のひとつ。くちばしのアルビレオはオレンジと青の美しい二重星で、宮沢賢治の「銀河鉄道の夜」にも登場します。',
+ fun:'デネブは約1400光年のかなた。あの遠さであの明るさ——実際の明るさは太陽の5万倍以上という、桁ちがいの星です。'},
+{id:'lyr',jp:'こと座',kana:'こと',en:'Lyra',season:'夏',
+ ss:[[18.616,38.784,0.03,0.00,'ベガ（おりひめ星）',25],[18.746,37.605,4.36,0.19],
+     [18.835,33.363,3.52,0.00],[18.982,32.690,3.24,-0.05],[18.908,36.899,4.30,1.68],
+     [18.739,39.673,4.59,0.15]],
+ ln:[[0,5],[0,1],[1,2],[2,3],[3,4],[4,1]],
+ kid:'てんさい おんがくかの たてごと。まなつの よる、あたまの うえで いちばん キラキラ してるのが ベガ＝おりひめぼし！',
+ adl:'竪琴の名手オルフェウスの琴とされます。ベガは七夕の織女星。わし座のアルタイル（彦星）と天の川をはさんで向かい合いますが、実際の2つの星は14光年もはなれています。',
+ fun:'ベガは約25光年先。光の速さでも25年かかるので、いま見えている光は約25年前にベガを出発した光です。'},
+{id:'aql',jp:'わし座',kana:'わし',en:'Aquila',season:'夏',
+ ss:[[19.846,8.868,0.77,0.22,'アルタイル（ひこ星）',17],[19.771,10.613,2.72,1.52,'タラゼド'],
+     [19.922,6.407,3.71,0.86],[19.090,13.863,2.99,0.01],[20.188,-0.821,3.24,-0.07],
+     [19.424,3.115,3.36,0.32]],
+ ln:[[1,0],[0,2],[0,5],[5,3],[5,4]],
+ kid:'かみさまの おつかいを する おおきな ワシ。むねに かがやく アルタイルは、たなばたの ひこぼしだよ。',
+ adl:'大神ゼウスの使いの大鷲の姿。アルタイルは七夕の牽牛星（彦星）で、両わきに小さな星を従えた姿は、日本で「犬飼い三星」とも呼ばれました。',
+ fun:'アルタイルは約9時間で1回転する高速自転の星。遠心力で、赤道方向につぶれた楕円形をしています。'},
+{id:'boo',jp:'うしかい座',kana:'うしかい',en:'Boötes',season:'春',
+ ss:[[14.261,19.182,-0.05,1.23,'アークトゥルス',37],[14.749,27.074,2.35,0.97,'イザール'],
+     [13.911,18.398,2.68,0.58],[14.535,38.308,3.04,0.19],[15.258,33.315,3.46,0.95],
+     [15.032,40.390,3.49,0.97],[14.530,30.371,3.57,1.30]],
+ ln:[[0,2],[0,1],[1,4],[4,5],[5,3],[3,6],[6,0]],
+ kid:'アイスクリームの コーンみたいな かたち。オレンジいろの アークトゥルスは「クマの ばんにん」って いう いみだよ。',
+ adl:'おおぐま座を追いかける牛飼いの姿。アークトゥルスは全天で4番目に明るい星で、日本では麦の刈り入れのころ夕空に見えることから「麦星」と呼ばれました。',
+ fun:'アークトゥルスは秒速約120kmで宇宙を移動中。数万年後には星座の形が少し変わってしまいます。'},
+{id:'peg',jp:'ペガスス座',kana:'ぺがすす',en:'Pegasus',season:'秋',
+ ss:[[23.079,15.205,2.48,-0.04,'マルカブ'],[23.063,28.083,2.42,1.66,'シェアト'],
+     [0.220,15.184,2.83,-0.19,'アルゲニブ'],[21.736,9.875,2.39,1.52,'エニフ'],
+     [0.140,29.091,2.06,-0.04,'アルフェラッツ（アンドロメダ座と共有）',97]],
+ ln:[[0,1],[1,4],[4,2],[2,0],[0,3]],
+ kid:'そらとぶ しろい うま ペガスス。よっつの ほしで できた おおきな しかくが、うまの からだだよ。',
+ adl:'英雄ペルセウスが倒したメドゥーサから生まれた天馬。秋の夜空にうかぶ大きな「ペガススの大四辺形」は、秋の星座さがしの出発点になります。',
+ fun:'四辺形の中に星がいくつ見えるかで、その場所の空の暗さがわかります。都会では0個、空のきれいな場所なら10個以上！'},
+{id:'and',jp:'アンドロメダ座',kana:'あんどろめだ',en:'Andromeda',season:'秋',
+ ss:[[0.140,29.091,2.06,-0.04,'アルフェラッツ',97],[1.162,35.621,2.06,1.58,'ミラク'],
+     [2.065,42.330,2.26,1.28,'アルマク'],[0.656,30.861,3.27,1.28]],
+ ln:[[0,3],[3,1],[1,2]],
+ kid:'くさりで つながれた おひめさま アンドロメダ。からだの そばには、うずまきの「アンドロメダぎんが」が あるよ！',
+ adl:'母カシオペヤの自慢話のせいで、海の怪物のいけにえにされた王女。危機一髪のところを英雄ペルセウスに救われます。秋の空には、この物語の登場人物たちの星座が勢ぞろいしています。',
+ fun:'アンドロメダ銀河は約250万光年先。肉眼で見えるもっとも遠い天体で、約40億年後には私たちの天の川銀河と合体すると予測されています。'},
+{id:'per',jp:'ペルセウス座',kana:'ぺるせうす',en:'Perseus',season:'秋〜冬',
+ ss:[[3.405,49.861,1.79,0.48,'ミルファク'],[3.136,40.956,2.12,-0.05,'アルゴル',90],
+     [3.080,53.506,2.93,0.70],[3.715,47.788,3.01,-0.13],[3.964,40.010,2.89,-0.18],
+     [3.902,31.884,2.85,0.12]],
+ ln:[[2,0],[0,3],[3,4],[4,5],[0,1]],
+ kid:'まものを たおした ゆうしゃ ペルセウス。てに もった まものの めが、あやしく またたく ほし アルゴルだよ！',
+ adl:'怪物メドゥーサ退治とアンドロメダ姫の救出で知られる英雄。β星アルゴルは約2.9日ごとに明るさが変わる変光星で、「悪魔の頭」という不吉な名前をもっています。',
+ fun:'アルゴルの明るさが変わるのは、2つの星がおたがいをかくし合うから。毎年8月のペルセウス座流星群でも有名です。'},
+{id:'cru',jp:'みなみじゅうじ座',kana:'みなみじゅうじ',en:'Crux',season:'南半球',
+ ss:[[12.443,-63.099,0.77,-0.24,'アクルックス',320],[12.795,-59.689,1.25,-0.24,'ミモザ'],
+     [12.519,-57.113,1.63,1.59,'ガクルックス'],[12.252,-58.749,2.79,-0.19]],
+ ln:[[0,2],[1,3]],
+ kid:'みなみはんきゅうで みえる、ちいさな じゅうじか「みなみじゅうじせい」。にほんからは ほとんど みえないよ。「ばしょ」ボタンで シドニーに いってみよう！',
+ adl:'全天88星座でいちばん小さい星座。南半球には北極星のような星がないため、十字の長い軸をのばして天の南極を見つける道しるべに使われます。オーストラリアやニュージーランドの国旗にも描かれています。',
+ fun:'沖縄の石垣島あたりまで南へ行くと、冬から初夏の限られた時間だけ、地平線すれすれに全体が見えます。'}
+];
+
+/* lone bright stars (constellation figure外) */
+const LONE = [
+ [22.961,-29.622,1.16,0.09,'フォーマルハウト',25,'みなみのうお座'],
+ [9.460,-8.659,1.98,1.44,'アルファルド',180,'うみへび座'],
+ [6.399,-52.696,-0.74,0.15,'カノープス',310,'りゅうこつ座'],
+ [1.629,-57.237,0.46,-0.16,'アケルナル',139,'エリダヌス座'],
+ [14.660,-60.834,-0.27,0.71,'リギル・ケンタウルス',4.4,'ケンタウルス座'],
+ [14.064,-60.373,0.61,-0.23,'ハダル',390,'ケンタウルス座'],
+ [12.573,-23.397,2.65,0.89,'',0,''],[16.239,-3.694,2.63,1.17,'',0,''],
+ [10.716,-64.394,2.74,-0.22,'',0,''],[5.560,-62.490,3.3,0.21,'',0,'']
+];
+
+/* deep-sky glow objects */
+const DSO = [
+ {ra:0.712, dec:41.269, name:'M31 アンドロメダ銀河', r:1.6, tilt:0.9},
+];
+
+/* asterisms */
+const ASTER = [
+ {name:'夏の大三角', pts:[[18.616,38.784],[19.846,8.868],[20.690,45.280]], close:true},
+ {name:'冬の大三角', pts:[[5.919,7.407],[6.752,-16.716],[7.655,5.225]], close:true},
+ {name:'春の大曲線', pts:[[13.792,49.313],[14.261,19.182],[13.420,-11.161]], close:false}
+];
+
+/* milky way band waypoints: [ra(h), dec, width(deg), intensity] */
+const MW = [[0.4,62,9,.5],[1.8,60,10,.5],[3.4,52,10,.55],[4.6,44,10,.5],[5.6,32,11,.5],
+ [6.3,18,11,.45],[6.9,5,12,.45],[7.5,-12,12,.5],[8.1,-26,12,.55],[9,-42,12,.6],
+ [10.5,-55,12,.6],[12.4,-62,12,.65],[13.8,-62,12,.7],[15.3,-57,12,.75],[16.3,-50,13,.85],
+ [16.9,-42,14,.95],[17.5,-33,15,1],[17.9,-27,16,1],[18.3,-20,15,.95],[18.7,-12,14,.9],
+ [19.2,-3,13,.8],[19.7,6,12,.75],[20.2,18,12,.7],[20.6,30,11,.7],[21.2,40,11,.65],
+ [21.9,50,10,.6],[22.8,56,10,.55],[23.6,60,9,.5]];
+
+/* ---------------- flatten stars ---------------- */
+const stars = []; // {raRad,sinD,cosD,mag,bv,name,ly,con,flag,twk}
+function addStar(s, con, conName){
+  stars.push({raRad:s[0]*15*DEG, sinD:Math.sin(s[1]*DEG), cosD:Math.cos(s[1]*DEG),
+    mag:s[2], bv:(s[3]==null?0.3:s[3]), name:s[4]||'', ly:s[5]||0, con, conName:conName||'',
+    flag:s[6]||'', twk:Math.random()*TAU, sx:0, sy:0, vis:false, alt:0});
+  return stars.length-1;
+}
+CONS.forEach(c=>{ c.idx = c.ss.map(s=>addStar(s, c)); });
+LONE.forEach(s=>addStar([s[0],s[1],s[2],s[3],s[4],s[5]], null, s[6]));
+// background stars (seeded)
+(function(){
+  let seed=20260709; const rnd=()=>{seed=(seed*1664525+1013904223)>>>0; return seed/4294967296;};
+  for(let i=0;i<520;i++){
+    const ra=rnd()*24, dec=Math.asin(2*rnd()-1)/DEG, mag=3.6+rnd()*2.0;
+    addStar([ra,dec,mag, rnd()*1.4-0.2], null);
+  }
+})();
+
+/* ---------------- astronomy ---------------- */
+function jd(ms){ return ms/86400000 + 2440587.5; }
+function gmstHours(ms){
+  let g = 18.697374558 + 24.06570982441908*(jd(ms)-2451545.0);
+  g%=24; if(g<0)g+=24; return g;
+}
+function sunRaDec(ms){
+  const n = jd(ms)-2451545.0;
+  let L=(280.460+0.9856474*n)%360, g=((357.528+0.9856003*n)%360)*DEG;
+  const lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*DEG, eps=23.439*DEG;
+  return {ra:Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam)),
+          dec:Math.asin(Math.sin(eps)*Math.sin(lam))};
+}
+/* alt/az from ra/dec trig parts. H = lst - ra */
+function altAz(sinD,cosD,raRad,lstRad,sinLat,cosLat){
+  const H=lstRad-raRad, cosH=Math.cos(H), sinH=Math.sin(H);
+  const alt=Math.asin(sinD*sinLat + cosD*cosLat*cosH);
+  const az=Math.atan2(-cosD*sinH, sinD*cosLat - cosD*cosH*sinLat);
+  return [alt, az];
+}
+
+/* ---------------- state ---------------- */
+const LOCS=[
+ {name:'東京', kana:'とうきょう', lat:35.681, lon:139.767},
+ {name:'札幌', kana:'さっぽろ', lat:43.062, lon:141.354},
+ {name:'那覇', kana:'なは', lat:26.212, lon:127.679},
+ {name:'シドニー', kana:'シドニー', lat:-33.868, lon:151.209},
+];
+const SEASON_KANA={'冬':'ふゆ','冬〜春':'ふゆから はる','春':'はる','初夏':'なつの はじめ',
+ '夏':'なつ','秋':'あき','秋〜冬':'あきから ふゆ','春（北の空）':'はる（きたの そら）',
+ '一年中（北の空）':'いつでも（きたの そら）','南半球':'みなみはんきゅう'};
+let locIdx=0, loc=LOCS[0];
+let offsetMs=0, scrubBase=0, playing=false;
+let az0=180*DEG, alt0=32*DEG, fov=78;
+let showLines=true, showNames=true, showAster=false, kids=false;
+let selected=null;               // selected constellation (highlight)
+let quiz=null;                   // {list, i, score, lockUntil, reveal}
+let flash=null;                  // {x,y,ok,until}
+const meteors=[]; let nextMeteor=performance.now()+9000;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------------- canvas ---------------- */
+const cv=document.getElementById('sky'), ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1;
+function resize(){
+  DPR=Math.min(2,window.devicePixelRatio||1);
+  W=innerWidth; H=innerHeight;
+  cv.width=W*DPR; cv.height=H*DPR;
+  cv.style.width=W+'px'; cv.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener('resize',resize); resize();
+
+function bvColor(bv){
+  if(bv<-0.05) return '#a8c0ff';
+  if(bv<0.2)  return '#d8e2ff';
+  if(bv<0.5)  return '#f6f4ff';
+  if(bv<0.9)  return '#fff2da';
+  if(bv<1.4)  return '#ffd9a4';
+  return '#ff9d68';
+}
+function focal(){ return H/(4*Math.tan(fov*DEG/4)); }
+
+/* project alt/az -> screen. returns [x,y,cosc] */
+function project(alt,az,f,sinA0,cosA0){
+  const dA=az-az0, cA=Math.cos(alt), sA=Math.sin(alt), cd=Math.cos(dA);
+  const cosc=sinA0*sA + cosA0*cA*cd;
+  if(cosc<-0.2) return null;
+  const k=2*f/(1+cosc);
+  return [W/2 + k*cA*Math.sin(dA), H/2 - k*(sA*cosA0 - cA*cd*sinA0), cosc];
+}
+
+/* ---------------- render ---------------- */
+function render(now){
+  const simMs=Date.now()+offsetMs;
+  const lstRad=((gmstHours(simMs)+loc.lon/15)%24)*15*DEG;
+  const sinLat=Math.sin(loc.lat*DEG), cosLat=Math.cos(loc.lat*DEG);
+  const f=focal(), sinA0=Math.sin(alt0), cosA0=Math.cos(alt0);
+
+  // sun
+  const sun=sunRaDec(simMs);
+  const [sAlt,sAz]=altAz(Math.sin(sun.dec),Math.cos(sun.dec),sun.ra,lstRad,sinLat,cosLat);
+  const sAltD=sAlt/DEG;
+  const dayF=smooth(-9,5,sAltD);           // 0 night → 1 day
+  const starF=1-smooth(-9,-1,sAltD);       // star visibility
+
+  // sky gradient
+  const zen=mixc([5,8,20],[96,160,215],dayF), hor=mixc([13,23,49],[168,205,235],dayF);
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,`rgb(${zen})`); g.addColorStop(1,`rgb(${hor})`);
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  // twilight glow around sun direction
+  if(sAltD>-14 && sAltD<8){
+    const p=project(Math.max(sAlt,0),sAz,f,sinA0,cosA0);
+    if(p){
+      const glow=ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],H*0.75);
+      const a=0.5*(1-Math.abs(sAltD)/14)*(1-dayF*0.4);
+      glow.addColorStop(0,`rgba(255,150,80,${a})`); glow.addColorStop(1,'rgba(255,150,80,0)');
+      ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  // milky way
+  if(starF>0.05){
+    ctx.save(); ctx.globalCompositeOperation='lighter';
+    for(const m of MW){
+      const [a,z]=altAz(Math.sin(m[1]*DEG),Math.cos(m[1]*DEG),m[0]*15*DEG,lstRad,sinLat,cosLat);
+      if(a<-0.05) continue;
+      const p=project(a,z,f,sinA0,cosA0); if(!p||p[2]<0.05) continue;
+      const r=m[2]*DEG*f*1.35;
+      const mg=ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],r);
+      mg.addColorStop(0,`rgba(200,214,255,${0.055*m[3]*starF})`);
+      mg.addColorStop(1,'rgba(200,214,255,0)');
+      ctx.fillStyle=mg; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,TAU); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // compute star positions
+  for(const s of stars){
+    const [a,z]=altAz(s.sinD,s.cosD,s.raRad,lstRad,sinLat,cosLat);
+    s.alt=a;
+    if(a<-0.02){ s.vis=false; continue; }
+    const p=project(a,z,f,sinA0,cosA0);
+    if(!p||p[0]<-60||p[0]>W+60||p[1]<-60||p[1]>H+60){ s.vis=false; continue; }
+    s.vis=true; s.sx=p[0]; s.sy=p[1];
+  }
+
+  // DSO
+  if(starF>0.1){
+    for(const d of DSO){
+      const [a,z]=altAz(Math.sin(d.dec*DEG),Math.cos(d.dec*DEG),d.ra*15*DEG,lstRad,sinLat,cosLat);
+      if(a<0) continue; const p=project(a,z,f,sinA0,cosA0); if(!p) continue;
+      const r=d.r*DEG*f;
+      ctx.save(); ctx.translate(p[0],p[1]); ctx.rotate(d.tilt); ctx.scale(1,0.45);
+      const dg=ctx.createRadialGradient(0,0,0,0,0,r);
+      dg.addColorStop(0,`rgba(224,225,255,${0.35*starF})`); dg.addColorStop(1,'rgba(224,225,255,0)');
+      ctx.fillStyle=dg; ctx.beginPath(); ctx.arc(0,0,r,0,TAU); ctx.fill(); ctx.restore();
+      if(showNames && fov<70 && !quiz){
+        ctx.fillStyle=`rgba(154,165,196,${0.8*starF})`; ctx.font='10px '+FONT_S;
+        ctx.textAlign='left'; ctx.fillText(d.name, p[0]+r*0.5+4, p[1]-4);
+      }
+    }
+  }
+
+  // constellation lines
+  if(showLines && starF>0.05){
+    for(const c of CONS){
+      const hot=(selected===c)||(quiz&&quiz.reveal===c);
+      ctx.strokeStyle=hot?`rgba(240,200,110,${0.9*starF})`:`rgba(127,212,232,${0.32*starF})`;
+      ctx.lineWidth=hot?1.8:1;
+      ctx.beginPath();
+      for(const [a,b] of c.ln){
+        const s1=stars[c.idx[a]], s2=stars[c.idx[b]];
+        if(!s1.vis&&!s2.vis) continue;
+        if(!s1.vis||!s2.vis) continue;
+        ctx.moveTo(s1.sx,s1.sy); ctx.lineTo(s2.sx,s2.sy);
+      }
+      ctx.stroke();
+    }
+  }
+
+  // asterisms
+  if(showAster && starF>0.05){
+    ctx.save(); ctx.setLineDash([6,6]);
+    ctx.strokeStyle=`rgba(240,200,110,${0.65*starF})`; ctx.lineWidth=1.4;
+    for(const a of ASTER){
+      const ps=a.pts.map(pt=>{
+        const [al,z]=altAz(Math.sin(pt[1]*DEG),Math.cos(pt[1]*DEG),pt[0]*15*DEG,lstRad,sinLat,cosLat);
+        return al>-0.05?project(al,z,f,sinA0,cosA0):null;
+      });
+      if(ps.some(p=>!p||p[2]<0.05)) continue;
+      ctx.beginPath(); ctx.moveTo(ps[0][0],ps[0][1]);
+      for(let i=1;i<ps.length;i++) ctx.lineTo(ps[i][0],ps[i][1]);
+      if(a.close) ctx.closePath();
+      ctx.stroke();
+      const cx=ps.reduce((s,p)=>s+p[0],0)/ps.length, cy=ps.reduce((s,p)=>s+p[1],0)/ps.length;
+      ctx.fillStyle=`rgba(240,200,110,${0.85*starF})`;
+      ctx.font='12px '+FONT_M; ctx.textAlign='center'; ctx.fillText(a.name,cx,cy);
+    }
+    ctx.restore();
+  }
+
+  // stars
+  const limitMag=4.9+(78-fov)*0.035;
+  const t=now*0.001;
+  for(const s of stars){
+    if(!s.vis) continue;
+    if(s.mag>limitMag) continue;
+    let alpha=starF*clamp(1.25-(s.mag/limitMag),0.12,1);
+    if(alpha<=0.01) continue;
+    let r=Math.max(0.6,(3.9-s.mag*0.68))*(0.82+f/H*0.35);
+    if(!reduceMotion && s.mag<2.4) alpha*=0.82+0.18*Math.sin(t*(2.2+s.bv)+s.twk);
+    const col=bvColor(s.bv);
+    if(s.flag==='cl'){ drawCluster(s,col,alpha); }
+    else if(s.flag==='neb'){ drawNeb(s,alpha); }
+    else{
+      if(s.mag<1.0){
+        const gg=ctx.createRadialGradient(s.sx,s.sy,0,s.sx,s.sy,r*4.5);
+        gg.addColorStop(0,hexA(col,alpha*0.5)); gg.addColorStop(1,hexA(col,0));
+        ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(s.sx,s.sy,r*4.5,0,TAU); ctx.fill();
+      }
+      ctx.fillStyle=hexA(col,alpha);
+      ctx.beginPath(); ctx.arc(s.sx,s.sy,r,0,TAU); ctx.fill();
+    }
+  }
+
+  // labels
+  if(starF>0.05 && !quiz){
+    if(showNames){
+      // constellation names
+      ctx.font=(kids?'15px ':'13px ')+FONT_M; ctx.textAlign='center';
+      for(const c of CONS){
+        let sx=0,sy=0,n=0;
+        for(const i of c.idx){ const s=stars[i]; if(s.vis){sx+=s.sx;sy+=s.sy;n++;} }
+        if(n<Math.max(2,c.idx.length*0.4)) continue;
+        const hot=selected===c;
+        ctx.fillStyle=hot?`rgba(240,200,110,${0.95*starF})`:`rgba(240,200,110,${0.62*starF})`;
+        ctx.fillText(kids?c.kana+'ざ':c.jp, sx/n, sy/n - 10);
+      }
+      // bright star names when zoomed
+      if(fov<62){
+        ctx.font='10.5px '+FONT_S; ctx.textAlign='left';
+        for(const s of stars){
+          if(!s.vis||!s.name||s.mag>2.3) continue;
+          ctx.fillStyle=`rgba(232,236,247,${0.6*starF})`;
+          ctx.fillText(s.name.split('（')[0], s.sx+7, s.sy+3);
+        }
+      }
+    }
+  }
+
+  // sun disc
+  if(sAlt>-6*DEG){
+    const p=project(sAlt,sAz,f,sinA0,cosA0);
+    if(p){
+      const r=Math.max(9,0.53*DEG*f*2);
+      const sg=ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],r*5);
+      sg.addColorStop(0,'rgba(255,244,214,0.95)'); sg.addColorStop(0.25,'rgba(255,220,140,0.5)');
+      sg.addColorStop(1,'rgba(255,220,140,0)');
+      ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(p[0],p[1],r*5,0,TAU); ctx.fill();
+      ctx.fillStyle='#fff6dc'; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,TAU); ctx.fill();
+      if(showNames){ ctx.fillStyle='rgba(90,70,20,0.85)'; ctx.font='11px '+FONT_S;
+        ctx.textAlign='center'; ctx.fillText(kids?'たいよう':'太陽', p[0], p[1]+r+16); }
+    }
+  }
+
+  drawHorizon(f,sinA0,cosA0,dayF);
+  if(!reduceMotion) drawMeteors(now,starF);
+  drawFlash(now);
+
+  // HUD text
+  updHud(simMs);
+  requestAnimationFrame(render);
+}
+function mixc(a,b,t){ return `${Math.round(lerp(a[0],b[0],t))},${Math.round(lerp(a[1],b[1],t))},${Math.round(lerp(a[2],b[2],t))}`; }
+function hexA(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${clamp(a,0,1)})`;
+}
+const FONT_M='"Hiragino Mincho ProN","Yu Mincho",serif';
+const FONT_S='"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif';
+
+const CLOFF=[[0,0],[.42,.16],[-.38,.22],[.16,-.34],[-.22,-.28],[.5,-.12],[-.05,.42]];
+function drawCluster(s,col,alpha){
+  const f=focal(), sc=0.35*DEG*f;
+  const gg=ctx.createRadialGradient(s.sx,s.sy,0,s.sx,s.sy,sc*2.6);
+  gg.addColorStop(0,`rgba(170,200,255,${alpha*0.3})`); gg.addColorStop(1,'rgba(170,200,255,0)');
+  ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(s.sx,s.sy,sc*2.6,0,TAU); ctx.fill();
+  ctx.fillStyle=hexA('#d8e2ff',alpha);
+  for(const o of CLOFF){ ctx.beginPath(); ctx.arc(s.sx+o[0]*sc,s.sy+o[1]*sc,1.3,0,TAU); ctx.fill(); }
+}
+function drawNeb(s,alpha){
+  const r=0.6*DEG*focal();
+  const gg=ctx.createRadialGradient(s.sx,s.sy,0,s.sx,s.sy,r);
+  gg.addColorStop(0,`rgba(220,228,255,${alpha*0.4})`); gg.addColorStop(1,'rgba(220,228,255,0)');
+  ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(s.sx,s.sy,r,0,TAU); ctx.fill();
+}
+
+function drawHorizon(f,sinA0,cosA0,dayF){
+  // glowing horizon line
+  ctx.save();
+  ctx.strokeStyle=`rgba(127,212,232,${lerp(0.4,0.15,dayF)})`;
+  ctx.lineWidth=1.5; ctx.shadowColor='rgba(127,212,232,0.6)'; ctx.shadowBlur=10;
+  ctx.beginPath(); let pen=false;
+  for(let a=0;a<=360;a+=2){
+    const p=project(0,a*DEG,f,sinA0,cosA0);
+    if(p&&p[2]>0.02){ if(pen)ctx.lineTo(p[0],p[1]); else ctx.moveTo(p[0],p[1]); pen=true; }
+    else pen=false;
+  }
+  ctx.stroke(); ctx.restore();
+  // cardinal labels
+  const dirs=[['北','きた',0],['北東','',45],['東','ひがし',90],['南東','',135],
+              ['南','みなみ',180],['南西','',225],['西','にし',270],['北西','',315]];
+  ctx.textAlign='center';
+  for(const [nm,kn,azd] of dirs){
+    const label=kids?kn:nm;
+    if(!label) continue;
+    const p=project(-2.5*DEG,azd*DEG,f,sinA0,cosA0);
+    if(!p||p[2]<0.05) continue;
+    const main=azd%90===0;
+    ctx.font=(main?'600 15px ':'11px ')+FONT_M;
+    ctx.fillStyle=main?'rgba(240,200,110,0.9)':'rgba(154,165,196,0.75)';
+    ctx.fillText(label,p[0],p[1]);
+  }
+}
+
+function drawMeteors(now,starF){
+  if(starF>0.4 && now>nextMeteor){
+    nextMeteor=now+9000+Math.random()*22000;
+    const x=Math.random()*W, y=Math.random()*H*0.4, ang=(Math.random()*40+55)*DEG*(Math.random()<0.5?1:-1);
+    meteors.push({x,y,dx:Math.cos(ang),dy:Math.abs(Math.sin(ang)),t0:now,dur:650});
+  }
+  for(let i=meteors.length-1;i>=0;i--){
+    const m=meteors[i], t=(now-m.t0)/m.dur;
+    if(t>1){meteors.splice(i,1);continue;}
+    const len=90, px=m.x+m.dx*t*220, py=m.y+m.dy*t*220;
+    const gr=ctx.createLinearGradient(px,py,px-m.dx*len,py-m.dy*len);
+    const a=Math.sin(t*Math.PI)*0.9*starF;
+    gr.addColorStop(0,`rgba(255,250,230,${a})`); gr.addColorStop(1,'rgba(255,250,230,0)');
+    ctx.strokeStyle=gr; ctx.lineWidth=1.8; ctx.beginPath();
+    ctx.moveTo(px,py); ctx.lineTo(px-m.dx*len,py-m.dy*len); ctx.stroke();
+  }
+}
+function drawFlash(now){
+  if(!flash) return;
+  if(now>flash.until){flash=null;return;}
+  ctx.font='600 30px '+FONT_S; ctx.textAlign='center';
+  ctx.fillStyle=flash.ok?'rgba(140,230,170,0.95)':'rgba(255,120,120,0.95)';
+  ctx.fillText(flash.ok?'○ せいかい！':'✕ ざんねん', flash.x, flash.y);
+}
+
+/* ---------------- HUD ---------------- */
+const $=id=>document.getElementById(id);
+const YOBI='日月火水木金土';
+function fmt(ms){
+  const d=new Date(ms);
+  const p=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())}（${YOBI[d.getDay()]}）${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+let lastHud=0;
+function updHud(simMs){
+  const n=performance.now(); if(n-lastHud<250) return; lastHud=n;
+  $('pTime').textContent=fmt(simMs)+(Math.abs(offsetMs)>90000?'（時間たび中）':'');
+  $('pLoc').textContent=kids?(loc.kana||loc.name):loc.name;
+  const azd=((az0/DEG)%360+360)%360;
+  $('pDir').textContent=['北','北東','東','南東','南','南西','西','北西'][Math.round(azd/45)%8];
+  $('tpNow').textContent=fmt(simMs);
+}
+
+/* ---------------- interaction ---------------- */
+const ptrs=new Map(); let pinchD=0, downXY=null, downT=0, moved=false;
+cv.addEventListener('pointerdown',e=>{
+  cv.setPointerCapture(e.pointerId);
+  ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===1){ downXY=[e.clientX,e.clientY]; downT=Date.now(); moved=false; cv.classList.add('drag'); }
+  if(ptrs.size===2){ const a=[...ptrs.values()]; pinchD=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]); }
+});
+cv.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId)) return;
+  const prev=ptrs.get(e.pointerId); ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===1){
+    const dx=e.clientX-prev[0], dy=e.clientY-prev[1];
+    if(Math.hypot(e.clientX-downXY[0],e.clientY-downXY[1])>8) moved=true;
+    const fpx=focal();
+    az0-=dx/fpx/Math.max(0.35,Math.cos(alt0));
+    alt0=clamp(alt0+dy/fpx, -35*DEG, 89.6*DEG);
+  }else if(ptrs.size===2){
+    const a=[...ptrs.values()]; const d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);
+    if(pinchD>0) fov=clamp(fov*pinchD/d, 24, 110);
+    pinchD=d;
+  }
+});
+function endPtr(e){
+  ptrs.delete(e.pointerId); pinchD=0; cv.classList.remove('drag');
+  if(downXY && !moved && Date.now()-downT<500 && ptrs.size===0){
+    handleTap(downXY[0],downXY[1]);
+  }
+  downXY=null;
+}
+cv.addEventListener('pointerup',endPtr); cv.addEventListener('pointercancel',endPtr);
+cv.addEventListener('wheel',e=>{ e.preventDefault(); fov=clamp(fov*Math.exp(e.deltaY*0.0012),24,110); },{passive:false});
+
+function nearestCon(x,y){
+  let best=null,bd=1e9;
+  for(const c of CONS){
+    for(const i of c.idx){ const s=stars[i];
+      if(!s.vis) continue;
+      const d=Math.hypot(s.sx-x,s.sy-y);
+      if(d<bd){bd=d;best=c;}
+    }
+  }
+  return bd<60?best:null;
+}
+function handleTap(x,y){
+  if(quiz){ quizTap(x,y); return; }
+  // named star first
+  let bs=null,bd=1e9;
+  for(const s of stars){
+    if(!s.vis||!s.name) continue;
+    const d=Math.hypot(s.sx-x,s.sy-y);
+    if(d<bd){bd=d;bs=s;}
+  }
+  if(bs&&bd<22){ openStar(bs); return; }
+  const c=nearestCon(x,y);
+  if(c){ openCon(c); } else { closeSheet(); selected=null; }
+}
+
+/* ---------------- sheet ---------------- */
+const sheet=$('sheet'), sheetBody=$('sheetBody');
+function openCon(c){
+  selected=c;
+  const up=stars[c.idx[0]].alt>0;
+  const season=kids?(SEASON_KANA[c.season]||c.season):c.season;
+  const chips=`<span class="chip season">${season}の${kids?'せいざ':'星座'}</span>`+
+    (up?`<span class="chip up">${kids?'いま みえているよ':'いま空に見えています'}</span>`
+       :`<span class="chip">${kids?'いまは ちへいせんの した':'いまは地平線の下'}</span>`);
+  const named=c.ss.filter(s=>s[4]).slice(0,4).map(s=>
+    `<div class="star-chip"><span class="dot" style="color:${bvColor(s[3]??0.3)};background:${bvColor(s[3]??0.3)}"></span>
+     ${s[4].split('（')[0]}<small>${kids
+       ?`${s[2].toFixed(1)}とうせい${s[5]?' ・ やく'+s[5]+'こうねん':''}`
+       :`${s[2].toFixed(1)}等${s[5]?' ・ '+s[5]+'光年':''}`}</small></div>`).join('');
+  sheetBody.innerHTML=`
+    <div class="sh-kana">${kids?'せいざ':c.kana+'ざ'}</div>
+    <div class="sh-name">${kids?c.kana+'ざ':c.jp}</div>
+    <div class="sh-en">${c.en}</div>
+    <div class="sh-chips">${chips}</div>
+    <div class="sh-story${kids?' kids':''}">${kids?c.kid:c.adl}</div>
+    ${kids?'':`<div class="sh-fun"><b>まめちしき</b>　${c.fun}</div>`}
+    ${named?`<div class="sh-stars">${named}</div>`:''}`;
+  sheet.classList.add('open');
+}
+function openStar(s){
+  const pct=clamp((s.bv+0.4)/2.2,0.02,0.98)*100;
+  const lyTxt=s.ly?(s.ly<1000?s.ly:Math.round(s.ly/100)*100):0;
+  const story=kids
+    ?`${s.ly?`いま みえている ひかりは、やく${lyTxt}ねんまえに この ほしを でた ひかりだよ。`:''}あおい ほしは とっても あつい ほし。あかい ほしは すこし つめたい ほしなんだ。`
+    :`${s.ly?`いま見えている光は、約${lyTxt}年前にこの星を出た光です。`:''}星の色は表面温度で決まります。<b style="color:#a8c0ff">青い星ほど高温</b>、<b style="color:#ff9d68">赤い星ほど低温</b>です。`;
+  sheetBody.innerHTML=`
+    <div class="sh-kana">${kids?'ほし':'恒星'}</div>
+    <div class="sh-name">${kids?s.name.split('（')[0]:s.name}</div>
+    <div class="sh-en">${s.con?(kids?s.con.kana+'ざ':s.con.jp):(kids?(s.conName||'').replace('座','ざ'):(s.conName||''))}</div>
+    <div class="sh-chips">
+      <span class="chip">${s.mag.toFixed(1)}${kids?'とうせい':'等星'}</span>
+      ${s.ly?`<span class="chip">${kids?'やく'+s.ly+'こうねん':'約'+s.ly+'光年'}</span>`:''}
+    </div>
+    <div class="sh-story${kids?' kids':''}" style="font-size:${kids?'15px':'13px'}">${story}</div>
+    <div class="tempbar">
+      <div class="bar"><span class="mk" style="left:${pct}%"></span></div>
+      <div class="lbl">${kids
+        ?'<span>あつい ほし（あおい）</span><span>つめたい ほし（あかい）</span>'
+        :'<span>高温（約30,000度〜）</span><span>低温（約3,000度）</span>'}</div>
+    </div>`;
+  selected=s.con||null;
+  sheet.classList.add('open');
+}
+function closeSheet(){ sheet.classList.remove('open'); }
+$('sheetClose').addEventListener('click',()=>{closeSheet();selected=null;});
+
+/* ---------------- quiz ---------------- */
+const quizBar=$('quizBar');
+function startQuiz(){
+  const cands=CONS.filter(c=>{
+    let n=0; for(const i of c.idx) if(stars[i].vis&&stars[i].alt>6*DEG) n++;
+    return n>=2;
+  });
+  if(cands.length<3){ toast('見えている星座がすくないよ。「時間たび」で夜にしてからチャレンジ！'); return; }
+  const list=cands.sort(()=>Math.random()-0.5).slice(0,Math.min(5,cands.length));
+  quiz={list,i:0,score:0,lockUntil:0,reveal:null};
+  closeSheet(); selected=null;
+  quizBar.style.display='block'; $('bQuiz').classList.add('on');
+  nextQ();
+}
+function nextQ(){
+  const q=quiz;
+  if(q.i>=q.list.length){ endQuiz(); return; }
+  $('qNum').textContent=`Q${q.i+1}/${q.list.length}`;
+  const c=q.list[q.i];
+  $('qText').innerHTML=kids?`「<b>${c.kana}ざ</b>」を さがして タップ！`:`「<b>${c.jp}</b>」をさがしてタップ！`;
+}
+function quizTap(x,y){
+  const q=quiz, now=performance.now();
+  if(now<q.lockUntil) return;
+  const hit=nearestCon(x,y), target=q.list[q.i];
+  const ok=hit===target;
+  if(ok)q.score++;
+  flash={x,y:Math.max(50,y-30),ok,until:now+1100};
+  q.reveal=target; q.lockUntil=now+1200;
+  setTimeout(()=>{ if(!quiz)return; quiz.reveal=null; quiz.i++; nextQ(); },1200);
+}
+function endQuiz(){
+  const sc=quiz.score, n=quiz.list.length;
+  quiz=null; quizBar.style.display='none'; $('bQuiz').classList.remove('on');
+  const msg=kids
+    ?(sc===n?'ぜんぶ せいかい！きみは ほしはかせだ！':sc>=n*0.6?'すごい！あと すこしで ぜんぶ せいかい！':'また ちょうせん してみてね！')
+    :(sc===n?'パーフェクト！きみは星はかせだ！':sc>=n*0.6?'すごい！あと少しでパーフェクト！':'また挑戦してね。星座線と名まえをONにして予習しよう！');
+  const cnt=kids
+    ?`${n}もんちゅう <b style="color:var(--gold)">${sc}もん</b> せいかい。`
+    :`${n}問中 <b style="color:var(--gold)">${sc}問</b> せいかい。`;
+  sheetBody.innerHTML=`
+    <div class="sh-kana">クイズけっか</div>
+    <div class="sh-name">${'★'.repeat(sc)}${'☆'.repeat(n-sc)}</div>
+    <div class="sh-story${kids?' kids':''}">${cnt}${msg}</div>`;
+  sheet.classList.add('open');
+}
+
+/* ---------------- controls ---------------- */
+function toggle(btn,fn){ $(btn).addEventListener('click',e=>{ fn(e.currentTarget); }); }
+toggle('bLines',b=>{ showLines=!showLines; b.classList.toggle('on',showLines); });
+toggle('bNames',b=>{ showNames=!showNames; b.classList.toggle('on',showNames); });
+toggle('bAst',b=>{ showAster=!showAster; b.classList.toggle('on',showAster);
+  if(showAster) toast('夏・冬の大三角と春の大曲線。一等星をつなぐ星さがしの道しるべです'); });
+function updateDock(){
+  $('bLines').textContent=kids?'せいざの せん':'星座線';
+  $('bNames').textContent=kids?'なまえ':'名まえ';
+  $('bAst').textContent=kids?'さんかく':'大三角';
+  $('bTime').textContent=kids?'じかんたび':'時間たび';
+  $('bLoc').textContent=(kids?'ばしょ: ':'場所: ')+(kids?(loc.kana||loc.name):loc.name);
+}
+toggle('bKids',b=>{ kids=!kids; b.classList.toggle('on',kids);
+  updateDock();
+  if(selected) openCon(selected);
+  toast(kids?'ひらがなモード：かんじを つかわない おはなしに きりかえたよ':'おとなモード：くわしい解説に切りかえました'); });
+toggle('bTime',b=>{ const p=$('timePanel'); p.classList.toggle('open'); b.classList.toggle('on'); });
+toggle('bQuiz',()=>{ if(quiz){quiz=null;quizBar.style.display='none';$('bQuiz').classList.remove('on');} else startQuiz(); });
+toggle('bLoc',b=>{
+  locIdx=(locIdx+1)%LOCS.length; loc=LOCS[locIdx];
+  updateDock();
+  az0=(loc.lat>=0?180:0)*DEG; alt0=32*DEG;
+  toast(loc.lat<0?'シドニー（南半球）！北を向くと太陽、南の空に南十字星。星の動きも逆まわりだよ':`${loc.name}の空に移動しました`);
+});
+
+const slider=$('tpSlider');
+slider.addEventListener('input',()=>{ offsetMs=scrubBase+Number(slider.value)*60000; });
+slider.addEventListener('change',()=>{ scrubBase=offsetMs; slider.value=0; });
+document.querySelectorAll('.tbtn[data-d]').forEach(b=>{
+  b.addEventListener('click',()=>{ offsetMs+=Number(b.dataset.d)*86400000; scrubBase=offsetMs; slider.value=0; });
+});
+$('tpNowBtn').addEventListener('click',()=>{ offsetMs=0; scrubBase=0; slider.value=0; playing=false; $('tpPlay').textContent='▶ 早送り'; });
+$('tpPlay').addEventListener('click',()=>{
+  playing=!playing; $('tpPlay').textContent=playing?'⏸ とめる':'▶ 早送り';
+  if(playing) toast('時間を600倍速で早送り中。星がまわる「日周運動」を見てみよう');
+});
+setInterval(()=>{ if(playing){ offsetMs+=600*250; scrubBase=offsetMs; } },250);
+
+/* toast */
+let toastTimer=0;
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),4200);
+}
+
+/* help */
+function lsGet(k){ try{return localStorage.getItem(k);}catch(e){return null;} }
+function lsSet(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
+$('helpBtn').addEventListener('click',()=>$('help').classList.add('open'));
+$('helpStart').addEventListener('click',()=>{ $('help').classList.remove('open'); lsSet('hzs_seen','1'); });
+if(!lsGet('hzs_seen')) $('help').classList.add('open');
+
+/* if daytime now, jump to tonight 21:00 */
+(function(){
+  const now=Date.now();
+  const s=sunRaDec(now);
+  const lst=((gmstHours(now)+loc.lon/15)%24)*15*DEG;
+  const [a]=altAz(Math.sin(s.dec),Math.cos(s.dec),s.ra,lst,Math.sin(loc.lat*DEG),Math.cos(loc.lat*DEG));
+  if(a/DEG>-5){
+    const d=new Date(); d.setHours(21,0,0,0);
+    if(d.getTime()<now) d.setDate(d.getDate()+1);
+    offsetMs=d.getTime()-now; scrubBase=offsetMs;
+    setTimeout(()=>toast('いまは昼間なので、今夜21時の空にワープしました🌙（「時間たび」→「いまに戻る」で現在へ）'),600);
+  }
+})();
+
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
