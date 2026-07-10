@@ -2,7 +2,7 @@
 
 こどもとおとなのための Web プラネタリウム。実際の日時・場所の星空を天文計算で再現し、星座をタップすると由来・神話が読めます。
 
-**▶ https://youheionuki.github.io/hoshizora-sanpo/**
+**▶ https://youheioonuki.github.io/hoshizora-sanpo/**
 
 ## 特徴
 
