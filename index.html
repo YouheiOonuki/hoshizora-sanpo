@@ -564,6 +564,8 @@ function project(alt,az,f,sinA0,cosA0){
 
 /* ---------------- render ---------------- */
 function render(now){
+  if(W!==innerWidth||H!==innerHeight||W===0) resize();
+  if(W===0||H===0){ requestAnimationFrame(render); return; }
   const simMs=Date.now()+offsetMs;
   const lstRad=((gmstHours(simMs)+loc.lon/15)%24)*15*DEG;
   const sinLat=Math.sin(loc.lat*DEG), cosLat=Math.cos(loc.lat*DEG);
