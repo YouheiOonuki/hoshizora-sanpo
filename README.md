@@ -26,7 +26,7 @@
 | `data.js` | 星座・明るい星・天の川・場所・月と惑星の解説 |
 | `catalog.js` | 実在の星のデータ（`tools/build-catalog.js` で生成。手で編集しない） |
 | `zukan/`・`about.html`・`privacy-policy.html`・`sitemap.xml` | 読みものページ（`tools/build-pages.js` で生成。手で編集しない） |
-| （運営者情報・プライバシーポリシー） | yorozu-craft 共通ページ（`https://yorozu-craft.com/about.html#hoshizora-sanpo`・`/privacy-policy.html#hoshizora-sanpo`）にある。`privacy-policy.html` はそこへ移動する案内ページ |
+| （運営者情報・プライバシーポリシー） | yorozu-craft 共通ページ（`https://yorozu-craft.com/about.html`・`/privacy-policy.html`）にある。`privacy-policy.html` はそこへ移動する案内ページ |
 | `pages.css` | 読みものページのスタイル |
 | `sw.js` / `manifest.webmanifest` | オフライン対応・PWA |
 | `tests/astro.test.js` | 天文計算を PyEphem の値と照合するテスト |

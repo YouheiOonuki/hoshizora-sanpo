@@ -60,7 +60,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 </main>
 <footer class="site"><div class="wrap">
-  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="https://yorozu-craft.com/about.html#hoshizora-sanpo">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">プライバシーポリシー</a></nav>
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
 ${BEACON}
@@ -279,7 +279,8 @@ function about() {
 <h2>ご利用上の注意</h2>
 <p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。</p>
 <p>太陽は絶対に肉眼や双眼鏡・望遠鏡で直接見ないでください。目を傷めます。夜の観察では、足もとや周囲の安全に気をつけ、お子さんは大人といっしょに出かけてください。</p>
-<p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html#hoshizora-sanpo">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
+<p>表示の設定と、選んだ場所はお使いのブラウザにだけ保存され、外部には送信されません。「いまいる場所の空」を選んだときだけブラウザの位置情報を使い、保存するときは緯度・経度を約10kmの精度に丸めます。位置情報は星空の計算にだけ使います。</p>
+<p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
   return page({ rel: './', file: 'about.html', title: 'このアプリについて｜ほしぞらさんぽ',
     description: 'Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典。', current: 'about.html', body });
 }
@@ -295,11 +296,11 @@ function privacy() {
 <title>プライバシーポリシー（移動しました）｜yorozu-craft</title>
 <meta name="robots" content="noindex, follow">
 <link rel="canonical" href="https://yorozu-craft.com/privacy-policy.html">
-<meta http-equiv="refresh" content="0; url=https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">
+<meta http-equiv="refresh" content="0; url=https://yorozu-craft.com/privacy-policy.html">
 </head>
 <body>
 <p>プライバシーポリシーは、yorozu-craft のすべてのツールで共通のページに移りました。</p>
-<p><a href="https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">プライバシーポリシーのページへ移動する</a></p>
+<p><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシーのページへ移動する</a></p>
 </body>
 </html>
 `;
