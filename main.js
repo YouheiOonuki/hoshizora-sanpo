@@ -914,7 +914,7 @@ function focusCon(c){
            `${c.kana}ざが よく みえる ${+p.month}がつ${+p.day}にち よる9じの そらだよ`));
 }
 
-/* オフライン対応（https で開いたときだけ） */
-if('serviceWorker' in navigator && location.protocol==='https:'){
+/* オフライン対応（https か localhost で開いたときだけ） */
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
   addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 }
