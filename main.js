@@ -881,15 +881,45 @@ onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet('hzs_seen','
 
   const params=new URLSearchParams(location.search);
   const target=CONS.find(c=>c.id===params.get('c'));
-  if(target){ focusCon(target); }
+  const linked=openAt(params);
+  if(linked){ /* カレンダーから: 指定の日時・方角で開いた */ }
+  else if(target){ focusCon(target); }
   else if(!nightNow()){
     // 昼間に開いたら、今夜21時の空へ
     jumpTo(nextLocalHour(Date.now(),21));
     setTimeout(()=>toast(tx('いまは昼間なので、今夜21時の空にワープしました🌙（「時間たび」→「いまに戻る」で現在へ）','いまは ひるま なので、こんやの 9じの そらに ワープしたよ🌙')),600);
   }
-  if(!lsGet('hzs_seen') && !target) $('help').classList.add('open');
+  if(!lsGet('hzs_seen') && !target && !linked) $('help').classList.add('open');
   requestAnimationFrame(render);
 })();
+
+/** 天文カレンダーからのリンク: ?t=<日時>&loc=<場所ID>&look=<向き> で、その日時・方角の空を開く
+ *  look: moon / 惑星ID（jupiter など）/ con:<星座ID> / radiant:<赤経°>,<赤緯°>（J2000）/ az:<方位°>
+ *  場所はそのときだけ使い、保存している「いつもの場所」は変えない */
+function openAt(params){
+  const ms=Date.parse(params.get('t')||'');
+  if(!isFinite(ms)) return false;
+  const l=LOCS.find(x=>x.id===params.get('loc'));
+  if(l){ loc=l; updateLabels(); }
+  jumpTo(ms);
+  const lst=lstRad(ms,loc.lon), sl=Math.sin(loc.lat*DEG), cl=Math.cos(loc.lat*DEG);
+  const hz=(ra,dec)=>altAz(Math.sin(dec),Math.cos(dec),ra,lst,sl,cl);
+  const look=params.get('look')||'';
+  let dir=null;
+  if(look==='moon'){ const M=moon(ms); dir=hz(M.ra,M.dec); }
+  else if(PLANET_IDS.includes(look)){ const p=planet(look,ms,prec); dir=hz(p.ra,p.dec); }
+  else if(look.startsWith('con:')){ const c=CONS.find(x=>x.id===look.slice(4)); if(c) dir=conAltAz(c,ms); }
+  else if(look.startsWith('radiant:')){
+    const [r,d]=look.slice(8).split(',').map(Number);
+    if(isFinite(r)&&isFinite(d)){ const [ra,dec]=prec(r*DEG,d*DEG); dir=hz(ra,dec); }
+  }else if(look.startsWith('az:')){ const a=Number(look.slice(3)); if(isFinite(a)) dir=[null,a*DEG]; }
+  if(dir){ az0=dir[1]; alt0=dir[0]==null?defaultAlt():clamp(dir[0],defaultAlt()*0.8,70*DEG); }
+  else faceDefault();
+  const p=localParts(ms,loc.tz);
+  toast(tx(`${+p.month}月${+p.day}日 ${+p.hour}時${p.minute==='00'?'':p.minute+'分'}の${loc.name}の空です（「時間たび」→「いまに戻る」で現在へ）`,
+           `${+p.month}がつ${+p.day}にち ${+p.hour}じの そらだよ`));
+  return true;
+}
 
 /** 図鑑からのリンク（?c=ori）: その星座がよく見える夜の21時へワープして、向きを合わせる */
 function focusCon(c){

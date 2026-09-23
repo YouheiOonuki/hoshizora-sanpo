@@ -1,5 +1,6 @@
 'use strict';
-/* 読みものページを生成する: 星座図鑑（zukan/）、このアプリについて、プライバシーポリシー、sitemap.xml
+/* 読みものページを生成する: 星座図鑑（zukan/）、天文カレンダー（calendar/、tools/calendar-pages.js）、
+ * このアプリについて、プライバシーポリシー（共通ページへの案内）、sitemap.xml
  * 使い方: node tools/build-pages.js
  * 星座の文章や星のデータは data.js / catalog.js から読むので、データを直したら再実行する。 */
 const fs = require('fs');
@@ -7,6 +8,7 @@ const path = require('path');
 const A = require('../astro.js');
 const { CONS, SEASON_KANA } = require('../data.js');
 const { CATALOG } = require('../catalog.js');
+const buildCalendar = require('./calendar-pages.js');
 
 const ROOT = path.join(__dirname, '..');
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
@@ -24,7 +26,7 @@ const BEACON = `<!-- Cloudflare Web Analytics --><script type='module' src='http
 
 function page({ rel, file, title, description, current, body, jsonld }) {
   const url = BASE + file.replace(/index\.html$/, '');
-  const nav = [['', 'プラネタリウム'], ['zukan/', '星座図鑑'], ['about.html', 'このアプリについて']]
+  const nav = [['', 'プラネタリウム'], ['zukan/', '星座図鑑'], ['calendar/', '天文カレンダー'], ['about.html', 'このアプリについて']]
     .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -36,7 +38,7 @@ function page({ rel, file, title, description, current, body, jsonld }) {
 <link rel="canonical" href="${url}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:type" content="${file.startsWith('zukan/') && file !== 'zukan/index.html' ? 'article' : 'website'}">
+<meta property="og:type" content="${/^(zukan|calendar)\/(?!index)/.test(file) ? 'article' : 'website'}">
 <meta property="og:url" content="${url}">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:image" content="${BASE}og-image.png">
@@ -60,7 +62,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 </main>
 <footer class="site"><div class="wrap">
-  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}calendar/">天文カレンダー</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
 ${BEACON}
@@ -177,6 +179,9 @@ function neighbors(c) {
   }).filter(x => x[1] < 32).sort((a, b) => a[1] - b[1]).slice(0, 4).map(x => x[0]);
 }
 
+/* ---------------- 天文カレンダー ---------------- */
+const calendar = buildCalendar({ page, esc, BASE, UPDATED });
+
 /* ---------------- 星座のページ ---------------- */
 const GROUPS = [
   ['春の星座', ['春', '春（北の空）']],
@@ -197,6 +202,7 @@ function conPage(c, i) {
   const rows = named.map(s => `<tr><td><span class="dot" style="color:${bvColor(s[3] ?? 0.3)};background:${bvColor(s[3] ?? 0.3)}"></span>${esc(s[4])}</td>`
     + `<td class="num">${s[6] ? '—' : s[2].toFixed(1) + '等'}</td><td class="num">${s[5] ? '約' + s[5] + '光年' : '—'}</td><td>${s[6] ? '星の集まり' : bvName(s[3] ?? 0.3)}</td></tr>`).join('');
   const nb = neighbors(c).map(o => `<a href="./${o.id}.html">${esc(o.jp)}</a>`).join('・');
+  const showers = (calendar.showerLinks[c.id] || []).map(m => `<li><a href="${m.href}">${esc(m.name)}</a>（${esc(m.season)}に極大）</li>`).join('');
   const title = `${c.jp}の見つけ方と神話｜${seasonLabel}｜ほしぞらさんぽ`;
   const description = `${c.jp}（${c.en}）は${seasonLabel}。${v.short}。${firstSentence(c.adl)}主な星・まめちしき・子ども向けのひらがな解説を星図つきで紹介します。`;
   const body = `<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ <a href="./">星座図鑑</a> ／ ${esc(c.jp)}</div>
@@ -213,6 +219,7 @@ function conPage(c, i) {
 <div class="box kids">${c.kid}</div>
 ${named.length ? `<h2>主な星</h2><div class="scroll"><table><thead><tr><th>名前</th><th>明るさ</th><th>距離</th><th>色</th></tr></thead><tbody>${rows}</tbody></table></div>
 <p class="lead">色は星の表面温度のめやすです。青白い星ほど熱く、赤い星ほど温度が低くなります。</p>` : ''}
+${showers ? `<h2>この星座から流れる流星群</h2><ul>${showers}</ul>` : ''}
 ${nb ? `<h2>近くの星座</h2><p>${nb}</p>` : ''}
 <nav class="pager" aria-label="前後の星座"><a href="./${prev.id}.html">← ${esc(prev.jp)}</a><a href="./${next.id}.html">${esc(next.jp)} →</a></nav>`;
   const jsonld = [{
@@ -260,6 +267,7 @@ function about() {
 <dt>クイズ</dt><dd>いま空に出ている星座から5問。見つからないときは「ヒント」で答えの方向へ視点が動きます。</dd>
 <dt>ひらがなモード</dt><dd>画面の文字と解説がすべてひらがなになります。</dd>
 <dt>赤いライト</dt><dd>画面全体を赤くして、夜の屋外で暗さに慣れた目を守ります。画面の明るさも下げるとより効果的です。</dd>
+<dt>天文カレンダー</dt><dd><a href="./calendar/">天文カレンダー</a>で流星群・満月・日食・月食・惑星の見ごろを調べ、「この日の星空を見る」でその日時・方角の空をひらけます。</dd>
 <dt>オフライン</dt><dd>一度ひらくとブラウザに保存され、電波のない場所でも使えます。ホーム画面に追加するとアプリのように起動できます。</dd>
 </dl>
 
@@ -273,11 +281,12 @@ function about() {
 <li>惑星の軌道要素: E. M. Standish, “Keplerian Elements for Approximate Positions of the Major Planets”（NASA JPL）</li>
 <li>月の位置: Paul Schlyter, “How to compute planetary positions” の簡略理論</li>
 <li>惑星の明るさ: Mallama &amp; Hilton (2018) の式</li>
+<li>天文カレンダーの日付・時刻（満月・新月、流星群の極大、日食・月食、惑星の見ごろ、お月見）: 国立天文台 暦計算室「暦要項」「日月食等データベース」、国立天文台「ほしぞら情報」。クレジット：国立天文台。流星群の極大日時は、国立天文台が国際流星機構（IMO）の予報をもとに掲載しているもの。満月・新月の時刻は Meeus『Astronomical Algorithms』の計算とも照合しています</li>
 </ul>
 <p>星座の神話は、ギリシャ神話などの一般的な伝承をもとにした要約です。伝承には諸説があります。</p>
 
 <h2>ご利用上の注意</h2>
-<p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。</p>
+<p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。天文カレンダーは国立天文台の発表を書き写したもので、発表があとから変わることもあります。</p>
 <p>太陽は絶対に肉眼や双眼鏡・望遠鏡で直接見ないでください。目を傷めます。夜の観察では、足もとや周囲の安全に気をつけ、お子さんは大人といっしょに出かけてください。</p>
 <p>表示の設定と、選んだ場所はお使いのブラウザにだけ保存され、外部には送信されません。「いまいる場所の空」を選んだときだけブラウザの位置情報を使い、保存するときは緯度・経度を約10kmの精度に丸めます。位置情報は星空の計算にだけ使います。</p>
 <p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
@@ -308,13 +317,16 @@ function privacy() {
 
 /* ---------------- 書き出し ---------------- */
 fs.mkdirSync(path.join(ROOT, 'zukan'), { recursive: true });
+fs.mkdirSync(path.join(ROOT, 'calendar'), { recursive: true });
 const out = (file, html) => fs.writeFileSync(path.join(ROOT, file), html);
 out('zukan/index.html', zukanIndex());
 ordered.forEach((c, i) => out(`zukan/${c.id}.html`, conPage(c, i)));
+calendar.files.forEach(f => out(f.file, f.html));
 out('about.html', about());
 out('privacy-policy.html', privacy());
 
 const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
+  ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly']),
   ['about.html', '0.4', 'yearly']];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -326,4 +338,4 @@ ${urls.map(([u, p, f]) => `  <url>
   </url>`).join('\n')}
 </urlset>
 `);
-console.log(`zukan: ${ordered.length} pages + index, about, privacy-policy, sitemap (${urls.length} urls)`);
+console.log(`zukan: ${ordered.length} pages + index, calendar: ${calendar.files.length} pages, about, privacy-policy, sitemap (${urls.length} urls)`);
