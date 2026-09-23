@@ -12,7 +12,7 @@
 'use strict';
 
 const CACHE_PREFIX = 'hoshizora-sanpo-';
-const CACHE_NAME   = `${CACHE_PREFIX}v1`; // キャッシュする中身の構成を変えたら上げる
+const CACHE_NAME   = `${CACHE_PREFIX}v2`; // キャッシュする中身の構成を変えたら上げる
 
 /** 初回インストール時に取得しておくファイル（プラネタリウム本体。図鑑は開いたページから順に保存される） */
 const PRECACHE_URLS = [
@@ -32,7 +32,7 @@ const PRECACHE_URLS = [
   './pages.css',
   './zukan/',
   './about.html',
-  './privacy-policy.html',
+  // プライバシーポリシーは yorozu-craft 共通ページに移したのでキャッシュしない
 ];
 
 /** この時間ネットワークが応答しなければ、キャッシュがあればそちらを返す */
