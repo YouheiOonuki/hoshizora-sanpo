@@ -9,7 +9,7 @@
   --panel:rgba(11,16,34,.9);
   --panel-edge:rgba(127,212,232,.22);
   --serif:"Hiragino Mincho ProN","Yu Mincho","BIZ UDMincho","Noto Serif JP","MS PMincho",serif;
-  --sans:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Meiryo",sans-serif;
+  --sans:"Noto Sans JP","Noto Sans CJK JP","Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
   --top:calc(12px + env(safe-area-inset-top));
 }
 html,body{height:100%;margin:0;background:#050814;}
