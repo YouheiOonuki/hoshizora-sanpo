@@ -60,7 +60,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 </main>
 <footer class="site"><div class="wrap">
-  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}about.html">運営者情報</a><a href="${rel}privacy-policy.html">プライバシーポリシー</a></nav>
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="https://yorozu-craft.com/about.html#hoshizora-sanpo">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
 ${BEACON}
@@ -246,7 +246,7 @@ ${sections}`;
 
 /* ---------------- このアプリについて ---------------- */
 function about() {
-  const body = `<h1>このアプリについて<small>つかいかた ・ しくみ ・ 運営者情報</small></h1>
+  const body = `<h1>このアプリについて<small>つかいかた ・ しくみ ・ データの出典</small></h1>
 <p>「ほしぞらさんぽ」は、いつ・どこの星空でも天文計算で再現する、ブラウザで動く無料のプラネタリウムです。星座をタップすると、その星座にまつわる神話やまめちしきが読めます。ひらがなモードにすると、5歳くらいのお子さんから読める文章に切りかわります。</p>
 <a class="cta" href="./">プラネタリウムをひらく →</a>
 
@@ -276,57 +276,33 @@ function about() {
 </ul>
 <p>星座の神話は、ギリシャ神話などの一般的な伝承をもとにした要約です。伝承には諸説があります。</p>
 
-<h2>運営者情報・免責事項</h2>
-<dl class="info">
-<dt>サイト名</dt><dd>yorozu-craft（よろずクラフト）</dd>
-<dt>アプリ名</dt><dd>ほしぞらさんぽ</dd>
-<dt>運営者</dt><dd>YouheiOonuki</dd>
-<dt>料金</dt><dd>無料（会員登録・インストール不要）</dd>
-</dl>
-<p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。当アプリの利用によって生じたいかなる損害についても、運営者は責任を負いかねます。</p>
+<h2>ご利用上の注意</h2>
+<p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。</p>
 <p>太陽は絶対に肉眼や双眼鏡・望遠鏡で直接見ないでください。目を傷めます。夜の観察では、足もとや周囲の安全に気をつけ、お子さんは大人といっしょに出かけてください。</p>
-<p>星座図鑑などの読みものページには、第三者配信事業者による広告を掲載しています。広告の内容や、広告先のサイトで提供される商品・サービスについて、運営者は責任を負いません。プラネタリウムの画面には広告を表示しません。</p>
-<p>当アプリのデザイン・文章・プログラムの著作権は運営者に帰属します。当アプリの内容は、予告なく変更・終了する場合があります。</p>`;
-  return page({ rel: './', file: 'about.html', title: 'このアプリについて・運営者情報｜ほしぞらさんぽ',
-    description: 'Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典、運営者情報。', current: 'about.html', body });
+<p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html#hoshizora-sanpo">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
+  return page({ rel: './', file: 'about.html', title: 'このアプリについて｜ほしぞらさんぽ',
+    description: 'Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典。', current: 'about.html', body });
 }
 
 /* ---------------- プライバシーポリシー ---------------- */
 function privacy() {
-  const body = `<h1>プライバシーポリシー</h1>
-<p class="lead">最終更新日: 2026年9月23日</p>
-<h2>1. はじめに</h2>
-<p>ほしぞらさんぽ（以下「当アプリ」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めています。本プライバシーポリシーでは、当アプリにおけるデータの取り扱いについて説明します。</p>
-<h2>2. 収集するデータ</h2>
-<p>当アプリは、氏名・メールアドレス・電話番号など、個人を特定できる情報を収集しません。当アプリの動作のために、以下のデータをお使いのブラウザ内に保存します。</p>
-<h3>2.1 ローカルストレージ</h3>
-<ul>
-<li>表示の設定（ひらがなモード、赤いライト、つかいかたの表示済みかどうか）</li>
-<li>選んだ場所。「いまいる場所」を選んだ場合は、緯度・経度を約10kmの精度に丸めた値</li>
-</ul>
-<p>これらのデータはすべてユーザーのブラウザ内にのみ保存され、外部サーバーに送信されることはありません。ブラウザのデータを消去することで、いつでも削除できます。</p>
-<h3>2.2 位置情報</h3>
-<p>「いまいる場所の空」を選んだときだけ、ブラウザの位置情報機能を使います。位置情報は星空の計算にだけ使い、外部に送信しません。許可しなくても、ほかの場所を選んで当アプリをお使いいただけます。</p>
-<h3>2.3 オフライン用のキャッシュ</h3>
-<p>当アプリは、電波のない場所でも使えるように、Service Worker という仕組みで当アプリのファイル（ページ、スタイル、プログラム、画像）をブラウザに保存します。保存されるのは当アプリ自体のファイルだけで、ユーザーの個人情報や操作の記録は含みません。ブラウザのサイトデータを消去すると削除されます。</p>
-<h3>2.4 Cookieおよびトラッキング</h3>
-<p>当アプリ自体はCookieを使用しません。アクセス解析（3.3）もCookieを使わない方式です。ただし、星座図鑑などの読みものページの広告配信（3.1）では、Google がCookieを使用する場合があります。</p>
-<h2>3. 第三者サービス</h2>
-<h3>3.1 Google AdSense</h3>
-<p>当アプリの星座図鑑・このアプリについて・本ページなどの読みものページでは、広告配信のためにGoogle AdSenseを使用する場合があります。Google AdSenseは、Cookieを使用してユーザーの興味に基づいた広告を表示することがあります。プラネタリウムの画面には広告を表示しません。</p>
-<p>Google AdSenseの詳細については、<a href="https://policies.google.com/technologies/ads?hl=ja">Googleの広告に関するポリシー</a>をご確認ください。ユーザーは、<a href="https://adssettings.google.com/">Googleの広告設定ページ</a>から、パーソナライズ広告を無効にすることができます。</p>
-<h3>3.2 Cookieの利用に関する同意（EEA・英国・スイスの方）</h3>
-<p>欧州経済領域（EEA）、英国、スイスからアクセスされた方には、Google が認定した同意管理プラットフォーム（Google の同意管理ツール）により、広告のために Cookie などを利用することへの同意を確認するメッセージが表示されます。同意しない場合でも、当アプリの機能はそのままお使いいただけます（表示される広告が制限される、または表示されない場合があります）。それ以外の地域からアクセスされた方には、このメッセージは表示されません。</p>
-<h3>3.3 アクセス解析ツール</h3>
-<p>当アプリでは、サイトの利用状況を把握し改善に役立てるため、Cloudflare, Inc. が提供するアクセス解析ツール「Cloudflare Web Analytics」を使用しています。このツールは Cookie やローカルストレージを使用せず、個人を特定する情報や、サイトをまたいだ行動の追跡に使える情報を収集しません。収集されるのは、閲覧されたページ、参照元、ブラウザ・OS・端末の種類、国・地域、ページの表示速度などの統計情報です。詳しくは、<a href="https://www.cloudflare.com/ja-jp/privacypolicy/">Cloudflare のプライバシーポリシー</a>をご確認ください。</p>
-<h2>4. データの安全性</h2>
-<p>当アプリは星空の計算と描画をすべてユーザーのブラウザ内で行い、サーバーサイドの処理や、外部へのデータ送信は行いません。</p>
-<h2>5. 未成年者のプライバシー</h2>
-<p>当アプリはお子さんにも使っていただけるように作っています。当アプリは、未成年者を含むすべてのユーザーから個人情報を意図的に収集することはありません。位置情報の利用を許可するときは、保護者の方がいっしょに確認してください。</p>
-<h2>6. プライバシーポリシーの変更</h2>
-<p>当アプリは、必要に応じて本プライバシーポリシーを更新することがあります。変更があった場合は、このページに掲載します。</p>`;
-  return page({ rel: './', file: 'privacy-policy.html', title: 'プライバシーポリシー｜ほしぞらさんぽ',
-    description: 'Webプラネタリウム「ほしぞらさんぽ」のプライバシーポリシー。位置情報・ローカルストレージ・アクセス解析・広告の取り扱いについて。', current: '', body });
+  // プライバシーポリシーは yorozu-craft 全体で共通のページに移した。古い URL で来た人をそちらへ案内する
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プライバシーポリシー（移動しました）｜yorozu-craft</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://yorozu-craft.com/privacy-policy.html">
+<meta http-equiv="refresh" content="0; url=https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">
+</head>
+<body>
+<p>プライバシーポリシーは、yorozu-craft のすべてのツールで共通のページに移りました。</p>
+<p><a href="https://yorozu-craft.com/privacy-policy.html#hoshizora-sanpo">プライバシーポリシーのページへ移動する</a></p>
+</body>
+</html>
+`;
 }
 
 /* ---------------- 書き出し ---------------- */
@@ -338,7 +314,7 @@ out('about.html', about());
 out('privacy-policy.html', privacy());
 
 const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
-  ['about.html', '0.4', 'yearly'], ['privacy-policy.html', '0.3', 'yearly']];
+  ['about.html', '0.4', 'yearly']];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, p, f]) => `  <url>
