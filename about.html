@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>このアプリについて・運営者情報｜ほしぞらさんぽ</title>
+<meta name="description" content="Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典、運営者情報。">
+<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/about.html">
+<meta property="og:title" content="このアプリについて・運営者情報｜ほしぞらさんぽ">
+<meta property="og:description" content="Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典、運営者情報。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yorozu-craft.com/hoshizora-sanpo/about.html">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://yorozu-craft.com/hoshizora-sanpo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="yorozu-craft">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070b18">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="google-adsense-account" content="ca-pub-5375267956079717">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5375267956079717"
+     crossorigin="anonymous"></script>
+<link rel="stylesheet" href="./pages.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="./"><img src="./favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
+  <nav aria-label="サイト内"><a href="././">プラネタリウム</a><a href="./zukan/">星座図鑑</a><a href="./about.html" aria-current="page">このアプリについて</a></nav>
+</div></header>
+<main class="wrap">
+<h1>このアプリについて<small>つかいかた ・ しくみ ・ 運営者情報</small></h1>
+<p>「ほしぞらさんぽ」は、いつ・どこの星空でも天文計算で再現する、ブラウザで動く無料のプラネタリウムです。星座をタップすると、その星座にまつわる神話やまめちしきが読めます。ひらがなモードにすると、5歳くらいのお子さんから読める文章に切りかわります。</p>
+<a class="cta" href="./">プラネタリウムをひらく →</a>
+
+<h2>つかいかた</h2>
+<dl class="info">
+<dt>見まわす</dt><dd>画面をドラッグ（スマホは指でなぞる）。パソコンでは矢印キーでも動かせます。</dd>
+<dt>ズーム</dt><dd>2本指でひろげる・つまむ、またはマウスホイール。ズームすると暗い星や星の名前が見えてきます。</dd>
+<dt>くわしく見る</dt><dd>星座・明るい星・月・惑星・太陽をタップすると、説明がひらきます。</dd>
+<dt>時間たび</dt><dd>スライダーで前後12時間、ボタンで1日・1ヶ月ずつ動かせます。「早送り」で星がまわる日周運動を見られます（速さは60倍・600倍・3600倍）。</dd>
+<dt>場所</dt><dd>札幌・東京・大阪・福岡・那覇・石垣島・シドニーと、いまいる場所（位置情報）から選べます。時刻はその土地の時刻で表示します。</dd>
+<dt>クイズ</dt><dd>いま空に出ている星座から5問。見つからないときは「ヒント」で答えの方向へ視点が動きます。</dd>
+<dt>ひらがなモード</dt><dd>画面の文字と解説がすべてひらがなになります。</dd>
+<dt>赤いライト</dt><dd>画面全体を赤くして、夜の屋外で暗さに慣れた目を守ります。画面の明るさも下げるとより効果的です。</dd>
+<dt>オフライン</dt><dd>一度ひらくとブラウザに保存され、電波のない場所でも使えます。ホーム画面に追加するとアプリのように起動できます。</dd>
+</dl>
+
+<h2>しくみと精度</h2>
+<p>星の位置は、実在の星 約3,300個（5.6等星まで）の座標に、地球の歳差（首ふり運動）を反映して計算しています。太陽・月・惑星（水星・金星・火星・木星・土星）は軌道要素から位置と明るさを計算し、月は満ち欠けと、地表から見たときのずれ（視差）も反映しています。</p>
+<p>精度は肉眼で星空を見るためのめやすとして十分な程度です（月や惑星の位置のずれは、満月の直径の数分の一以下）。惑星の位置は1800〜2050年の範囲を想定した計算式を使っています。大気による浮き上がり（大気差）や、天王星・海王星、彗星、人工衛星は表示していません。</p>
+
+<h2>データの出典</h2>
+<ul>
+<li>恒星: Yale Bright Star Catalogue 第5版（Hoffleit &amp; Warren, 1991）。JSON 化したデータ <a href="https://github.com/brettonw/YaleBrightStarCatalog">brettonw/YaleBrightStarCatalog</a>（MIT License, © 2016 Bretton Wade）を利用</li>
+<li>惑星の軌道要素: E. M. Standish, “Keplerian Elements for Approximate Positions of the Major Planets”（NASA JPL）</li>
+<li>月の位置: Paul Schlyter, “How to compute planetary positions” の簡略理論</li>
+<li>惑星の明るさ: Mallama &amp; Hilton (2018) の式</li>
+</ul>
+<p>星座の神話は、ギリシャ神話などの一般的な伝承をもとにした要約です。伝承には諸説があります。</p>
+
+<h2>運営者情報・免責事項</h2>
+<dl class="info">
+<dt>サイト名</dt><dd>yorozu-craft（よろずクラフト）</dd>
+<dt>アプリ名</dt><dd>ほしぞらさんぽ</dd>
+<dt>運営者</dt><dd>YouheiOonuki</dd>
+<dt>料金</dt><dd>無料（会員登録・インストール不要）</dd>
+</dl>
+<p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。当アプリの利用によって生じたいかなる損害についても、運営者は責任を負いかねます。</p>
+<p>太陽は絶対に肉眼や双眼鏡・望遠鏡で直接見ないでください。目を傷めます。夜の観察では、足もとや周囲の安全に気をつけ、お子さんは大人といっしょに出かけてください。</p>
+<p>星座図鑑などの読みものページには、第三者配信事業者による広告を掲載しています。広告の内容や、広告先のサイトで提供される商品・サービスについて、運営者は責任を負いません。プラネタリウムの画面には広告を表示しません。</p>
+<p>当アプリのデザイン・文章・プログラムの著作権は運営者に帰属します。当アプリの内容は、予告なく変更・終了する場合があります。</p>
+</main>
+<footer class="site"><div class="wrap">
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="./">プラネタリウム</a><a href="./zukan/">星座図鑑</a><a href="./about.html">運営者情報</a><a href="./privacy-policy.html">プライバシーポリシー</a></nav>
+  &copy; 2026 yorozu-craft. All rights reserved.
+</div></footer>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

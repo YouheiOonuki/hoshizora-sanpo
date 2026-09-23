@@ -1,24 +1,21 @@
 {
-  "name": "ほしぞらさんぽ",
+  "id": "/hoshizora-sanpo/",
+  "name": "ほしぞらさんぽ｜Webプラネタリウム",
   "short_name": "ほしぞら",
-  "description": "こどもとおとなのWebプラネタリウム",
-  "start_url": ".",
-  "scope": ".",
+  "description": "今夜の星空を天文計算で再現する、こどもとおとなのWebプラネタリウム。オフラインでも使えます。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#050814",
   "theme_color": "#050814",
+  "categories": ["education", "kids"],
   "icons": [
-    {
-      "src": "icon-180.png",
-      "sizes": "180x180",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }
