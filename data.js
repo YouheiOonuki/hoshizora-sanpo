@@ -271,14 +271,14 @@ const LONE = [
 
 /* ぼんやり光る天体 */
 const DSO = [
- {ra:0.712, dec:41.269, name:'M31 アンドロメダ銀河', r:1.6, tilt:0.9},
+ {ra:0.712, dec:41.269, name:'M31 アンドロメダ銀河', en:'M31 Andromeda Galaxy', r:1.6, tilt:0.9},
 ];
 
 /* 星をつなぐ目印（アステリズム） */
 const ASTER = [
- {name:'夏の大三角', pts:[[18.616,38.784],[19.846,8.868],[20.690,45.280]], close:true},
- {name:'冬の大三角', pts:[[5.919,7.407],[6.752,-16.716],[7.655,5.225]], close:true},
- {name:'春の大曲線', pts:[[13.792,49.313],[14.261,19.182],[13.420,-11.161]], close:false}
+ {name:'夏の大三角', en:'Summer Triangle', pts:[[18.616,38.784],[19.846,8.868],[20.690,45.280]], close:true},
+ {name:'冬の大三角', en:'Winter Triangle', pts:[[5.919,7.407],[6.752,-16.716],[7.655,5.225]], close:true},
+ {name:'春の大曲線', en:'Arc to Arcturus and Spica', pts:[[13.792,49.313],[14.261,19.182],[13.420,-11.161]], close:false}
 ];
 
 /* 天の川の中心線: [ra(h), dec, 幅(度), 濃さ] */
@@ -295,50 +295,114 @@ const SEASON_KANA={'冬':'ふゆ','冬〜春':'ふゆから はる','春':'は�
 
 /* 場所。tz はその土地の時刻で表示するためのタイムゾーン */
 const LOCS=[
- {id:'sapporo', name:'札幌', kana:'さっぽろ', lat:43.062, lon:141.354, tz:'Asia/Tokyo'},
- {id:'tokyo',   name:'東京', kana:'とうきょう', lat:35.681, lon:139.767, tz:'Asia/Tokyo'},
- {id:'osaka',   name:'大阪', kana:'おおさか', lat:34.694, lon:135.502, tz:'Asia/Tokyo'},
- {id:'fukuoka', name:'福岡', kana:'ふくおか', lat:33.590, lon:130.402, tz:'Asia/Tokyo'},
- {id:'naha',    name:'那覇', kana:'なは', lat:26.212, lon:127.679, tz:'Asia/Tokyo'},
- {id:'ishigaki',name:'石垣島', kana:'いしがきじま', lat:24.340, lon:124.156, tz:'Asia/Tokyo'},
- {id:'sydney',  name:'シドニー', kana:'シドニー', lat:-33.868, lon:151.209, tz:'Australia/Sydney'},
+ {id:'sapporo', name:'札幌', en:'Sapporo', kana:'さっぽろ', lat:43.062, lon:141.354, tz:'Asia/Tokyo'},
+ {id:'tokyo',   name:'東京', en:'Tokyo', kana:'とうきょう', lat:35.681, lon:139.767, tz:'Asia/Tokyo'},
+ {id:'osaka',   name:'大阪', en:'Osaka', kana:'おおさか', lat:34.694, lon:135.502, tz:'Asia/Tokyo'},
+ {id:'fukuoka', name:'福岡', en:'Fukuoka', kana:'ふくおか', lat:33.590, lon:130.402, tz:'Asia/Tokyo'},
+ {id:'naha',    name:'那覇', en:'Naha (Okinawa)', kana:'なは', lat:26.212, lon:127.679, tz:'Asia/Tokyo'},
+ {id:'ishigaki',name:'石垣島', en:'Ishigaki Island', kana:'いしがきじま', lat:24.340, lon:124.156, tz:'Asia/Tokyo'},
+ {id:'sydney',  name:'シドニー', en:'Sydney', kana:'シドニー', lat:-33.868, lon:151.209, tz:'Australia/Sydney'},
 ];
 
 /* 太陽・月・惑星の解説。col は画面での色 */
 const BODY_INFO={
- sun:{jp:'太陽',kana:'たいよう',en:'Sun',col:'#fff6dc',
+ sun:{jp:'太陽',kana:'たいよう',en:'Sun',
+  adlEn:'Never look at the Sun directly; it damages your eyes. The Sun is a star like the ones in the night sky, and the closest star to Earth. After it sets and the sky darkens, the other stars come out.',
+  funEn:'Sunlight takes about 8 minutes 20 seconds to reach Earth, so the Sun you see is how it looked just over 8 minutes ago.',col:'#fff6dc',
   kid:'たいようを ちょくせつ みては ぜったい だめ！めを いためて しまうよ。たいようも じつは よぞらの ほしと おなじ「こうせい」。ちきゅうに いちばん ちかい ほしなんだ。',
   adl:'太陽は絶対に直接見ないでください。目を傷めます。太陽も夜空の星と同じ恒星のひとつで、地球からいちばん近い星です。太陽が沈んで空が暗くなると、ほかの恒星が見えてきます。',
   fun:'太陽の光が地球に届くまでは約8分20秒。いま見ている太陽は、8分あまり前の姿です。'},
- moon:{jp:'月',kana:'つき',en:'Moon',col:'#f4f1e4',
+ moon:{jp:'月',kana:'つき',en:'Moon',
+  adlEn:'The Moon does not shine by itself; it reflects sunlight. As the Sun, Earth and Moon change places, it goes from new moon to first quarter, full moon and last quarter in about 29.5 days.',
+  funEn:'The Moon always shows the same face to Earth, because it spins exactly once per orbit. In Japan, its dark markings are seen as a rabbit pounding rice cakes (mochi).',col:'#f4f1e4',
   kid:'つきは じぶんで ひかって いなくて、たいようの ひかりが あたって いる ところだけが ひかって みえるんだ。だから まいにち すこしずつ かたちが かわるよ。',
   adl:'月は自ら光らず、太陽の光を反射して輝いています。太陽・地球・月の位置関係が変わるにつれて、約29.5日で新月→上弦→満月→下弦と満ち欠けをくり返します。',
   fun:'月はいつも同じ面を地球に向けています。自転と公転の周期がぴったり同じだからです。日本ではその模様を「うさぎのもちつき」に見立ててきました。'},
- mercury:{jp:'水星',kana:'すいせい',en:'Mercury',col:'#e9dcc8',
+ mercury:{jp:'水星',kana:'すいせい',en:'Mercury',
+  adlEn:'The planet closest to the Sun. It never gets far from the Sun, so you can see it only low in the west just after sunset, or low in the east before sunrise. A story says even Copernicus never saw it.',
+  funEn:'A year on Mercury (one trip around the Sun) lasts about 88 days, roughly a quarter of an Earth year.',col:'#e9dcc8',
   kid:'たいようの いちばん ちかくを まわる、ちいさな わくせい。たいようの そばに いるから、ゆうがたや あけがたの ひくい そらでしか みられない レアもの！',
   adl:'太陽にいちばん近い惑星。太陽から大きく離れないため、見えるのは日の入り直後の西の低空か、日の出前の東の低空だけ。地動説のコペルニクスも生涯見られなかった、という言い伝えがあるほど見つけにくい惑星です。',
   fun:'水星の1年（太陽を1周する時間）は約88日。地球の4分の1ほどしかありません。'},
- venus:{jp:'金星',kana:'きんせい',en:'Venus',col:'#fffbe8',
+ venus:{jp:'金星',kana:'きんせい',en:'Venus',
+  adlEn:'After the Moon, the brightest object in the night sky. Thick carbon dioxide air and clouds of sulfuric acid cover it, and the surface is about 460 °C (860 °F). In the western evening sky it is the Evening Star; in the eastern dawn sky, the Morning Star.',
+  funEn:'Venus spins very slowly, and in the opposite direction to Earth. On Venus, the Sun rises in the west.',col:'#fffbe8',
   kid:'よぞらで つきの つぎに あかるく ひかる ほし。ゆうがたに みえる きんせいは「よいの みょうじょう」、あさは「あけの みょうじょう」って よばれるよ。',
   adl:'月の次に明るく見える天体。分厚い二酸化炭素の大気と硫酸の雲におおわれ、地表は約460℃。夕方の西空に輝くときは「宵の明星」、明け方の東空では「明けの明星」と呼ばれます。',
   fun:'金星は自転がとてもゆっくりで、しかも地球と逆向き。金星では太陽が西からのぼります。'},
- mars:{jp:'火星',kana:'かせい',en:'Mars',col:'#ff9a6a',
+ mars:{jp:'火星',kana:'かせい',en:'Mars',
+  adlEn:'It looks red because of iron oxide (rust) in its rocks and dust. It comes close to Earth about every 2 years and 2 months, and then shines especially bright and red. Rovers drive across it, studying signs of water in the past.',
+  funEn:'Mars has Olympus Mons, the largest volcano in the Solar System: about 22 km (14 mi) high, roughly six times Mount Fuji.',col:'#ff9a6a',
   kid:'あかい いろを した わくせい。すなや いわに ふくまれる「さび」の いろなんだって。いまも たんさしゃが はしりまわって しらべているよ。',
   adl:'赤く見えるのは、地表の岩や砂に含まれる酸化鉄（さび）のため。約2年2か月ごとに地球へ近づき、そのころは特に明るく赤く輝きます。探査車が走り回り、かつて水があった痕跡を調べています。',
   fun:'火星には太陽系最大の火山「オリンポス山」があります。高さは約2万2千メートル、富士山のおよそ6倍です。'},
- jupiter:{jp:'木星',kana:'もくせい',en:'Jupiter',col:'#fbe6c4',
+ jupiter:{jp:'木星',kana:'もくせい',en:'Jupiter',
+  adlEn:'The largest planet in the Solar System, about 11 times wider than Earth and made mostly of hydrogen and helium gas. With binoculars you can sometimes see the four big moons Galileo discovered, lined up like dots.',
+  funEn:'The Great Red Spot is a storm big enough to swallow Earth. People have watched it for more than 150 years.',col:'#fbe6c4',
   kid:'たいようけいで いちばん おおきな わくせい。ちきゅうが 1000こ いじょう はいっちゃう おおきさ！',
   adl:'太陽系最大の惑星で、直径は地球の約11倍。ほとんどが水素とヘリウムのガスでできています。双眼鏡を向けると、ガリレオが発見した4つの大きな衛星が、点のように並んで見えることがあります。',
   fun:'木星の「大赤斑」は、地球がすっぽり入るほど大きな嵐。150年以上前から観測されつづけています。'},
- saturn:{jp:'土星',kana:'どせい',en:'Saturn',col:'#f3dca0',
+ saturn:{jp:'土星',kana:'どせい',en:'Saturn',
+  adlEn:'The planet with beautiful rings, made of countless bits of ice and rock. The tilt of the rings changes over about 15 years; in the year they turn edge-on, they shrink to a thin line and almost vanish.',
+  funEn:"Saturn is so light that its average density is less than water's. In a big enough pool, it would float.",col:'#f3dca0',
   kid:'きれいな わっかを もつ わくせい。わっかは こおりや いわの つぶが あつまって できているよ。ぼうえんきょうで みると、ほんとうに わっかが みえる！',
   adl:'美しい環をもつ惑星。環は無数の氷や岩の粒でできています。環の傾きは約15年ごとに変わり、ちょうど真横を向いた年には、環が細い線のようになってほとんど見えなくなります。',
   fun:'土星はとても軽く、平均の密度は水より小さいほど。もし巨大なプールがあれば、ぷかぷか浮かんでしまう計算です。'},
 };
 
 /* 月齢 → 呼び名 [上限の月齢, 漢字, かな] */
-const MOON_NAMES=[[1.5,'新月','しんげつ'],[5.5,'三日月','みかづき'],[10,'上弦の月','じょうげんの つき（はんげつ）'],
- [14,'満月まえの月','まんげつ まえの つき'],[16.5,'満月','まんげつ'],[21,'満月すぎの月','まんげつ すぎの つき'],
- [25,'下弦の月','かげんの つき（はんげつ）'],[28.3,'有明の月','ありあけの つき'],[30,'新月','しんげつ']];
+const MOON_NAMES=[[1.5,'新月','しんげつ','New moon'],[5.5,'三日月','みかづき','Waxing crescent'],[10,'上弦の月','じょうげんの つき（はんげつ）','First quarter'],
+ [14,'満月まえの月','まんげつ まえの つき','Waxing gibbous'],[16.5,'満月','まんげつ','Full moon'],[21,'満月すぎの月','まんげつ すぎの つき','Waning gibbous'],
+ [25,'下弦の月','かげんの つき（はんげつ）','Last quarter'],[28.3,'有明の月','ありあけの つき','Waning crescent'],[30,'新月','しんげつ','New moon']];
 
-if(typeof module!=='undefined') module.exports={CONS,LONE,DSO,ASTER,MW,SEASON_KANA,LOCS,BODY_INFO,MOON_NAMES};
+/* ---------------- 英語版（en/）で使う名前 ----------------
+   星の固有名は IAU の星名作業部会（WGSN）の「IAU Catalog of Star Names」の表記
+   （https://exopla.net/star-names/modern-iau-star-names/ 。2026-09-24 に WGSN の表
+    https://www.pas.rochester.edu/~emamajek/WGSN/IAU-CSN.txt （2022-04-04 版）で全件を照合）。
+   星団は Messier 番号と英語の通称。星座名は CONS の en（IAU の正式名）。キーは日本語名の「（」より前 */
+const STAR_EN={
+ 'ベテルギウス':'Betelgeuse','リゲル':'Rigel','ベラトリックス':'Bellatrix','ミンタカ':'Mintaka','アルニラム':'Alnilam',
+ 'アルニタク':'Alnitak','サイフ':'Saiph','メイサ':'Meissa','アルデバラン':'Aldebaran','エルナト':'Elnath',
+ 'すばる':'Pleiades (M45)','ポルックス':'Pollux','カストル':'Castor','アルヘナ':'Alhena','プレセペ星団':'Beehive Cluster (M44)',
+ 'レグルス':'Regulus','デネボラ':'Denebola','アルギエバ':'Algieba','スピカ':'Spica','ポリマ':'Porrima',
+ 'ズベンエルゲヌビ':'Zubenelgenubi','ズベンエスカマリ':'Zubeneschamali','アンタレス':'Antares','サルガス':'Sargas',
+ 'シャウラ':'Shaula','カウス・アウストラリス':'Kaus Australis','ヌンキ':'Nunki','サダルメリク':'Sadalmelik',
+ 'サダルスウド':'Sadalsuud','アルレシャ':'Alrescha','ハマル':'Hamal','シェラタン':'Sheratan','シリウス':'Sirius',
+ 'ミルザム':'Mirzam','アダーラ':'Adhara','プロキオン':'Procyon','ゴメイサ':'Gomeisa','カペラ':'Capella',
+ 'メンカリナン':'Menkalinan','ドゥーベ':'Dubhe','メラク':'Merak','アリオト':'Alioth','ミザール':'Mizar',
+ 'アルカイド':'Alkaid','ポラリス':'Polaris (North Star)','コカブ':'Kochab','カフ':'Caph','シェダル':'Schedar',
+ 'デネブ':'Deneb','サドル':'Sadr','アルビレオ':'Albireo','ベガ':'Vega','アルタイル':'Altair','タラゼド':'Tarazed',
+ 'アークトゥルス':'Arcturus','イザール':'Izar','マルカブ':'Markab','シェアト':'Scheat','アルゲニブ':'Algenib',
+ 'エニフ':'Enif','アルフェラッツ':'Alpheratz','ミラク':'Mirach','アルマク':'Almach','ミルファク':'Mirfak',
+ 'アルゴル':'Algol','アクルックス':'Acrux','ミモザ':'Mimosa','ガクルックス':'Gacrux','ラス・アルハゲ':'Rasalhague',
+ 'ケバルライ':'Cebalrai','イェド・プリオル':'Yed Prior','サビク':'Sabik','アルフェッカ':'Alphecca',
+ 'コルネフォロス':'Kornephoros','ラス・アルゲティ':'Rasalgethi','エルタニン':'Eltanin','ラスタバン':'Rastaban',
+ 'トゥバン':'Thuban','リギル・ケンタウルス':'Rigil Kentaurus','ハダル':'Hadar','メンケント':'Menkent',
+ 'フォーマルハウト':'Fomalhaut','アルファルド':'Alphard','カノープス':'Canopus','アケルナル':'Achernar',
+};
+/* LONE の所属星座（CONS に無いもの）の IAU 正式名 */
+const CON_EN_EXTRA={'みなみのうお座':'Piscis Austrinus','うみへび座':'Hydra','りゅうこつ座':'Carina','エリダヌス座':'Eridanus'};
+/* 見ごろの季節（日本＝北半球の夜の空で見たとき） */
+const SEASON_EN={'冬':'Best in northern winter','冬〜春':'Best in northern winter–spring','春':'Best in northern spring',
+ '初夏':'Best in northern early summer','夏':'Best in northern summer','秋':'Best in northern autumn',
+ '秋〜冬':'Best in northern autumn–winter','春（北の空）':'Northern sky, best in spring','夏（北の空）':'Northern sky, best in summer',
+ '一年中（北の空）':'Northern sky, all year','南半球':'Southern Hemisphere sky'};
+/* 英語版の場所。座標は各都市の中心のおおよその値（0.1° 程度の精度で足りる）。tz はその土地の時刻の表示用 */
+const LOCS_WORLD=[
+ {id:'new-york',    en:'New York',     lat:40.713, lon:-74.006,  tz:'America/New_York'},
+ {id:'chicago',     en:'Chicago',      lat:41.878, lon:-87.630,  tz:'America/Chicago'},
+ {id:'los-angeles', en:'Los Angeles',  lat:34.052, lon:-118.244, tz:'America/Los_Angeles'},
+ {id:'toronto',     en:'Toronto',      lat:43.653, lon:-79.383,  tz:'America/Toronto'},
+ {id:'honolulu',    en:'Honolulu',     lat:21.307, lon:-157.858, tz:'Pacific/Honolulu'},
+ {id:'sao-paulo',   en:'São Paulo',    lat:-23.551,lon:-46.633,  tz:'America/Sao_Paulo'},
+ {id:'london',      en:'London',       lat:51.507, lon:-0.128,   tz:'Europe/London'},
+ {id:'berlin',      en:'Berlin',       lat:52.520, lon:13.405,   tz:'Europe/Berlin'},
+ {id:'cape-town',   en:'Cape Town',    lat:-33.925,lon:18.424,   tz:'Africa/Johannesburg'},
+ {id:'mumbai',      en:'Mumbai',       lat:19.076, lon:72.878,   tz:'Asia/Kolkata'},
+ {id:'singapore',   en:'Singapore',    lat:1.352,  lon:103.820,  tz:'Asia/Singapore'},
+ ...['tokyo','osaka','sapporo','naha'].map(id=>LOCS.find(l=>l.id===id)),   // 同じタイムゾーンなら先の都市が既定になる
+ LOCS.find(l=>l.id==='sydney'),
+ {id:'auckland',    en:'Auckland',     lat:-36.848,lon:174.763,  tz:'Pacific/Auckland'},
+];
+
+if(typeof module!=='undefined') module.exports={CONS,LONE,DSO,ASTER,MW,SEASON_KANA,LOCS,BODY_INFO,MOON_NAMES,STAR_EN,CON_EN_EXTRA,SEASON_EN,LOCS_WORLD};

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>What’s in the Night Sky Tonight? Free Star Map and Web Planetarium</title>
+<meta name="description" content="See tonight’s sky for your city: stars, constellations, planets and the Moon’s phase, calculated in your browser for any date and place. Free, no sign-up, works offline.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/en/">
+<link rel="alternate" hreflang="ja" href="https://yorozu-craft.com/hoshizora-sanpo/">
+<link rel="alternate" hreflang="en" href="https://yorozu-craft.com/hoshizora-sanpo/en/">
+<link rel="alternate" hreflang="x-default" href="https://yorozu-craft.com/hoshizora-sanpo/">
+<!-- Open Graph -->
+<meta property="og:title" content="What’s in the Night Sky Tonight? Free Star Map and Web Planetarium">
+<meta property="og:description" content="Stars, constellations, planets and the Moon’s phase for your city, any date. Free, no sign-up, works offline.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yorozu-craft.com/hoshizora-sanpo/en/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:image" content="https://yorozu-craft.com/hoshizora-sanpo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="yorozu-craft">
+<meta name="twitter:card" content="summary_large_image">
+<!-- PWA -->
+<meta name="theme-color" content="#050814">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Planetarium">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Web Planetarium (Hoshizora Sanpo)",
+  "description": "A free web planetarium that calculates the night sky for any date and place: stars, constellations, planets and the Moon's phase.",
+  "url": "https://yorozu-craft.com/hoshizora-sanpo/en/",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "All",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "inLanguage": "en",
+  "browserRequirements": "Requires JavaScript"
+}
+</script>
+<!-- Google AdSense: full-screen app, so no ad script here (site verification tag only). Same rule as the Japanese screen -->
+<meta name="google-adsense-account" content="ca-pub-5375267956079717">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="sky" tabindex="0" aria-label="Night sky. Drag to look around, pinch to zoom, tap a constellation for notes. Arrow keys also work."></canvas>
+
+  <div id="plate">
+    <h1>Web Planetarium</h1>
+    <div class="sub"><b id="pTime">--</b><br><span id="pWhere"></span></div>
+  </div>
+  <a id="langLink" href="../" hreflang="ja" lang="ja">日本語</a>
+  <button id="helpBtn" aria-label="How to use">?</button>
+
+  <div id="quizBar" role="status"><span class="qt"><span class="qn" id="qNum"></span><span id="qText"></span></span>
+    <button id="qHint">Hint</button></div>
+
+  <div id="timePanel" class="panel" role="group" aria-label="Time travel">
+    <div id="tpNow">--</div>
+    <input id="tpSlider" type="range" min="-720" max="720" step="10" value="0" aria-label="Move time">
+    <div id="tpHint">← 12 hours earlier　|　slide to move time　|　12 hours later →</div>
+    <div class="tpRow">
+      <button class="tbtn" data-month="-1">−1 month</button>
+      <button class="tbtn" data-d="-1">−1 day</button>
+      <button class="tbtn" data-d="1">+1 day</button>
+      <button class="tbtn" data-month="1">+1 month</button>
+    </div>
+    <div class="tpRow">
+      <button class="tbtn gold" id="tpNowBtn">Back to now</button>
+      <button class="tbtn" id="tpPlay" aria-pressed="false"></button>
+      <button class="tbtn" id="tpSpeed"></button>
+    </div>
+  </div>
+
+  <div id="locPanel" class="panel" role="group" aria-label="Place">
+    <h2>Whose sky?</h2>
+    <div id="locList"></div>
+    <button class="tbtn" id="locHere">📍 Use my location</button>
+    <form id="locForm">
+      <label>Latitude (south is −)<input id="locLat" type="number" inputmode="decimal" step="any" min="-90" max="90" placeholder="51.5"></label>
+      <label>Longitude (west is −)<input id="locLon" type="number" inputmode="decimal" step="any" min="-180" max="180" placeholder="-0.1"></label>
+      <button class="tbtn gold" type="submit">Go</button>
+    </form>
+    <div id="locNote">Your location is used only to calculate the sky and is never sent anywhere. For your location or typed coordinates, times use your device’s time zone.</div>
+  </div>
+
+  <nav id="dock" aria-label="Menu">
+    <button class="pill" id="bLines" aria-pressed="true">Lines</button>
+    <button class="pill" id="bNames" aria-pressed="true">Names</button>
+    <button class="pill" id="bTime" aria-pressed="false" aria-controls="timePanel">Time</button>
+    <button class="pill" id="bLoc" aria-pressed="false" aria-controls="locPanel"></button>
+    <button class="pill" id="bMoon">Moon phase</button>
+    <button class="pill" id="bQuiz" aria-pressed="false">Quiz</button>
+    <button class="pill" id="bAst" aria-pressed="false">Asterisms</button>
+    <button class="pill" id="bRed" aria-pressed="false">Red light</button>
+  </nav>
+
+  <section id="sheet" role="dialog" aria-label="Details">
+    <button id="sheetClose" aria-label="Close">✕</button>
+    <div id="sheetBody"></div>
+  </section>
+
+  <div id="help">
+    <div id="helpCard" role="dialog" aria-labelledby="helpTitle">
+      <h2 id="helpTitle">Web Planetarium</h2>
+      <div class="tag">HOSHIZORA SANPO</div>
+      <ul>
+        <li><span class="k">Drag</span><span>Look around (swipe on a phone)</span></li>
+        <li><span class="k">Pinch / wheel</span><span>Zoom in and out</span></li>
+        <li><span class="k">Tap</span><span>Open notes on a constellation, star, the Moon or a planet</span></li>
+        <li><span class="k">Time</span><span>Move time and watch the stars, Sun and Moon move</span></li>
+        <li><span class="k">Place</span><span>Pick a city or type a latitude and longitude</span></li>
+        <li><span class="k">Red light</span><span>Keeps your eyes used to the dark outdoors</span></li>
+      </ul>
+      <button id="helpStart">Start</button>
+      <div id="helpLinks">
+        <a href="./calendar/">Sky calendar</a><a href="./guide.html">How it works</a><a href="../../en/about.html">About</a><a href="../../en/privacy-policy.html">Privacy policy</a><br>
+        <a href="../../en/">yorozu-craft (more tools)</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="redFilter"></div>
+</div>
+
+<script src="../astro.js"></script>
+<script src="../data.js"></script>
+<script src="../catalog.js"></script>
+<script src="../text.js"></script>
+<script src="../main.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

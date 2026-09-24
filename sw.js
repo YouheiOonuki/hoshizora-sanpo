@@ -12,7 +12,7 @@
 'use strict';
 
 const CACHE_PREFIX = 'hoshizora-sanpo-';
-const CACHE_NAME   = `${CACHE_PREFIX}v3`; // キャッシュする中身の構成を変えたら上げる
+const CACHE_NAME   = `${CACHE_PREFIX}v4`; // キャッシュする中身の構成を変えたら上げる
 
 /** 初回インストール時に取得しておくファイル（プラネタリウム本体。図鑑は開いたページから順に保存される） */
 const PRECACHE_URLS = [
@@ -22,6 +22,7 @@ const PRECACHE_URLS = [
   './astro.js',
   './data.js',
   './catalog.js',
+  './text.js',
   './main.js',
   './manifest.webmanifest',
   './favicon.svg',
@@ -33,6 +34,10 @@ const PRECACHE_URLS = [
   './zukan/',
   './calendar/',
   './about.html',
+  // 英語版（本体と天文カレンダーの一覧。ほかの英語ページは開いたものから保存される）
+  './en/',
+  './en/manifest.webmanifest',
+  './en/calendar/',
   // プライバシーポリシーは yorozu-craft 共通ページに移したのでキャッシュしない
 ];
 
@@ -103,8 +108,9 @@ async function matchCache(request) {
   const cache = await caches.open(CACHE_NAME);
   if (request.mode !== 'navigate') return cache.match(request);
 
-  // ページ遷移は ?c=ori などのクエリを無視して探し、無ければトップページを返す
-  return (await cache.match(request, { ignoreSearch: true })) || cache.match('./');
+  // ページ遷移は ?c=ori などのクエリを無視して探し、無ければトップページ（英語のページなら英語の本体）を返す
+  const inEn = new URL(request.url).pathname.startsWith(new URL('./en/', self.registration.scope).pathname);
+  return (await cache.match(request, { ignoreSearch: true })) || cache.match(inEn ? './en/' : './');
 }
 
 function delay(ms) {

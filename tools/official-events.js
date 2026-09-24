@@ -72,18 +72,18 @@ const MOON_PHASES = [
   ['2027-12-28T05:12+09:00', 'new', 2027],
 ].map(([at, type, y]) => ({ at, type, src: `rekiyou${y}-moon` }));
 
-/* 満月に添える注記（ほしぞら情報） */
+/* 満月に添える注記（ほしぞら情報）。en は英語版（en/calendar/）の表記。日付・時刻は持たせない（上のデータから取る） */
 const MOON_NOTES = [
-  { date: '2026-12-24', note: '2026年で地球に最も近い満月', src: 'sky2026-12' },
-  { date: '2027-01-22', note: '2027年で地球に最も近い満月', src: 'sky2027-01' },
-  { date: '2027-07-19', note: '2027年で地球から最も遠い満月', src: 'sky2027-07' },
+  { date: '2026-12-24', note: '2026年で地球に最も近い満月', en: 'Closest full moon of 2026', src: 'sky2026-12' },
+  { date: '2027-01-22', note: '2027年で地球に最も近い満月', en: 'Closest full moon of 2027', src: 'sky2027-01' },
+  { date: '2027-07-19', note: '2027年で地球から最も遠い満月', en: 'Farthest full moon of 2027', src: 'sky2027-07' },
 ];
 
 /* お月見（国立天文台が二十四節気と朔から求めた日付） */
 const MOON_VIEWING = [
-  { date: '2026-09-25', name: '中秋の名月', note: '満月（9月27日）と日付が2日ずれる', src: 'sky2026-09-meigetsu' },
+  { date: '2026-09-25', name: '中秋の名月', note: '満月（9月27日）と日付が2日ずれる', en: 'Two days before the full moon (Sep 27)', src: 'sky2026-09-meigetsu' },
   { date: '2026-10-23', name: '十三夜', src: 'sky2026-09-meigetsu' },
-  { date: '2027-09-15', name: '中秋の名月', note: '満月は翌16日', src: 'sky2027-09' },
+  { date: '2027-09-15', name: '中秋の名月', note: '満月は翌16日', en: 'The full moon is the next day (Sep 16)', src: 'sky2027-09' },
 ];
 
 /* 流星群の極大（ほしぞら情報。極大日時は IMO の予報にもとづく）
@@ -113,7 +113,7 @@ const METEOR_PEAKS = [
 const ECLIPSES = [
   { date: '2026-03-03', body: 'moon', type: '皆既月食', japan: 'visible', src: 'rekiyou2026-eclipse',
     tokyo: { start: '18:49.8', totalStart: '20:04.0', max: '20:33.7', totalEnd: '21:03.4', end: '22:17.6', mag: '1.156' },
-    note: '日本では全国で皆既食が見られた' },
+    note: '日本では全国で皆既食が見られた', en: 'Totality was visible across Japan' },
   { date: '2026-08-13', body: 'sun', type: '皆既日食', japan: 'none', src: 'rekiyou2026-eclipse' },
   { date: '2026-08-28', body: 'moon', type: '部分月食', japan: 'none', src: 'rekiyou2026-eclipse' },
   { date: '2027-02-07', dateLabel: '2027年2月6〜7日', body: 'sun', type: '金環日食', japan: 'none', src: 'rekiyou2027-eclipse' },
@@ -140,11 +140,11 @@ const PLANET_EVENTS = [
   { date: '2026-10-04', planet: 'saturn', kind: 'opposition', src: 'sky2026-10' },
   { date: '2026-10-12', planet: 'mercury', kind: 'elong-east', src: 'sky2026-10' },
   { date: '2026-11-21', planet: 'mercury', kind: 'elong-west', src: 'sky2026-11' },
-  { date: '2026-11-30', planet: 'venus', kind: 'brightest', note: 'マイナス4.9等', src: 'sky2026-11' },
+  { date: '2026-11-30', planet: 'venus', kind: 'brightest', note: 'マイナス4.9等', en: 'magnitude −4.9', src: 'sky2026-11' },
   { date: '2027-01-04', planet: 'venus', kind: 'elong-west', src: 'sky2027-01' },
   { date: '2027-02-03', planet: 'mercury', kind: 'elong-east', src: 'sky2027-02' },
   { date: '2027-02-11', planet: 'jupiter', kind: 'opposition', src: 'sky2027-02' },
-  { date: '2027-02-20', planet: 'mars', kind: 'opposition', note: '同じ日に地球に最接近', src: 'sky2027-02' },
+  { date: '2027-02-20', planet: 'mars', kind: 'opposition', note: '同じ日に地球に最接近', en: 'Closest to Earth the same day', src: 'sky2027-02' },
   { date: '2027-03-17', planet: 'mercury', kind: 'elong-west', src: 'sky2027-03' },
   { date: '2027-05-28', planet: 'mercury', kind: 'elong-east', src: 'sky2027-05' },
   { date: '2027-07-16', planet: 'mercury', kind: 'elong-west', src: 'sky2027-07' },
