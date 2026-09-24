@@ -141,7 +141,8 @@ const monthKey = d => d.slice(0, 7);
 module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   const events = allEvents();
   const files = [];
-  const add = (file, title, description, body, jsonld) => files.push({ file, html: page({ rel: '../', file, title, description, current: 'calendar/', body: body + PAST_SCRIPT, jsonld }) });
+  // 天文カレンダーは全ページに英語版（en/calendar/、tools/calendar-pages-en.js）がある
+  const add = (file, title, description, body, jsonld) => files.push({ file, html: page({ rel: '../', file, title, description, current: 'calendar/', body: body + PAST_SCRIPT, jsonld, alt: 'en/' + file }) });
   const crumbs = (label) => `<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ <a href="./">天文カレンダー</a> ／ ${esc(label)}</div>`;
   const breadcrumb = (name, file) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ほしぞらさんぽ', item: BASE },
@@ -381,3 +382,5 @@ ${sourceList(rows.map(e => e.src[0]), esc)}`;
   }
   return { files, showerLinks };
 };
+/* 英語版（tools/calendar-pages-en.js）が同じデータ・同じ計算を使うための部品 */
+Object.assign(module.exports, { allEvents, SHOWERS, parts, isoJst, midnightJst, planetView, fullMoonView });

@@ -114,3 +114,11 @@ ul.src{font-size:13px;line-height:1.8;}
 .mcard-h b{color:var(--gold);font-family:var(--sans);letter-spacing:0;}
 .mcard dl.info{grid-template-columns:7.5em 1fr;margin:6px 0 8px;font-size:14px;}
 @media (max-width:520px){ .mcard dl.info{grid-template-columns:1fr;gap:0;} .mcard dl.info dd{margin-bottom:6px;} }
+
+/* ---- 英語版（en/）: 欧文のフォントと字間 ---- */
+html[lang="en"]{--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
+html[lang="en"] body{line-height:1.7;}
+html[lang="en"] h1,html[lang="en"] h2,html[lang="en"] .logo,html[lang="en"] .cta,html[lang="en"] ul.cards b{letter-spacing:.02em;}
+html[lang="en"] h1 small{letter-spacing:.04em;}
+html[lang="en"] .box b{letter-spacing:.02em;}
+.month h3{font-family:var(--serif);color:var(--gold);font-weight:600;margin:26px 0 4px;}

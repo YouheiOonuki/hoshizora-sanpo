@@ -1,12 +1,17 @@
 'use strict';
 /* =================================================================
    ほしぞらさんぽ — 画面の描画と操作
-   読み込み順: astro.js（天文計算）→ data.js（星座・解説）→ catalog.js（実在の星）→ この main.js
+   読み込み順: astro.js（天文計算）→ data.js（星座・解説）→ catalog.js（実在の星）→ text.js（文言）→ この main.js
+   英語版（en/index.html、<html lang="en">）も同じこのファイルで動く。文言は text.js の TEXT.en
    ================================================================= */
 const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
 const lerp  = (a,b,t)=>a+(b-a)*t;
 const smooth= (a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);};
 const $ = id=>document.getElementById(id);
+const EN = document.documentElement.lang==='en';
+const ROOT = EN?'../':'./';            // 英語版は en/ に置くので、図鑑・sw.js はひとつ上
+const PLACES = EN?LOCS_WORLD:LOCS;     // 選べる場所
+const KEY = EN?'hzs_en_':'hzs_';       // 保存のキー（日英で別にする）
 
 /* ---------------- 保存（使えない環境でも動くように） ---------------- */
 function lsGet(k){ try{return localStorage.getItem(k);}catch(e){return null;} }
@@ -47,7 +52,7 @@ const DSO_PTS = DSO.map(d=>{ const [ra,dec]=prec(d.ra*15*DEG,d.dec*DEG); return 
 const ASTER_PTS = ASTER.map(a=>({...a, pts:a.pts.map(p=>{ const [ra,dec]=prec(p[0]*15*DEG,p[1]*DEG); return {raRad:ra,sinD:Math.sin(dec),cosD:Math.cos(dec)}; })}));
 
 /* ---------------- 状態 ---------------- */
-let loc = LOCS[1];                     // 東京
+let loc = EN?defaultPlace():LOCS[1];   // 日本語版は東京
 let offsetMs=0, scrubBase=0, playing=false, scrubbing=false;
 const SPEEDS=[60,600,3600]; let speedIdx=1;
 let az0=180*DEG, alt0=32*DEG, fov=80;
@@ -59,7 +64,21 @@ let anim=null;                         // 視点の移動アニメーション
 let bodies=[];                         // この瞬間の太陽・月・惑星（画面座標つき）
 const meteors=[]; let nextMeteor=performance.now()+9000;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const tx = (adult, kid)=>kids?kid:adult;
+/** 文言（text.js）。ひらがなモードで kana に無いものは ja を使う */
+function T(k,...a){
+  const v=EN?TEXT.en[k]:(kids&&k in TEXT.kana)?TEXT.kana[k]:TEXT.ja[k];
+  return typeof v==='function'?v(...a):v;
+}
+/** 英語版の最初の場所: 端末のタイムゾーンと同じ都市。なければロンドン */
+function defaultPlace(){
+  let tz=''; try{ tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){}
+  return LOCS_WORLD.find(l=>l.tz===tz)||LOCS_WORLD.find(l=>l.id==='london');
+}
+/* 名前（日本語・ひらがな・英語） */
+const placeName=l=>EN?(l.en||l.name):kids?(l.kana||l.name):l.name;
+const conLabel=c=>EN?c.en:kids?c.kana+'ざ':c.jp;
+const starLabel=s=>{ const b=s.name.split('（')[0]; return EN?(STAR_EN[b]||b):kids?b:s.name; };
+const bodyLabel=info=>EN?info.en:kids?info.kana:info.jp;
 
 /* ---------------- 時刻（その土地の時刻で表示する） ---------------- */
 const fmtCache={};
@@ -70,9 +89,23 @@ function localParts(ms,tz){
   return o;
 }
 const WEEK=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], YOBI='日月火水木金土';
+const fmtEn={};
 function fmt(ms){
+  if(EN){
+    const f=fmtEn[loc.tz]||(fmtEn[loc.tz]=new Intl.DateTimeFormat('en-US',{timeZone:loc.tz,weekday:'short',year:'numeric',
+      month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}));
+    return f.format(new Date(ms));
+  }
   const p=localParts(ms,loc.tz);
   return `${p.year}/${p.month}/${p.day}（${YOBI[WEEK.indexOf(p.weekday)]}）${p.hour}:${p.minute}`;
+}
+/** その土地の「YYYY-MM-DDTHH:MM」（現地時刻）→ UNIX ミリ秒。夏時間の切りかわりも2回で合う */
+function fromLocal(str){
+  const want=Date.parse(str+'Z'); if(!isFinite(want)) return NaN;
+  let ms=want;
+  for(let i=0;i<2;i++){ const p=localParts(ms,loc.tz);
+    const got=Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute); ms+=want-got; }
+  return ms;
 }
 /** その土地で次に「hh 時」になる時刻（すでに過ぎていれば翌日。backMin 分前までは今日とみなす） */
 function nextLocalHour(ms,hh,backMin=0){
@@ -122,8 +155,8 @@ function hexA(hex,a){
   const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
   return `rgba(${r},${g},${b},${clamp(a,0,1)})`;
 }
-const FONT_M='"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif';
-const FONT_S='"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif';
+const FONT_M=EN?'Georgia,"Times New Roman",serif':'"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif';
+const FONT_S=EN?'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif':'"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif';
 
 /* ---------------- 描画 ---------------- */
 let lastFrame=performance.now();
@@ -220,7 +253,7 @@ function render(now){
       ctx.fillStyle=dg; ctx.beginPath(); ctx.arc(0,0,r,0,TAU); ctx.fill(); ctx.restore();
       if(showNames && fov<70 && !quiz){
         ctx.fillStyle=`rgba(154,165,196,${0.8*starF})`; ctx.font='10px '+FONT_S;
-        ctx.textAlign='left'; ctx.fillText(tx(d.name,'アンドロメダぎんが'), p[0]+r*0.5+4, p[1]-4);
+        ctx.textAlign='left'; ctx.fillText(EN?d.en:kids?'アンドロメダぎんが':d.name, p[0]+r*0.5+4, p[1]-4);
       }
     }
   }
@@ -261,7 +294,7 @@ function render(now){
       const cx=ps.reduce((s,p)=>s+p[0],0)/ps.length, cy=ps.reduce((s,p)=>s+p[1],0)/ps.length;
       ctx.fillStyle=`rgba(240,200,110,${0.85*starF})`;
       ctx.font='12px '+FONT_M; ctx.textAlign='center';
-      ctx.fillText(kids?a.name.replace('夏の大三角','なつの だいさんかく').replace('冬の大三角','ふゆの だいさんかく').replace('春の大曲線','はるの だいきょくせん'):a.name,cx,cy);
+      ctx.fillText(EN?a.en:kids?a.name.replace('夏の大三角','なつの だいさんかく').replace('冬の大三角','ふゆの だいさんかく').replace('春の大曲線','はるの だいきょくせん'):a.name,cx,cy);
     }
     ctx.restore();
   }
@@ -337,14 +370,14 @@ function render(now){
         if(n<Math.max(2,c.idx.length*0.4)) continue;
         const hot=selected===c;
         ctx.fillStyle=hot?`rgba(240,200,110,${0.95*starF})`:`rgba(240,200,110,${0.62*starF})`;
-        ctx.fillText(kids?c.kana+'ざ':c.jp, sx/n, sy/n - 10);
+        ctx.fillText(conLabel(c), sx/n, sy/n - 10);
       }
       if(fov<62){
         ctx.font='10.5px '+FONT_S; ctx.textAlign='left';
         ctx.fillStyle=`rgba(232,236,247,${0.6*starF})`;
         for(const s of stars){
           if(!s.vis||!s.name||s.mag>2.3) continue;
-          ctx.fillText(s.name.split('（')[0], s.sx+7, s.sy+3);
+          ctx.fillText(EN?starLabel(s).split(' (')[0]:s.name.split('（')[0], s.sx+7, s.sy+3);
         }
       }
     }
@@ -356,7 +389,7 @@ function render(now){
       const info=BODY_INFO[b.id];
       ctx.fillStyle=dayF>0.5&&lit?'rgba(40,40,60,0.85)':`rgba(255,228,170,${0.9*a})`;
       const off=(b.r||6)+6;
-      ctx.fillText(tx(info.jp,info.kana), b.sx+off, b.sy+4);
+      ctx.fillText(bodyLabel(info), b.sx+off, b.sy+4);
     }
   }
 
@@ -426,11 +459,10 @@ function drawGround(f,dayF){
   ctx.restore();
 }
 function drawDirections(f,sinA0,cosA0){
-  const dirs=[['北','きた',0],['北東','',45],['東','ひがし',90],['南東','',135],
-              ['南','みなみ',180],['南西','',225],['西','にし',270],['北西','',315]];
+  const names=T('dirs');
   ctx.textAlign='center';
-  for(const [nm,kn,azd] of dirs){
-    const label=kids?kn:nm;
+  for(let i=0;i<8;i++){
+    const label=names[i], azd=i*45;
     if(!label) continue;
     const p=project(-3*DEG,azd*DEG,f,sinA0,cosA0);
     if(!p||p[2]<0.05) continue;
@@ -462,7 +494,7 @@ function drawFlash(now){
   if(now>flash.until){flash=null;return;}
   ctx.font='600 30px '+FONT_S; ctx.textAlign='center';
   ctx.fillStyle=flash.ok?'rgba(140,230,170,0.95)':'rgba(255,120,120,0.95)';
-  ctx.fillText(flash.ok?'○ せいかい！':'✕ ざんねん', flash.x, flash.y);
+  ctx.fillText(flash.ok?T('correct'):T('wrong'), flash.x, flash.y);
 }
 
 /* ---------------- 視点の移動 ---------------- */
@@ -485,16 +517,14 @@ function conAltAz(c,ms=simNow()){
 function lookAtCon(c){ const [a,z]=conAltAz(c); flyTo(Math.max(a,defaultAlt()*0.6),z); }
 
 /* ---------------- 上の表示 ---------------- */
-const DIRS=['北','北東','東','南東','南','南西','西','北西'];
-const DIRS_K=['きた','ほくとう','ひがし','なんとう','みなみ','なんせい','にし','ほくせい'];
 let lastHud=0;
 function updHud(simMs){
   const n=performance.now(); if(n-lastHud<250) return; lastHud=n;
   const traveling=Math.abs(offsetMs)>90000;
-  const local=loc.tz!=='Asia/Tokyo'?tx('（現地時刻）','（げんちの じかん）'):'';
-  $('pTime').textContent=fmt(simMs)+local+(traveling?tx('（時間たび中）','（じかんたび ちゅう）'):'');
+  const local=loc.tz!=='Asia/Tokyo'?T('localTime'):'';
+  $('pTime').textContent=fmt(simMs)+local+(traveling?T('traveling'):'');
   const d=Math.round((((az0/DEG)%360+360)%360)/45)%8;
-  $('pWhere').textContent=kids?`${loc.kana}の そら ・ ${DIRS_K[d]}を むいているよ`:`${loc.name}の空 ・ ${DIRS[d]}を向いています`;
+  $('pWhere').textContent=T('where',placeName(loc),T('dirsLong')[d]);
   $('tpNow').textContent=fmt(simMs);
 }
 
@@ -623,53 +653,50 @@ function openCon(c){
   // 時間を動かした直後でも正しいよう、描画を待たずにその場で高度を計算する
   const ms=simNow(), lst=lstRad(ms,loc.lon), sl=Math.sin(loc.lat*DEG), cl=Math.cos(loc.lat*DEG);
   const up=c.idx.filter(i=>{ const s=stars[i]; return altAz(s.sinD,s.cosD,s.raRad,lst,sl,cl)[0]>0; }).length>=c.idx.length/2;
-  const season=kids?(SEASON_KANA[c.season]||c.season):c.season;
-  const chips=`<span class="chip season">${season}の${tx('星座','せいざ')}</span>`+
-    (up?`<span class="chip up">${tx('いま空に見えています','いま みえているよ')}</span>`
-       :`<span class="chip">${tx('いまは地平線の下','いまは ちへいせんの した')}</span>`);
-  const named=c.ss.filter(s=>s[4]).slice(0,4).map(s=>
-    `<div class="star-chip"><span class="dot" style="color:${bvColor(s[3]??0.3)};background:${bvColor(s[3]??0.3)}"></span>
-     ${esc(s[4].split('（')[0])}<small>${kids
-       ?`${s[2].toFixed(1)}とうせい${s[5]?' ・ やく'+s[5]+'こうねん':''}`
-       :`${s[2].toFixed(1)}等${s[5]?' ・ '+s[5]+'光年':''}`}</small></div>`).join('');
+  const season=EN?SEASON_EN[c.season]:kids?(SEASON_KANA[c.season]||c.season):c.season;
+  const chips=`<span class="chip season">${T('seasonChip',season)}</span>`+
+    (up?`<span class="chip up">${T('upNow')}</span>`:`<span class="chip">${T('below')}</span>`);
+  const named=c.ss.filter(s=>s[4]).slice(0,4).map(s=>{
+    const b=s[4].split('（')[0];
+    return `<div class="star-chip"><span class="dot" style="color:${bvColor(s[3]??0.3)};background:${bvColor(s[3]??0.3)}"></span>
+     ${esc(EN?STAR_EN[b]||b:b)}<small>${T('starMag',s[2].toFixed(1),s[5])}</small></div>`; }).join('');
+  // 英語版: 神話・まめちしきは日本語だけ（長い文章を機械翻訳しない）。そのことを書いて図鑑（日本語）へ
+  const story=EN?`<div class="sh-story">${T('mythNote')}</div>`
+    :`<div class="sh-story${kids?' kids':''}">${kids?c.kid:c.adl}</div>${kids?'':`<div class="sh-fun"><b>${T('funLabel')}</b>　${c.fun}</div>`}`;
   showSheet(`
-    <div class="sh-kana">${kids?'せいざ':c.kana+'ざ'}</div>
-    <div class="sh-name">${kids?c.kana+'ざ':c.jp}</div>
-    <div class="sh-en">${c.en}</div>
+    <div class="sh-kana">${EN?T('conKind'):kids?'せいざ':c.kana+'ざ'}</div>
+    <div class="sh-name">${conLabel(c)}</div>
+    <div class="sh-en"${EN?' lang="ja"':''}>${EN?c.jp:c.en}</div>
     <div class="sh-chips">${chips}</div>
-    <div class="sh-story${kids?' kids':''}">${kids?c.kid:c.adl}</div>
-    ${kids?'':`<div class="sh-fun"><b>まめちしき</b>　${c.fun}</div>`}
+    ${story}
     ${named?`<div class="sh-stars">${named}</div>`:''}
-    <a class="sh-link" href="./zukan/${c.id}.html">${tx(`${c.jp}の見つけ方・図鑑ページ →`,'ずかんで もっと みる →')}</a>`,{type:'con',c});
+    <a class="sh-link" href="${ROOT}zukan/${c.id}.html"${EN?' hreflang="ja"':''}>${T('zukanLink',c)}</a>`,{type:'con',c});
 }
 function openStar(s){
   const pct=clamp((s.bv+0.4)/2.2,0.02,0.98)*100;
   const lyTxt=s.ly?(s.ly<1000?s.ly:Math.round(s.ly/100)*100):0;
-  const story=kids
-    ?`${s.ly?`いま みえている ひかりは、やく${lyTxt}ねんまえに この ほしを でた ひかりだよ。`:''}あおい ほしは とっても あつい ほし。あかい ほしは すこし つめたい ほしなんだ。`
-    :`${s.ly?`いま見えている光は、約${lyTxt}年前にこの星を出た光です。`:''}星の色は表面温度で決まります。<b style="color:#a8c0ff">青い星ほど高温</b>、<b style="color:#ff9d68">赤い星ほど低温</b>です。`;
+  const story=T('starStory',s.ly?lyTxt:0);
+  const conOf=s.con?conLabel(s.con):EN?(CON_EN_EXTRA[s.conName]||''):kids?(s.conName||'').replace('座','ざ'):(s.conName||'');
   showSheet(`
-    <div class="sh-kana">${kids?'ほし':'恒星'}</div>
-    <div class="sh-name">${esc(kids?s.name.split('（')[0]:s.name)}</div>
-    <div class="sh-en">${s.con?(kids?s.con.kana+'ざ':s.con.jp):esc(kids?(s.conName||'').replace('座','ざ'):(s.conName||''))}</div>
+    <div class="sh-kana">${T('starKind')}</div>
+    <div class="sh-name">${esc(starLabel(s))}</div>
+    <div class="sh-en">${esc(conOf)}</div>
     <div class="sh-chips">
-      <span class="chip">${s.mag.toFixed(1)}${kids?'とうせい':'等星'}</span>
-      ${s.ly?`<span class="chip">${kids?'やく'+s.ly+'こうねん':'約'+s.ly+'光年'}</span>`:''}
+      <span class="chip">${T('magChip',s.mag.toFixed(1))}</span>
+      ${s.ly?`<span class="chip">${T('lyChip',s.ly)}</span>`:''}
     </div>
     <div class="sh-story${kids?' kids':''}" style="font-size:${kids?'15px':'13px'}">${story}</div>
     <div class="tempbar">
       <div class="bar"><span class="mk" style="left:${pct}%"></span></div>
-      <div class="lbl">${kids
-        ?'<span>あつい ほし（あおい）</span><span>つめたい ほし（あかい）</span>'
-        :'<span>高温（約30,000度〜）</span><span>低温（約3,000度）</span>'}</div>
+      <div class="lbl"><span>${T('tempHot')}</span><span>${T('tempCool')}</span></div>
     </div>
-    ${s.con?`<a class="sh-link" href="./zukan/${s.con.id}.html">${tx(`${s.con.jp}の図鑑ページ →`,'ずかんで もっと みる →')}</a>`:''}`,{type:'star',s});
+    ${s.con?`<a class="sh-link" href="${ROOT}zukan/${s.con.id}.html"${EN?' hreflang="ja"':''}>${T('zukanOfStar',s.con)}</a>`:''}`,{type:'star',s});
   selected=s.con||null;
 }
-function moonName(age){ const e=MOON_NAMES.find(m=>age<m[0])||MOON_NAMES[0]; return tx(e[1],e[2]); }
-/** 満ち欠けの小さな絵（北半球で見た形。右が太陽側＝満ちていく月） */
+function moonName(age){ const e=MOON_NAMES.find(m=>age<m[0])||MOON_NAMES[0]; return EN?e[3]:kids?e[2]:e[1]; }
+/** 満ち欠けの小さな絵。北半球では満ちていく月の右が光る。南半球（緯度がマイナス）では左右が逆に見える */
 function moonSvg(M,size=64){
-  const r=size/2-2, c=size/2, k=M.illum, ex=Math.abs(1-2*k)*r, right=M.waxing?1:-1;
+  const r=size/2-2, c=size/2, k=M.illum, ex=Math.abs(1-2*k)*r, right=(M.waxing?1:-1)*(loc.lat<0?-1:1);
   const sweepOuter=right>0?1:0;
   const sweepInner=(k<0.5)===(right>0)?0:1;
   const d=`M${c} ${c-r} A${r} ${r} 0 0 ${sweepOuter} ${c} ${c+r} A${ex} ${r} 0 0 ${sweepInner} ${c} ${c-r}Z`;
@@ -681,32 +708,30 @@ function openBody(b){
   const info=BODY_INFO[b.id];
   let chips='', extra='';
   if(b.id==='sun'){
-    chips=`<span class="chip warn">${tx('ぜったいに直接見ない','ちょくせつ みないでね')}</span><span class="chip">${tx('恒星','こうせい')}</span>`;
+    chips=`<span class="chip warn">${T('sunWarn')}</span><span class="chip">${kids?'こうせい':T('starKind')}</span>`;
   }else if(b.id==='moon'){
-    const M=b.M, man=Math.round(M.distKm/1000)/10;
+    const M=b.M;
     chips=`<span class="chip season">${moonName(M.age)}</span>
-      <span class="chip">${tx(`月齢 ${M.age.toFixed(1)}`,`つきの としは ${M.age.toFixed(0)}`)}</span>
-      <span class="chip">${tx(`地球から 約${man}万km`,`ちきゅうから やく${Math.round(man)}まん キロ`)}</span>`;
+      <span class="chip">${T('moonAge',M.age)}</span>
+      <span class="chip">${T('moonDist',M.distKm)}</span>`;
     extra=`<div class="sh-moon">${moonSvg(M)}<div class="sh-story${kids?' kids':''}" style="margin:0">${
-      tx(`いまの月は ${Math.round(M.illum*100)}% が光っています。${M.waxing?'これから満月に向かって、毎日少しずつふくらんでいきます。':'これから新月に向かって、毎日少しずつ細くなっていきます。'}`,
-         M.waxing?'これから まいにち すこしずつ ふとって いくよ。':'これから まいにち すこしずつ ほそく なって いくよ。')}</div></div>`;
+      T('moonLit',Math.round(M.illum*100),M.waxing)}</div></div>`;
   }else{
-    const P=b.P, oku=(P.dist*1.496).toFixed(1), lmin=Math.round(P.dist*8.317);
-    chips=`<span class="chip season">${tx('惑星','わくせい')}</span>
-      <span class="chip">${P.mag.toFixed(1)}${tx('等','とうせい')}</span>
-      <span class="chip">${tx(`地球から 約${oku}億km（光で約${lmin}分）`,`ちきゅうから やく${oku}おく キロ`)}</span>`;
+    const P=b.P;
+    chips=`<span class="chip season">${T('planet')}</span>
+      <span class="chip">${T('planetMag',P.mag.toFixed(1))}</span>
+      <span class="chip">${T('planetDist',P.dist)}</span>`;
   }
   const up=b.alt>0;
-  chips+=up?`<span class="chip up">${tx('いま空に見えています','いま みえているよ')}</span>`
-           :`<span class="chip">${tx('いまは地平線の下','いまは ちへいせんの した')}</span>`;
+  chips+=up?`<span class="chip up">${T('upNow')}</span>`:`<span class="chip">${T('below')}</span>`;
   showSheet(`
-    <div class="sh-kana">${b.id==='moon'?tx('衛星','えいせい'):b.id==='sun'?tx('恒星','こうせい'):tx('惑星','わくせい')}</div>
-    <div class="sh-name">${tx(info.jp,info.kana)}</div>
-    <div class="sh-en">${info.en}</div>
+    <div class="sh-kana">${b.id==='moon'?T('satellite'):b.id==='sun'?(kids?'こうせい':T('starKind')):T('planet')}</div>
+    <div class="sh-name">${bodyLabel(info)}</div>
+    <div class="sh-en"${EN?' lang="ja"':''}>${EN?info.jp:info.en}</div>
     <div class="sh-chips">${chips}</div>
     ${extra}
-    <div class="sh-story${kids?' kids':''}">${tx(info.adl,info.kid)}</div>
-    ${kids?'':`<div class="sh-fun"><b>まめちしき</b>　${info.fun}</div>`}`,{type:'body',id:b.id});
+    <div class="sh-story${kids?' kids':''}">${EN?info.adlEn:kids?info.kid:info.adl}</div>
+    ${kids?'':`<div class="sh-fun"><b>${T('funLabel')}</b>　${EN?info.funEn:info.fun}</div>`}`,{type:'body',id:b.id});
 }
 function reopenSheet(){
   if(!sheetKind) return;
@@ -725,13 +750,13 @@ function nightNow(){
   return a<-6*DEG;
 }
 function startQuiz(){
-  if(!nightNow()){ toast(tx('いまは空が明るくて星が見えません。「時間たび」で夜にしてから挑戦してね','いまは ひるまで ほしが みえないよ。「じかんたび」で よるに してから ちょうせん！')); return; }
+  if(!nightNow()){ toast(T('notNight')); return; }
   // 画面の中だけでなく、地平線の上に出ている星座から出題する（見まわしてさがすのも遊びのうち）
   const cands=CONS.filter(c=>{
     let n=0; for(const i of c.idx) if(stars[i].alt>8*DEG) n++;
     return n>=Math.max(2,Math.ceil(c.idx.length*0.6));
   });
-  if(cands.length<3){ toast(tx('いま空に出ている星座が少ないよ。時間を動かしてみてね','いま でている せいざが すくないよ。じかんを うごかしてみてね')); return; }
+  if(cands.length<3){ toast(T('fewCons')); return; }
   quiz={id:++quizSeq,list:shuffle(cands).slice(0,5),i:0,score:0,lockUntil:0,reveal:null};
   closeSheet(); closePanels();
   quizBar.classList.add('show'); document.body.classList.add('quizzing'); setPressed('bQuiz',true);
@@ -745,7 +770,7 @@ function nextQ(){
   if(q.i>=q.list.length){ endQuiz(); return; }
   const c=q.list[q.i];
   $('qNum').textContent=`Q${q.i+1}/${q.list.length}`;
-  $('qText').innerHTML=kids?`「<b>${c.kana}ざ</b>」を さがして タップ！`:`「<b>${c.jp}</b>」をさがしてタップ！`;
+  $('qText').innerHTML=T('quizQ',c);
 }
 function quizTap(x,y){
   const q=quiz, now=performance.now();
@@ -766,14 +791,10 @@ function endQuiz(){
   showQuizResult(sc,n);
 }
 function showQuizResult(sc,n){
-  const msg=kids
-    ?(sc===n?'ぜんぶ せいかい！きみは ほしはかせだ！':sc>=n*0.6?'すごい！あと すこしで ぜんぶ せいかい！':'また ちょうせん してみてね！')
-    :(sc===n?'パーフェクト！きみは星はかせだ！':sc>=n*0.6?'すごい！あと少しでパーフェクト！':'また挑戦してね。星座線と名まえをONにして予習しよう！');
-  const cnt=kids
-    ?`${n}もんちゅう <b style="color:var(--gold)">${sc}もん</b> せいかい。`
-    :`${n}問中 <b style="color:var(--gold)">${sc}問</b> 正解。`;
+  const msg=T(sc===n?'quizPerfect':sc>=n*0.6?'quizGood':'quizAgain');
+  const cnt=T('quizCount',sc,n);
   showSheet(`
-    <div class="sh-kana">${tx('クイズの結果','クイズの けっか')}</div>
+    <div class="sh-kana">${T('quizTitle')}</div>
     <div class="sh-name">${'★'.repeat(sc)}${'☆'.repeat(n-sc)}</div>
     <div class="sh-story${kids?' kids':''}">${cnt}${msg}</div>`,{type:'quiz',sc,n});
 }
@@ -792,19 +813,19 @@ function togglePanel(p,b){
 onClick('bLines',()=>{ showLines=!showLines; setPressed('bLines',showLines); });
 onClick('bNames',()=>{ showNames=!showNames; setPressed('bNames',showNames); });
 onClick('bAst',()=>{ showAster=!showAster; setPressed('bAst',showAster);
-  if(showAster) toast(tx('夏・冬の大三角と春の大曲線。明るい星をつなぐ星さがしの道しるべです','あかるい ほしを つなぐと、おおきな さんかくが できるよ')); });
+  if(showAster) toast(T('asterToast')); });
 onClick('bTime',()=>togglePanel('timePanel','bTime'));
 onClick('bLoc',()=>togglePanel('locPanel','bLoc'));
 onClick('bQuiz',()=>{ if(quiz) stopQuiz(); else startQuiz(); });
 function setKids(on){
-  kids=on; document.body.classList.toggle('kids',kids); setPressed('bKids',kids); lsSet('hzs_kids',kids?'1':'0');
+  kids=on; document.body.classList.toggle('kids',kids); setPressed('bKids',kids); lsSet(KEY+'kids',kids?'1':'0');
   updateLabels(); reopenSheet(); if(quiz) nextQ(); lastHud=0;
 }
-onClick('bKids',()=>{ setKids(!kids);
-  toast(tx('おとなモード：くわしい解説に切りかえました','ひらがなモード：かんじを つかわない おはなしに きりかえたよ')); });
-function setRed(on){ red=on; document.body.classList.toggle('red',red); setPressed('bRed',red); lsSet('hzs_red',red?'1':'0'); }
-onClick('bRed',()=>{ setRed(!red);
-  if(red) toast(tx('赤いライト：暗さに慣れた目を守ります。画面の明るさも下げると効果的です','あかい ライト：くらい ところでも めが まぶしく ならないよ')); });
+if($('bKids')) onClick('bKids',()=>{ setKids(!kids); toast(T('kidsToast')); });   // ひらがなモードは日本語版だけ
+function setRed(on){ red=on; document.body.classList.toggle('red',red); setPressed('bRed',red); lsSet(KEY+'red',red?'1':'0'); }
+onClick('bRed',()=>{ setRed(!red); if(red) toast(T('redToast')); });
+/* 月の満ち欠け（英語版のボタン）: 地平線の下にあっても月の説明をひらく */
+if($('bMoon')) onClick('bMoon',()=>{ closePanels(); const b=bodies.find(x=>x.id==='moon'); if(b) openBody(b); });
 
 /* 時間たび */
 const slider=$('tpSlider');
@@ -818,41 +839,49 @@ document.querySelectorAll('.tbtn[data-month]').forEach(b=>b.addEventListener('cl
 }));
 onClick('tpNowBtn',()=>{ jumpTo(Date.now()); setPlaying(false); });
 function setPlaying(on){ playing=on; setPressed('tpPlay',on); updateLabels();
-  if(on) toast(tx(`時間を${SPEEDS[speedIdx]}倍の速さで進めています。星がまわる「日周運動」を見てみよう`,'じかんを はやおくり ちゅう。ほしが ぐるっと まわるよ')); }
+  if(on) toast(T('playToast',SPEEDS[speedIdx])); }
 onClick('tpPlay',()=>setPlaying(!playing));
 onClick('tpSpeed',()=>{ speedIdx=(speedIdx+1)%SPEEDS.length; updateLabels(); });
 
 /* 場所 */
-function locLabel(l){ return kids?(l.kana||l.name):l.name; }
 function updateLabels(){
-  $('bLoc').textContent=tx('場所: ','ばしょ: ')+locLabel(loc);
-  $('tpPlay').textContent=playing?tx('⏸ とめる','⏸ とめる'):tx('▶ 早送り','▶ はやおくり');
-  $('tpSpeed').textContent=tx(`はやさ ×${SPEEDS[speedIdx]}`,`はやさ ×${SPEEDS[speedIdx]}`);
+  $('bLoc').textContent=T('placeBtn',placeName(loc));
+  $('tpPlay').textContent=playing?T('pause'):T('play');
+  $('tpSpeed').textContent=T('speed',SPEEDS[speedIdx]);
   const list=$('locList');
   list.innerHTML='';
-  for(const l of LOCS){
+  for(const l of PLACES){
     const b=document.createElement('button');
-    b.className='tbtn'; b.textContent=locLabel(l); b.setAttribute('aria-pressed',l.id===loc.id?'true':'false');
+    b.className='tbtn'; b.textContent=placeName(l); b.setAttribute('aria-pressed',l.id===loc.id?'true':'false');
     b.addEventListener('click',()=>{ setLoc(l); closePanels();
-      toast(l.lat<0?tx('シドニー（南半球）！太陽は北の空を通り、星は南の空を中心に回ります。南十字星もさがしてみて','シドニーは みなみはんきゅう。みなみじゅうじせいを さがしてみよう！')
-                   :tx(`${l.name}の空に移動しました`,`${l.kana}の そらに いどう したよ`)); });
+      toast(l.lat<0&&(EN||l.id==='sydney')?T('southToast'):T('movedToast',placeName(l))); });
     list.appendChild(b);
   }
 }
 function setLoc(l){
-  loc=l; lsSet('hzs_loc',JSON.stringify(l.id==='here'?l:{id:l.id}));
+  loc=l; lsSet(KEY+'loc',JSON.stringify(l.id==='here'||l.id==='custom'?l:{id:l.id}));
   faceDefault(); anim=null; updateLabels(); lastHud=0;
 }
+/** 端末のタイムゾーン（「いまいる場所」「緯度・経度を入れる」の時刻の表示に使う） */
+function deviceTz(){ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone||'Asia/Tokyo'; }catch(e){ return 'Asia/Tokyo'; } }
 onClick('locHere',()=>{
-  if(!navigator.geolocation){ toast(tx('この端末では位置情報が使えません','いる ばしょが わからなかったよ')); return; }
+  if(!navigator.geolocation){ toast(T('noGeo')); return; }
   navigator.geolocation.getCurrentPosition(p=>{
-    const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'Asia/Tokyo';
     // 星空には0.1度（約10km）の精度で十分。保存するのも丸めた値だけ
     const lat=Math.round(p.coords.latitude*10)/10, lon=Math.round(p.coords.longitude*10)/10;
-    setLoc({id:'here',name:'いまいる場所',kana:'いま いる ばしょ',lat,lon,tz});
-    closePanels(); toast(tx('いまいる場所の空にしました','いま いる ばしょの そらに したよ'));
-  },()=>toast(tx('位置情報を取得できませんでした。端末の設定で許可してください','いる ばしょが わからなかったよ')),
+    setLoc({id:'here',name:TEXT.ja.here,kana:TEXT.kana.here,en:TEXT.en.here,lat,lon,tz:deviceTz()});
+    closePanels(); toast(T('geoOk'));
+  },()=>toast(T('geoFail')),
   {enableHighAccuracy:false,timeout:10000,maximumAge:600000});
+});
+/* 緯度・経度を入れる（英語版）。時刻は端末のタイムゾーンで表示する */
+if($('locForm')) $('locForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const lat=Number($('locLat').value), lon=Number($('locLon').value);
+  if(!($('locLat').value!==''&&$('locLon').value!==''&&Math.abs(lat)<=90&&Math.abs(lon)<=180)){ toast(T('badCoords')); return; }
+  const r=v=>Math.round(v*10)/10;
+  setLoc({id:'custom',en:`${T('custom')} (${r(lat)}°, ${r(lon)}°)`,name:'',lat:r(lat),lon:r(lon),tz:deviceTz()});
+  closePanels(); toast(T('movedToast',placeName(loc)));
 });
 
 /* ドックの右端が見えているかで、フェードを消す */
@@ -869,14 +898,14 @@ function toast(msg){
 
 /* help */
 onClick('helpBtn',()=>$('help').classList.add('open'));
-onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet('hzs_seen','1'); cv.focus({preventScroll:true}); });
+onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet(KEY+'seen','1'); cv.focus({preventScroll:true}); });
 
 /* ---------------- はじまり ---------------- */
 (function init(){
-  const saved=lsGet('hzs_loc');
-  if(saved){ try{ const o=JSON.parse(saved); const l=o.id==='here'?o:LOCS.find(x=>x.id===o.id); if(l&&isFinite(l.lat)&&isFinite(l.lon)) loc=l; }catch(e){} }
-  if(lsGet('hzs_kids')==='1'){ kids=true; document.body.classList.add('kids'); setPressed('bKids',true); }
-  if(lsGet('hzs_red')==='1') setRed(true);
+  const saved=lsGet(KEY+'loc');
+  if(saved){ try{ const o=JSON.parse(saved); const l=o.id==='here'||o.id==='custom'?o:PLACES.find(x=>x.id===o.id); if(l&&isFinite(l.lat)&&isFinite(l.lon)) loc=l; }catch(e){} }
+  if(!EN&&lsGet(KEY+'kids')==='1'){ kids=true; document.body.classList.add('kids'); setPressed('bKids',true); }
+  if(lsGet(KEY+'red')==='1') setRed(true);
   faceDefault(); updateLabels(); dockFade();
 
   const params=new URLSearchParams(location.search);
@@ -887,20 +916,24 @@ onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet('hzs_seen','
   else if(!nightNow()){
     // 昼間に開いたら、今夜21時の空へ
     jumpTo(nextLocalHour(Date.now(),21));
-    setTimeout(()=>toast(tx('いまは昼間なので、今夜21時の空にワープしました🌙（「時間たび」→「いまに戻る」で現在へ）','いまは ひるま なので、こんやの 9じの そらに ワープしたよ🌙')),600);
+    setTimeout(()=>toast(T('dayJump')),600);
   }
-  if(!lsGet('hzs_seen') && !target && !linked) $('help').classList.add('open');
+  if(!lsGet(KEY+'seen') && !target && !linked) $('help').classList.add('open');
   requestAnimationFrame(render);
 })();
 
 /** 天文カレンダーからのリンク: ?t=<日時>&loc=<場所ID>&look=<向き> で、その日時・方角の空を開く
  *  look: moon / 惑星ID（jupiter など）/ con:<星座ID> / radiant:<赤経°>,<赤緯°>（J2000）/ az:<方位°>
+ *  英語版は場所を指定せず、見る人の場所の現地時刻で開く: ?lt=<YYYY-MM-DDTHH:MM>（その場所の時刻）
+ *    または ?d=<YYYY-MM-DD>&tw=evening|morning（その日の夕方・明け方に空が暗くなるころ＝太陽高度 −6°）
  *  場所はそのときだけ使い、保存している「いつもの場所」は変えない */
 function openAt(params){
-  const ms=Date.parse(params.get('t')||'');
-  if(!isFinite(ms)) return false;
-  const l=LOCS.find(x=>x.id===params.get('loc'));
+  const l=PLACES.find(x=>x.id===params.get('loc'));
   if(l){ loc=l; updateLabels(); }
+  let ms=Date.parse(params.get('t')||'');
+  if(!isFinite(ms)&&params.get('lt')) ms=fromLocal(params.get('lt'));
+  if(!isFinite(ms)&&/^\d{4}-\d\d-\d\d$/.test(params.get('d')||'')) ms=twilightAt(params.get('d'),params.get('tw')!=='morning');
+  if(!isFinite(ms)) return false;
   jumpTo(ms);
   const lst=lstRad(ms,loc.lon), sl=Math.sin(loc.lat*DEG), cl=Math.cos(loc.lat*DEG);
   const hz=(ra,dec)=>altAz(Math.sin(dec),Math.cos(dec),ra,lst,sl,cl);
@@ -916,15 +949,27 @@ function openAt(params){
   if(dir){ az0=dir[1]; alt0=dir[0]==null?defaultAlt():clamp(dir[0],defaultAlt()*0.8,70*DEG); }
   else faceDefault();
   const p=localParts(ms,loc.tz);
-  toast(tx(`${+p.month}月${+p.day}日 ${+p.hour}時${p.minute==='00'?'':p.minute+'分'}の${loc.name}の空です（「時間たび」→「いまに戻る」で現在へ）`,
-           `${+p.month}がつ${+p.day}にち ${+p.hour}じの そらだよ`));
+  toast(T('linkedToast',p,placeName(loc)));
   return true;
+}
+/** その土地で、その日の夕方（または明け方）に太陽高度が −6° になる時刻。見つからなければ 21 時（明け方は 5 時） */
+function twilightAt(date,evening){
+  const sl=Math.sin(loc.lat*DEG), cl=Math.cos(loc.lat*DEG);
+  const sunAlt=ms=>{ const S=sun(ms); return altAz(Math.sin(S.dec),Math.cos(S.dec),S.ra,lstRad(ms,loc.lon),sl,cl)[0]/DEG; };
+  const [h0,h1]=evening?[12,24]:[0,12];
+  let prev=fromLocal(`${date}T${String(h0).padStart(2,'0')}:00`);
+  for(let m=h0*60+10;m<=h1*60;m+=10){
+    const ms=prev+600000, a=sunAlt(prev)+6, b=sunAlt(ms)+6;
+    if(evening?(a>0&&b<=0):(a<0&&b>=0)) return ms - ms%60000;
+    prev=ms;
+  }
+  return fromLocal(`${date}T${evening?'21':'05'}:00`);
 }
 
 /** 図鑑からのリンク（?c=ori）: その星座がよく見える夜の21時へワープして、向きを合わせる */
 function focusCon(c){
   const maxAlt=90-Math.abs(loc.lat-Math.asin(c.center.sinD)/DEG);
-  if(maxAlt<12 && loc.lat>0) setLoc(LOCS.find(l=>l.id==='sydney'));   // 日本からほぼ見えない南の星座
+  if(maxAlt<12 && loc.lat>0) setLoc(PLACES.find(l=>l.id==='sydney'));   // 日本からほぼ見えない南の星座
   const best=90-Math.abs(loc.lat-Math.asin(c.center.sinD)/DEG);
   const goal=Math.min(best-6,50)*DEG;
   const base=nextLocalHour(Date.now(),21,180);
@@ -940,11 +985,10 @@ function focusCon(c){
   az0=z; alt0=clamp(a-0.22*H/focal(),defaultAlt()*0.8,70*DEG);
   openCon(c);
   const p=localParts(when,loc.tz);
-  toast(tx(`${c.jp}がよく見える ${+p.month}月${+p.day}日 21時の${loc.name}の空です`,
-           `${c.kana}ざが よく みえる ${+p.month}がつ${+p.day}にち よる9じの そらだよ`));
+  toast(T('focusToast',c,p,placeName(loc)));
 }
 
 /* オフライン対応（https か localhost で開いたときだけ） */
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
-  addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  addEventListener('load',()=>navigator.serviceWorker.register(ROOT+'sw.js').catch(()=>{}));
 }

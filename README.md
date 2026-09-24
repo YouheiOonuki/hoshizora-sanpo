@@ -16,6 +16,7 @@
 - **赤いライト** — 夜の屋外で暗さに慣れた目を守る夜間モード
 - **星座図鑑** — 星座ごとの星図・見ごろ（東京・夜9時）・神話・主な星の静的ページ（`zukan/`）
 - **天文カレンダー** — 流星群の極大・満月・新月・日食・月食・惑星の見ごろ（`calendar/`）。日付は国立天文台の発表から。「この日の星空を見る」でプラネタリウムをその日時・方角で開く
+- **英語版** — `/hoshizora-sanpo/en/`（本体・天文カレンダー・使い方）。場所は世界の都市・位置情報・緯度経度から選ぶ。星座の神話・図鑑・ひらがなモードは日本語のみ
 - **オフライン対応** — Service Worker で一度開けば電波がなくても動く。ホーム画面に追加可能
 
 ## ファイル
@@ -23,6 +24,8 @@
 | ファイル | 役割 |
 |---------|------|
 | `index.html` / `style.css` / `main.js` | プラネタリウム本体（画面と操作） |
+| `text.js` | 画面の文言（日本語・ひらがな・英語）。本体の日英は同じ `main.js` で動き、`<html lang>` で切りかえる |
+| `en/index.html` | 英語版の本体（手で書く）。`en/calendar/`・`en/guide.html` は `tools/calendar-pages-en.js` で生成（日本語版と同じ `official-events.js` から。値を書き写さない） |
 | `astro.js` | 天文計算（恒星時・歳差・太陽・月・惑星）。ブラウザと Node の両方で読める |
 | `data.js` | 星座・明るい星・天の川・場所・月と惑星の解説 |
 | `catalog.js` | 実在の星のデータ（`tools/build-catalog.js` で生成。手で編集しない） |
@@ -47,6 +50,7 @@ node tools/build-catalog.js path/to/bsc5-all.json > catalog.js   # 星のカタ�
 ```
 
 - 図鑑の星座ページは `?c=<星座ID>`（例: `?c=ori`）でプラネタリウムにリンクし、その星座がよく見える夜へワープして開きます
+- 英語版のカレンダーは場所を指定せず、見る人の場所の現地時刻で開きます: `?lt=<YYYY-MM-DDTHH:MM>` または `?d=<日付>&tw=evening|morning`（太陽高度 −6° のころ）
 - 天文カレンダーは `?t=<日時>&loc=<場所ID>&look=<向き>` でリンクします（例: `?t=2027-08-14T03:00+09:00&loc=tokyo&look=con:per`）。`look` は `moon`・惑星ID・`con:<星座ID>`・`radiant:<赤経°>,<赤緯°>`・`az:<方位°>`
 
 ## 天文カレンダーのデータ更新（年に数回）
@@ -62,6 +66,7 @@ node tools/build-catalog.js path/to/bsc5-all.json > catalog.js   # 星のカタ�
 
 ## 出典・注意
 
+- 英語の星の名前: IAU WGSN「IAU Catalog of Star Names」（https://exopla.net/star-names/modern-iau-star-names/ ）
 - 恒星: Yale Bright Star Catalogue 5th ed. (Hoffleit & Warren 1991)。JSON 版 [brettonw/YaleBrightStarCatalog](https://github.com/brettonw/YaleBrightStarCatalog)（MIT）
 - 惑星: JPL "Approximate Positions of the Planets"（1800–2050 年向け）／月: P. Schlyter の簡略理論／惑星の等級: Mallama & Hilton (2018)
 - 位置は肉眼の星空として十分な近似です（月・惑星のずれは数分角程度）。大気差は計算していません

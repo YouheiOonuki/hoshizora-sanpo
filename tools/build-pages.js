@@ -9,6 +9,7 @@ const A = require('../astro.js');
 const { CONS, SEASON_KANA } = require('../data.js');
 const { CATALOG } = require('../catalog.js');
 const buildCalendar = require('./calendar-pages.js');
+const buildEn = require('./calendar-pages-en.js');
 
 const ROOT = path.join(__dirname, '..');
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
@@ -24,7 +25,12 @@ const ADSENSE = `<meta name="google-adsense-account" content="ca-pub-53752679560
      crossorigin="anonymous"></script>`;
 const BEACON = `<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->`;
 
-function page({ rel, file, title, description, current, body, jsonld }) {
+/** 日英の対（README「ツールを追加するとき」23）: 両方のページに ja・en・x-default（＝日本語）の 3 行 */
+const hreflang = (jaFile, enFile) => `<link rel="alternate" hreflang="ja" href="${BASE + jaFile.replace(/index\.html$/, '')}">
+<link rel="alternate" hreflang="en" href="${BASE + enFile.replace(/index\.html$/, '')}">
+<link rel="alternate" hreflang="x-default" href="${BASE + jaFile.replace(/index\.html$/, '')}">`;
+
+function page({ rel, file, title, description, current, body, jsonld, alt }) {
   const url = BASE + file.replace(/index\.html$/, '');
   const nav = [['', 'プラネタリウム'], ['zukan/', '星座図鑑'], ['calendar/', '天文カレンダー'], ['about.html', 'このアプリについて']]
     .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
@@ -36,7 +42,7 @@ function page({ rel, file, title, description, current, body, jsonld }) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${url}">
-<meta property="og:title" content="${esc(title)}">
+${alt ? hreflang(file, alt) + '\n' : ''}<meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="${/^(zukan|calendar)\/(?!index)/.test(file) ? 'article' : 'website'}">
 <meta property="og:url" content="${url}">
@@ -56,7 +62,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 <body>
 <header class="site"><div class="wrap">
   <a class="logo" href="${rel}"><img src="${rel}favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
-  <nav aria-label="サイト内">${nav}</nav>
+  <nav aria-label="サイト内">${nav}${alt ? `<a href="${rel}${alt.replace(/index\.html$/, '')}" hreflang="en" lang="en">English</a>` : ''}</nav>
 </div></header>
 <main class="wrap">
 ${body}
@@ -270,6 +276,7 @@ function about() {
 <dt>天文カレンダー</dt><dd><a href="./calendar/">天文カレンダー</a>で流星群・満月・日食・月食・惑星の見ごろを調べ、「この日の星空を見る」でその日時・方角の空をひらけます。</dd>
 <dt>オフライン</dt><dd>一度ひらくとブラウザに保存され、電波のない場所でも使えます。ホーム画面に追加するとアプリのように起動できます。</dd>
 </dl>
+<p class="lead">おなじ ひらがなモードで あそべる → <a href="../todofuken-quiz/">こども都道府県クイズ</a></p>
 
 <h2>しくみと精度</h2>
 <p>星の位置は、実在の星 約3,300個（5.6等星まで）の座標に、地球の歳差（首ふり運動）を反映して計算しています。太陽・月・惑星（水星・金星・火星・木星・土星）は軌道要素から位置と明るさを計算し、月は満ち欠けと、地表から見たときのずれ（視差）も反映しています。</p>
@@ -289,9 +296,10 @@ function about() {
 <p>当アプリの天体の位置は計算による近似値です。天体観測の計画などに使う場合は、国立天文台などの公的な情報もあわせてご確認ください。天文カレンダーは国立天文台の発表を書き写したもので、発表があとから変わることもあります。</p>
 <p>太陽は絶対に肉眼や双眼鏡・望遠鏡で直接見ないでください。目を傷めます。夜の観察では、足もとや周囲の安全に気をつけ、お子さんは大人といっしょに出かけてください。</p>
 <p>表示の設定と、選んだ場所はお使いのブラウザにだけ保存され、外部には送信されません。「いまいる場所の空」を選んだときだけブラウザの位置情報を使い、保存するときは緯度・経度を約10kmの精度に丸めます。位置情報は星空の計算にだけ使います。</p>
+<p><a href="https://docs.google.com/forms/d/e/1FAIpQLSd8B90qh5lEIyr25iw1jOjdQjOyaPZ1_z2wMB4kH-EmEeJYWw/viewform?usp=pp_url&amp;entry.585564634=hoshizora-sanpo" target="_blank" rel="noopener">ご要望・不具合の報告（Google フォーム）</a>：いただいた内容をもとに直します。お返事はしていません。</p>
 <p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
   return page({ rel: './', file: 'about.html', title: 'このアプリについて｜ほしぞらさんぽ',
-    description: 'Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典。', current: 'about.html', body });
+    description: 'Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典。', current: 'about.html', body, alt: 'en/guide.html' });
 }
 
 /* ---------------- プライバシーポリシー ---------------- */
@@ -318,7 +326,10 @@ function privacy() {
 /* ---------------- 書き出し ---------------- */
 fs.mkdirSync(path.join(ROOT, 'zukan'), { recursive: true });
 fs.mkdirSync(path.join(ROOT, 'calendar'), { recursive: true });
+fs.mkdirSync(path.join(ROOT, 'en/calendar'), { recursive: true });
 const out = (file, html) => fs.writeFileSync(path.join(ROOT, file), html);
+const en = buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON });
+en.files.forEach(f => out(f.file, f.html));
 out('zukan/index.html', zukanIndex());
 ordered.forEach((c, i) => out(`zukan/${c.id}.html`, conPage(c, i)));
 calendar.files.forEach(f => out(f.file, f.html));
@@ -327,7 +338,9 @@ out('privacy-policy.html', privacy());
 
 const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
   ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly']),
-  ['about.html', '0.4', 'yearly']];
+  ['about.html', '0.4', 'yearly'],
+  // 英語版（本体の en/index.html は手で書いたもの。ほかは tools/calendar-pages-en.js で生成）
+  ['en/', '0.9', 'weekly'], ...en.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.7' : f.file.endsWith('guide.html') ? '0.4' : '0.6', f.file.endsWith('guide.html') ? 'yearly' : 'weekly'])];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, p, f]) => `  <url>
@@ -338,4 +351,4 @@ ${urls.map(([u, p, f]) => `  <url>
   </url>`).join('\n')}
 </urlset>
 `);
-console.log(`zukan: ${ordered.length} pages + index, calendar: ${calendar.files.length} pages, about, privacy-policy, sitemap (${urls.length} urls)`);
+console.log(`zukan: ${ordered.length} pages + index, calendar: ${calendar.files.length} pages, en: ${en.files.length} pages, about, privacy-policy, sitemap (${urls.length} urls)`);
