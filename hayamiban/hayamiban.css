@@ -38,6 +38,7 @@ details.opt[open] summary{margin-bottom:10px;}
 .fixbar{position:fixed;top:0;left:0;right:0;z-index:20;height:52px;display:flex;align-items:center;justify-content:center;gap:12px;
   background:rgba(7,11,24,.94);border-bottom:1px solid var(--edge);font-size:14px;}
 .fixbar .btn{min-height:40px;padding:6px 18px;}
+.btn-reset{min-height:40px;padding:6px 18px;margin-top:6px;font-size:13px;}
 .fixbar[hidden]{display:none;}
 #print-sheets{display:none;}
 @media (max-width:520px){
