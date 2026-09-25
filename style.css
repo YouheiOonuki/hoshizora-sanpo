@@ -161,6 +161,8 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
            font-family:var(--serif);letter-spacing:.25em;cursor:pointer;}
 #helpLinks{margin-top:18px;font-size:11.5px;line-height:2;color:var(--ink-dim);}
 #helpLinks a{color:var(--ink-dim);text-decoration:none;border-bottom:1px solid rgba(154,165,196,.35);margin:0 5px;}
+#helpReset{margin-top:14px;border:1px solid var(--panel-edge);background:transparent;color:var(--ink-dim);
+           border-radius:999px;padding:8px 16px;font-size:12px;cursor:pointer;}
 
 /* ---- toast ---- */
 #toast{position:absolute;top:calc(var(--top) + 76px);left:50%;transform:translateX(-50%);z-index:8;
