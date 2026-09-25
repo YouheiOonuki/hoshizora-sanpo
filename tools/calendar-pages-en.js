@@ -167,7 +167,7 @@ module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
   function pageEn({ rel, file, jaFile, title, description, current, body, jsonld, script = true }) {
     const url = BASE + file.replace(/index\.html$/, ''), jaUrl = BASE + jaFile.replace(/index\.html$/, '');
     const top = rel + '../../en/';                                   // yorozu-craft の英語のトップ
-    const nav = [['', 'Planetarium'], ['calendar/', 'Sky calendar'], ['guide.html', 'How it works']]
+    const nav = [['', 'Planetarium'], ['calendar/', 'Sky calendar'], ['planisphere/', 'Planisphere'], ['guide.html', 'How it works']]
       .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
     return `<!DOCTYPE html>
 <html lang="en">
@@ -206,7 +206,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 </main>
 <footer class="site"><div class="wrap">
-  <nav><a href="${top}">yorozu-craft</a><a href="${rel || './'}">Planetarium</a><a href="${rel}calendar/">Sky calendar</a><a href="${rel}guide.html">How it works</a><a href="${top}about.html">About</a><a href="${top}privacy-policy.html">Privacy policy</a></nav>
+  <nav><a href="${top}">yorozu-craft</a><a href="${rel || './'}">Planetarium</a><a href="${rel}calendar/">Sky calendar</a><a href="${rel}planisphere/">Planisphere</a><a href="${rel}guide.html">How it works</a><a href="${top}about.html">About</a><a href="${top}privacy-policy.html">Privacy policy</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
 ${script ? PAGE_SCRIPT + '\n' : ''}${BEACON}
@@ -452,6 +452,7 @@ ${sources(rows.map(e => e.src[0]))}`;
 <li>Open Time to move by hours, days or months, or to fast-forward.</li>
 <li>Tap Moon phase for the Moon’s phase, age and how much of it is lit.</li>
 </ol>
+<p>For a paper version to take outside, <a href="planisphere/">print a planisphere</a> for your latitude.</p>
 <h2>Works for any place on Earth</h2>
 <p>Positions are calculated from your latitude, longitude and time, so the sky is right for any place. City times use that city’s time zone. For your location or typed coordinates, times use your device’s time zone.</p>
 <h2>Accuracy</h2>

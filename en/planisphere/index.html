@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Printable Planisphere PDF: Free Star Wheel for Your Latitude</title>
+<meta name="description" content="Make a free printable planisphere (star wheel) for your latitude and time zone, 20–65° north or south. Print on A4 or US Letter, cut out and pin. No sign-up.">
+<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/en/planisphere/">
+<link rel="alternate" hreflang="ja" href="https://yorozu-craft.com/hoshizora-sanpo/hayamiban/">
+<link rel="alternate" hreflang="en" href="https://yorozu-craft.com/hoshizora-sanpo/en/planisphere/">
+<link rel="alternate" hreflang="x-default" href="https://yorozu-craft.com/hoshizora-sanpo/hayamiban/">
+<meta property="og:title" content="Printable Planisphere: Free Star Wheel for Your Latitude">
+<meta property="og:description" content="A free printable planisphere for your latitude and time zone. Print on A4 or US Letter, cut out and pin the center.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yorozu-craft.com/hoshizora-sanpo/en/planisphere/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ja_JP">
+<meta property="og:image" content="https://yorozu-craft.com/hoshizora-sanpo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="yorozu-craft">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070b18">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Printable Planisphere Maker",
+ "description": "Make a printable planisphere (star wheel) for your latitude and time zone. Print on A4 or US Letter, cut out and pin the center.",
+ "url": "https://yorozu-craft.com/hoshizora-sanpo/en/planisphere/",
+ "applicationCategory": "EducationalApplication",
+ "operatingSystem": "All",
+ "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+ "inLanguage": "en",
+ "isPartOf": { "@type": "WebSite", "name": "Hoshizora Sanpo", "url": "https://yorozu-craft.com/hoshizora-sanpo/en/" }
+}
+</script>
+<!-- Same as the Japanese page: auto ads on screen, never on the printed sheets (hayamiban.css @media print) -->
+<meta name="google-adsense-account" content="ca-pub-5375267956079717">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5375267956079717"
+     crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../../pages.css">
+<link rel="stylesheet" href="../../hayamiban/hayamiban.css">
+<style>
+.tiles{grid-template-columns:repeat(5,1fr);}
+.custom select{min-height:44px;padding:6px 10px;border-radius:10px;border:1px solid var(--edge);background:#0a1122;color:var(--ink);font:inherit;}
+@media (max-width:520px){.tiles{grid-template-columns:repeat(2,1fr);}.tiles label:last-child{grid-column:1/-1;}}
+</style>
+<!-- Paper size for printing (A4 or US Letter). app.js rewrites this -->
+<style id="paper-css">@page{size:A4 portrait;margin:0;}</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="../"><img src="../../favicon.svg" alt="" width="28" height="28">Web Planetarium</a>
+  <nav aria-label="Site"><a href="../">Planetarium</a><a href="../calendar/">Sky calendar</a><a href="./" aria-current="page">Planisphere</a><a href="../../hayamiban/" hreflang="ja" lang="ja">日本語</a></nav>
+</div></header>
+
+<!-- Fixed bar (SCREEN.md 1.2): shown only while the print button is off screen -->
+<div class="fixbar" id="fixbar" role="status" hidden>
+  <span id="fixbar-place"></span>
+  <button type="button" class="btn" id="fixbar-print">Print</button>
+</div>
+
+<main class="wrap">
+  <h1>Printable planisphere for your latitude</h1>
+  <p class="lead">Pick your city, print on A4 or US Letter, then cut out and pin the center. Your inputs never leave this browser.</p>
+
+  <section class="box form" aria-label="Settings">
+    <fieldset class="tiles">
+      <legend>Place</legend>
+      <label><input type="radio" name="place" value="london"><span>London<small>51.5° N</small></span></label>
+      <label><input type="radio" name="place" value="new-york" checked><span>New York<small>40.7° N</small></span></label>
+      <label><input type="radio" name="place" value="los-angeles"><span>Los Angeles<small>34.1° N</small></span></label>
+      <label><input type="radio" name="place" value="sydney"><span>Sydney<small>33.9° S</small></span></label>
+      <label><input type="radio" name="place" value="custom"><span>Enter latitude<small>20–65° N or S</small></span></label>
+    </fieldset>
+    <div class="custom" id="custom" hidden>
+      <label>Latitude<input type="number" id="lat" inputmode="decimal" min="-65" max="65" step="0.1" placeholder="e.g. 41.9"></label>
+      <label>Longitude<input type="number" id="lon" inputmode="decimal" min="-180" max="180" step="0.1" placeholder="e.g. -87.6"></label>
+      <label>UTC offset<select id="tz"></select></label>
+      <p class="hint" id="custom-msg"></p>
+    </div>
+    <fieldset class="seg">
+      <legend>Paper</legend>
+      <label><input type="radio" name="paper" value="a4" checked> A4</label>
+      <label><input type="radio" name="paper" value="letter"> US Letter</label>
+    </fieldset>
+    <fieldset class="seg">
+      <legend>Size</legend>
+      <label><input type="radio" name="layout" value="two" checked> 2 sheets (large)</label>
+      <label><input type="radio" name="layout" value="one"> 1 sheet (small)</label>
+    </fieldset>
+    <div class="print-row" id="print-row">
+      <button type="button" class="btn" id="print">Print or save as PDF</button>
+    </div>
+    <p class="hint">Print at 100% scale (Actual size). Card stock works best.</p>
+  </section>
+
+  <figure class="preview" id="preview">
+    <div id="pv-sky" aria-hidden="true"></div>
+    <figcaption id="pv-caption" aria-live="polite"></figcaption>
+  </figure>
+
+  <details class="box opt" id="turn">
+    <summary>Turn the wheel: <span id="turn-state"></span></summary>
+    <div class="custom">
+      <label>Date<input type="date" id="pv-date"></label>
+      <label>Time<input type="time" id="pv-time" step="600"></label>
+    </div>
+    <p class="hint">Standard time at the chosen place. <a id="pv-link" href="../">See this sky in the planetarium</a></p>
+  </details>
+
+  <details class="box opt" id="more">
+    <summary>More options: <span id="more-state"></span></summary>
+    <fieldset class="seg">
+      <legend>Stars</legend>
+      <label><input type="radio" name="mag" value="4.5" checked> To magnitude 4.5</label>
+      <label><input type="radio" name="mag" value="5"> To magnitude 5 (dark skies)</label>
+    </fieldset>
+    <fieldset class="seg">
+      <legend>Hour ring</legend>
+      <label><input type="radio" name="clock" value="12" checked> 12-hour (9 PM)</label>
+      <label><input type="radio" name="clock" value="24"> 24-hour (21:00)</label>
+    </fieldset>
+    <label class="check"><input type="checkbox" id="credit" checked> Print “Made at yorozu-craft.com/hoshizora-sanpo/en/planisphere/” in the corner</label>
+    <p class="hint">Save as SVG (to print larger or change colors): <span id="svg-links"></span></p>
+    <p class="hint">Settings are saved only in this browser.<br><button type="button" class="btn btn-reset" data-reset-storage="hoshizora-sanpo_planisphere-en">Delete everything saved (reset)</button></p>
+  </details>
+
+  <details class="box opt" id="sheets-box">
+    <summary>See the printed sheets</summary>
+    <div class="sheets-pv" id="sheets-pv"></div>
+  </details>
+
+  <p><a href="./guide.html">How to make and use it, accuracy, FAQ</a></p>
+</main>
+
+<!-- The sheets to print (hidden on screen) -->
+<div id="print-sheets" aria-hidden="true"></div>
+
+<footer class="site"><div class="wrap">
+  <nav><a href="https://yorozu-craft.com/en/">yorozu-craft</a><a href="../">Planetarium</a><a href="../calendar/">Sky calendar</a><a href="./guide.html">Planisphere guide</a><a href="https://yorozu-craft.com/en/about.html">About</a><a href="https://yorozu-craft.com/en/privacy-policy.html">Privacy policy</a></nav>
+  &copy; 2026 yorozu-craft. All rights reserved.
+</div></footer>
+
+<script src="../../astro.js"></script>
+<script src="../../data.js"></script>
+<script src="../../catalog.js"></script>
+<script src="../../hayamiban/planisphere.js"></script>
+<script src="./app.js"></script>
+<script src="../../reset-storage.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

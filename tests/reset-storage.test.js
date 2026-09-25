@@ -10,6 +10,9 @@ const PREFIXES = ["hoshizora-sanpo_", "hzs_"];
 const LEGACY = [];
 // 画面ごとに消す範囲を分けるページ（1 つのリポジトリに別々の道具があるとき）。書いていないページは PREFIXES
 const PAGE_PREFIXES = {
+  "en/planisphere/index.html": [
+    "hoshizora-sanpo_planisphere-en"
+  ],
   "index.html": [
     "hzs_kids",
     "hzs_red",
