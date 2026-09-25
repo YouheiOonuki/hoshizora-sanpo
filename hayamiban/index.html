@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>星座早見盤の作り方｜住んでいる緯度で型紙を印刷（札幌・東京・那覇）｜ほしぞらさんぽ</title>
+<meta name="description" content="星座早見盤の型紙を、住んでいる場所の緯度・経度に合わせて作って A4 に印刷。切って中心を割りピンで留めるだけ。小学生の工作・自由研究に。無料・登録なし。">
+<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/hayamiban/">
+<meta property="og:title" content="星座早見盤の作り方｜住んでいる緯度で型紙を印刷｜ほしぞらさんぽ">
+<meta property="og:description" content="星座早見盤の型紙を、住んでいる場所の緯度・経度に合わせて作って A4 に印刷。切って中心を留めるだけ。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yorozu-craft.com/hoshizora-sanpo/hayamiban/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://yorozu-craft.com/hoshizora-sanpo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="yorozu-craft">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070b18">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "星座早見盤メーカー",
+ "description": "星座早見盤の型紙を、住んでいる場所の緯度・経度に合わせて作って A4 に印刷。切って中心を留めるだけ。",
+ "url": "https://yorozu-craft.com/hoshizora-sanpo/hayamiban/",
+ "applicationCategory": "EducationalApplication",
+ "operatingSystem": "All",
+ "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+ "inLanguage": "ja",
+ "isPartOf": { "@type": "WebSite", "name": "ほしぞらさんぽ", "url": "https://yorozu-craft.com/hoshizora-sanpo/" }
+}
+</script>
+<!-- 印刷物を作る画面なので、読みものページと同じく広告タグを入れる。印刷には出さない（hayamiban.css の @media print） -->
+<meta name="google-adsense-account" content="ca-pub-5375267956079717">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5375267956079717"
+     crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../pages.css">
+<link rel="stylesheet" href="./hayamiban.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="../"><img src="../favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
+  <nav aria-label="サイト内"><a href="../">プラネタリウム</a><a href="../zukan/">星座図鑑</a><a href="../calendar/">天文カレンダー</a><a href="./" aria-current="page">星座早見盤</a></nav>
+</div></header>
+
+<!-- 固定バー（SCREEN.md 1.2）: 印刷ボタンが画面の外にあるときだけ上端に出す -->
+<div class="fixbar" id="fixbar" role="status" hidden>
+  <span id="fixbar-place"></span>
+  <button type="button" class="btn" id="fixbar-print">印刷する</button>
+</div>
+
+<main class="wrap">
+  <h1>星座早見盤を印刷して作る</h1>
+  <p class="lead">場所を選んで A4 に印刷し、切って中心を留めるだけ。入力は外部に送信しません。</p>
+
+  <section class="box form" aria-label="設定">
+    <fieldset class="tiles">
+      <legend>使う場所</legend>
+      <label><input type="radio" name="place" value="sapporo"><span>札幌<small>北緯 43°</small></span></label>
+      <label><input type="radio" name="place" value="tokyo" checked><span>東京<small>北緯 35.7°</small></span></label>
+      <label><input type="radio" name="place" value="naha"><span>那覇<small>北緯 26°</small></span></label>
+      <label><input type="radio" name="place" value="custom"><span>緯度を入れる<small>北緯 23〜50°</small></span></label>
+    </fieldset>
+    <div class="custom" id="custom" hidden>
+      <label>北緯<input type="number" id="lat" inputmode="decimal" min="23" max="50" step="0.1" placeholder="例: 34.7"></label>
+      <label>東経<input type="number" id="lon" inputmode="decimal" min="122" max="154" step="0.1" placeholder="例: 135.5"></label>
+      <p class="hint" id="custom-msg">Google マップで場所を長押しすると出る 2 つの数字の、前が北緯・後が東経です。</p>
+    </div>
+    <fieldset class="seg">
+      <legend>紙</legend>
+      <label><input type="radio" name="layout" value="two" checked> A4 2 枚（大きい）</label>
+      <label><input type="radio" name="layout" value="one"> A4 1 枚（小さい）</label>
+    </fieldset>
+    <div class="print-row" id="print-row">
+      <button type="button" class="btn" id="print">印刷する・PDF に保存</button>
+    </div>
+    <p class="hint">印刷の設定: A4・倍率 100%（実際のサイズ）。厚紙がおすすめ。<a href="../../print-help.html">スマホで印刷する</a></p>
+  </section>
+
+  <figure class="preview" id="preview">
+    <div id="pv-sky" aria-hidden="true"></div>
+    <figcaption id="pv-caption" aria-live="polite"></figcaption>
+  </figure>
+
+  <details class="box opt" id="turn">
+    <summary>日時を変えて回す: <span id="turn-state"></span></summary>
+    <div class="custom">
+      <label>日付<input type="date" id="pv-date"></label>
+      <label>時刻<input type="time" id="pv-time" step="600"></label>
+    </div>
+    <p class="hint"><a id="pv-link" href="../">この日時の空をプラネタリウムで見る</a></p>
+  </details>
+
+  <details class="box opt" id="more">
+    <summary>くわしい設定: <span id="more-state"></span></summary>
+    <fieldset class="seg">
+      <legend>星の数</legend>
+      <label><input type="radio" name="mag" value="4.5" checked> 4.5 等まで</label>
+      <label><input type="radio" name="mag" value="5"> 5 等まで（暗い空向け）</label>
+    </fieldset>
+    <label class="check"><input type="checkbox" id="credit" checked> 紙のすみに「yorozu-craft.com/hoshizora-sanpo/print/ で作成」と入れる</label>
+    <p class="hint">SVG で保存（大きく印刷・色を変えるとき）: <span id="svg-links"></span></p>
+  </details>
+
+  <details class="box opt" id="sheets-box">
+    <summary>印刷される紙を見る</summary>
+    <div class="sheets-pv" id="sheets-pv"></div>
+  </details>
+
+  <p><a href="./guide.html">作り方・使い方・よくある質問</a></p>
+</main>
+
+<!-- 印刷する紙（画面では出さない） -->
+<div id="print-sheets" aria-hidden="true"></div>
+
+<footer class="site"><div class="wrap">
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="../">プラネタリウム</a><a href="../zukan/">星座図鑑</a><a href="../calendar/">天文カレンダー</a><a href="./guide.html">星座早見盤の使い方</a><a href="../../about.html">運営者情報</a><a href="../../privacy-policy.html">プライバシーポリシー</a></nav>
+  &copy; 2026 yorozu-craft. All rights reserved.
+</div></footer>
+
+<script src="../astro.js"></script>
+<script src="../data.js"></script>
+<script src="../catalog.js"></script>
+<script src="./planisphere.js"></script>
+<script src="./app.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
