@@ -68,7 +68,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 </main>
 <footer class="site"><div class="wrap">
-  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}calendar/">天文カレンダー</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}calendar/">天文カレンダー</a><a href="${rel}hayamiban/">星座早見盤</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
 ${BEACON}
@@ -339,13 +339,15 @@ out('privacy-policy.html', privacy());
 const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
   ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly']),
   ['about.html', '0.4', 'yearly'],
+  // 星座早見盤（hayamiban/。手で書いたページ。盤面は hayamiban/planisphere.js がブラウザで作る）
+  ['hayamiban/', '0.8', 'monthly', '2026-09-25'], ['hayamiban/guide.html', '0.5', 'yearly', '2026-09-25'],
   // 英語版（本体の en/index.html は手で書いたもの。ほかは tools/calendar-pages-en.js で生成）
   ['en/', '0.9', 'weekly'], ...en.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.7' : f.file.endsWith('guide.html') ? '0.4' : '0.6', f.file.endsWith('guide.html') ? 'yearly' : 'weekly'])];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(([u, p, f]) => `  <url>
+${urls.map(([u, p, f, lastmod]) => `  <url>
     <loc>${BASE}${u}</loc>
-    <lastmod>${UPDATED}</lastmod>
+    <lastmod>${lastmod || UPDATED}</lastmod>
     <changefreq>${f}</changefreq>
     <priority>${p}</priority>
   </url>`).join('\n')}
