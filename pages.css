@@ -123,6 +123,6 @@ html[lang="en"] h1 small{letter-spacing:.04em;}
 html[lang="en"] .box b{letter-spacing:.02em;}
 .month h3{font-family:var(--serif);color:var(--gold);font-weight:600;margin:26px 0 4px;}
 /* 「カレンダーに登録」（天文カレンダー。購読用の data/tenmon.ics） */
-.cal-sub h2{margin-top:0;}
+.cal-sub p:first-child{margin-top:0;}
 .cal-sub .btn{display:inline-block;padding:10px 20px;border-radius:999px;background:var(--gold);color:#070b18;font-weight:700;text-decoration:none;}
 .cal-sub input{width:100%;max-width:34em;font:inherit;font-size:14px;background:var(--bg);color:var(--ink);border:1px solid var(--edge);border-radius:8px;padding:6px 8px;box-sizing:border-box;}

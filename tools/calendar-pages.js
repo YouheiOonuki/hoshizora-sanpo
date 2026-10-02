@@ -141,7 +141,7 @@ const monthKey = d => d.slice(0, 7);
 const ICS_PATH = 'yorozu-craft.com/hoshizora-sanpo/data/tenmon.ics';
 function subscribeBox() {
   return `<section class="box cal-sub" id="calendar-subscribe" aria-labelledby="h-cal-sub">
-<h2 id="h-cal-sub">カレンダーに登録</h2>
+<p><b id="h-cal-sub">カレンダーに登録</b></p>
 <p>新月・上弦・満月・下弦、流星群の極大、日食・月食を、スマホやパソコンのカレンダーで購読できます。国立天文台の発表を見て予定を足すと、登録したカレンダーにも入ります。</p>
 <p><a class="btn" href="webcal://${ICS_PATH}">カレンダーに登録する</a></p>
 <p><label for="ics-url">URL（Google カレンダーの「URL で追加」に貼る）</label><br><input id="ics-url" type="text" readonly value="https://${ICS_PATH}" onfocus="this.select()"></p>
