@@ -73,7 +73,7 @@ node tools/build-catalog.js path/to/bsc5-all.json > catalog.js   # 星のカタ�
 
 1. 毎年2月: 国立天文台 暦計算室の「暦要項」で翌年の **朔弦望**（新月・満月は `MOON_PHASES`、上弦・下弦は `MOON_QUARTERS`）と **日食・月食** が発表される（`https://eco.mtk.nao.ac.jp/koyomi/yoko/`）
 2. 随時: 国立天文台「ほしぞら情報」（`https://www.nao.ac.jp/astro/sky/<年>/<月>.html`）のカレンダーから、**流星群の極大**・**惑星の衝・最大離角・最大光度**・**中秋の名月**
-3. `COVERAGE.to` と `CHECKED`（確認日。上弦・下弦は `CHECKED_QUARTERS`）を更新し、`node --test tests/*.test.js`（新月・上弦・満月・下弦は計算と2分以内、衝・最大離角は同じ日付かを照合）→ `node tools/build-pages.js` → `node tools/build-ics.js`（購読用の `data/tenmon.ics`、CC0。`data/README.md`）
+3. `COVERAGE.to` と `CHECKED`（確認日。上弦・下弦は `CHECKED_QUARTERS`）を更新し、`node --test tests/*.test.js`（新月・上弦・満月・下弦は計算と2分以内、衝・最大離角は同じ日付かを照合）→ `node tools/build-pages.js` → `node tools/build-ics.js`（購読用の `data/tenmon.ics` と同じ予定の `data/tenmon.json`、CC0。`data/README.md`）
 4. データの期間を広げたら、ページの見出しの年（例: 2026–2027）も自動で変わる。過ぎた日付はページ内のスクリプトで隠れる
 - yorozu-craft の決まりに合わせ、キャッシュ名は `hoshizora-sanpo-` で始め、manifest の `id` は `/hoshizora-sanpo/`
 - 広告: プラネタリウム本体は全画面で操作するため AdSense は所有確認の meta タグのみ。図鑑などの読みものページにだけ広告タグを入れています

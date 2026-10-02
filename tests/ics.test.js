@@ -15,7 +15,36 @@ const value = (s, name) => { const m = unfold(s).match(new RegExp('^' + name + '
 const vevents = () => unfold(ics).split('BEGIN:VEVENT\r\n').slice(1).map(b => b.split('END:VEVENT')[0]);
 
 test('data/tenmon.ics が tools/official-events.js から書き出した結果と同じ（node tools/build-ics.js）', () => {
-  assert.strictEqual(ics, B.buildIcs());
+  assert.strictEqual(ics, B.outputs()[B.FILE]);
+});
+
+// ACCEPTANCE 7.10.3 e: ファイルの中に license・generated・checked・source。生成日は中身が変わったときだけ変わる
+test('生成日: ics の X-WR-CALDESC と tenmon.json にあり、中身が同じなら書き出し直しても変わらない', () => {
+  const json = fs.readFileSync(B.JSON_FILE, 'utf8');
+  const d = JSON.parse(json);
+  assert.strictEqual(json, B.outputs()[B.JSON_FILE]);
+  assert.match(value(ics, 'X-WR-CALDESC'), /\n生成日: \d{4}-\d{2}-\d{2}/);
+  assert.strictEqual(B.generatedOf(ics), d.generated);
+  assert.strictEqual(B.stamp(B.buildIcs, ics), ics);
+  assert.strictEqual(B.stamp(B.buildJson, json), json);
+  process.env.GENERATED = '2099-01-01';
+  try {
+    assert.match(B.stamp(B.buildJson, json.replace('"title": "', '"title": "x')), /"generated": "2099-01-01"/);
+  } finally { delete process.env.GENERATED; }
+});
+
+test('tenmon.json: CC0・確認日・出典、予定は ics と同じ並びと UID', () => {
+  const d = JSON.parse(fs.readFileSync(B.JSON_FILE, 'utf8'));
+  assert.strictEqual(d.license, 'CC0-1.0');
+  assert.strictEqual(d.checked, [O.CHECKED, O.CHECKED_QUARTERS].sort().at(-1));
+  assert.ok(d.source.length > 0);
+  for (const u of d.source) assert.match(u, /^https:\/\//);
+  const uids = [...unfold(ics).matchAll(/^UID:(.+)@yorozu-craft\.com\r$/gm)].map(m => m[1]);
+  assert.deepStrictEqual(d.events.map(e => e.id), uids);
+  for (const e of d.events) {
+    assert.ok(e.start ? /Z$/.test(e.start) : /^\d{4}-\d{2}-\d{2}$/.test(e.date), e.id);
+    assert.ok(e.sources.length > 0 && e.sources.every(s => /^https:\/\//.test(s.url)), e.id);
+  }
 });
 
 test('形: VCALENDAR で始まり CRLF だけ、1 行 75 オクテット以内、Windows で取り出しても CRLF のまま', () => {
