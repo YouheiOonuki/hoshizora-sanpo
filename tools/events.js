@@ -52,6 +52,45 @@ function phaseTime(k) {
   const deltaT = 69.5;                                             // 2020年代の TT−UT（秒）
   return Math.round(((jde - 2440587.5) * 86400 - deltaT) * 1000);
 }
+/** 上弦・下弦の時刻（Meeus 第49章の「上弦・下弦」の項と補正 W）。k は整数+0.25（上弦）/ +0.75（下弦）。返り値は UNIX ミリ秒（UT） */
+function quarterTime(k) {
+  const T = k / 1236.85, r = DEG, first = ((k % 1) + 1) % 1 < 0.5;
+  let jde = 2451550.09766 + 29.530588861 * k + 0.00015437 * T * T - 0.000000150 * T ** 3 + 0.00000000073 * T ** 4;
+  const E = 1 - 0.002516 * T - 0.0000074 * T * T;
+  const M = (2.5534 + 29.10535670 * k - 0.0000014 * T * T - 0.00000011 * T ** 3) * r;
+  const Mp = (201.5643 + 385.81693528 * k + 0.0107582 * T * T + 0.00001238 * T ** 3 - 0.000000058 * T ** 4) * r;
+  const F = (160.7108 + 390.67050284 * k - 0.0016118 * T * T - 0.00000227 * T ** 3 + 0.000000011 * T ** 4) * r;
+  const Om = (124.7746 - 1.56375588 * k + 0.0020672 * T * T + 0.00000215 * T ** 3) * r;
+  const s = Math.sin, c = Math.cos;
+  jde += -0.62801 * s(Mp) + 0.17172 * E * s(M) - 0.01183 * E * s(Mp + M) + 0.00862 * s(2 * Mp)
+    + 0.00804 * s(2 * F) + 0.00454 * E * s(Mp - M) + 0.00204 * E * E * s(2 * M) - 0.00180 * s(Mp - 2 * F)
+    - 0.00070 * s(Mp + 2 * F) - 0.00040 * s(3 * Mp) - 0.00034 * E * s(2 * Mp - M) + 0.00032 * E * s(M + 2 * F)
+    + 0.00032 * E * s(M - 2 * F) - 0.00028 * E * E * s(Mp + 2 * M) + 0.00027 * E * s(2 * Mp + M) - 0.00017 * s(Om)
+    - 0.00005 * s(Mp - M - 2 * F) + 0.00004 * s(2 * Mp + 2 * F) - 0.00004 * s(Mp + M + 2 * F) + 0.00004 * s(Mp - 2 * M)
+    + 0.00003 * s(Mp + M - 2 * F) + 0.00003 * s(3 * M) + 0.00002 * s(2 * Mp - 2 * F) + 0.00002 * s(Mp - M + 2 * F)
+    - 0.00002 * s(3 * Mp + M);
+  const W = 0.00306 - 0.00038 * E * c(M) + 0.00026 * c(Mp) - 0.00002 * c(Mp - M) + 0.00002 * c(Mp + M) + 0.00002 * c(2 * F);
+  jde += first ? W : -W;
+  const A = [[299.77, 0.107408, 0.000325], [251.88, 0.016321, 0.000165], [251.83, 26.651886, 0.000164],
+    [349.42, 36.412478, 0.000126], [84.66, 18.206239, 0.000110], [141.74, 53.303771, 0.000062],
+    [207.14, 2.453732, 0.000060], [154.84, 7.306860, 0.000056], [34.52, 27.261239, 0.000047],
+    [207.19, 0.121824, 0.000042], [291.34, 1.844379, 0.000040], [161.72, 24.198154, 0.000037],
+    [239.56, 25.513099, 0.000035], [331.55, 3.592518, 0.000023]];
+  A.forEach(([a0, a1, cc], i) => { jde += cc * s((a0 + a1 * k - (i === 0 ? 0.009173 * T * T : 0)) * r); });
+  const deltaT = 69.5;
+  return Math.round(((jde - 2440587.5) * 86400 - deltaT) * 1000);
+}
+/** 上弦・下弦（from〜to のあいだ）。分単位に丸める */
+function moonQuarters(from, to) {
+  const out = [];
+  const k0 = Math.floor(((from / 86400000 + 2440587.5) - 2451550.09766) / 29.530588861) - 1;
+  for (let k = k0 + 0.25; ; k += 0.5) {
+    const ms = quarterTime(k);
+    if (ms >= to) break;
+    if (ms >= from) out.push({ type: (k - Math.floor(k)) < 0.5 ? 'first-quarter' : 'last-quarter', ms: Math.round(ms / 60000) * 60000 });
+  }
+  return out;
+}
 /** 満月・新月（from〜to のあいだ）。分単位に丸める */
 function moonPhases(from, to) {
   const out = [];
@@ -126,4 +165,4 @@ function twilight(dayMsJstMidnight, evening, loc = TOKYO) {
   return bisect(f, a, b, 60000);
 }
 
-module.exports = { phaseTime, moonPhases, oppositions, elongations, twilight, sunAlt, TOKYO, HOUR, DAY };
+module.exports = { phaseTime, moonPhases, quarterTime, moonQuarters, oppositions, elongations, twilight, sunAlt, TOKYO, HOUR, DAY };

@@ -11,7 +11,7 @@ const jstDate = ms => new Date(ms + JST).toISOString().slice(0, 10);
 const dayDiff = (a, b) => Math.round((Date.parse(a) - Date.parse(b)) / 86400000);
 
 test('すべての行に出典がある', () => {
-  const all = [...O.MOON_PHASES, ...O.MOON_NOTES, ...O.MOON_VIEWING, ...O.METEOR_PEAKS, ...O.ECLIPSES, ...O.PLANET_EVENTS];
+  const all = [...O.MOON_PHASES, ...O.MOON_QUARTERS, ...O.MOON_NOTES, ...O.MOON_VIEWING, ...O.METEOR_PEAKS, ...O.ECLIPSES, ...O.PLANET_EVENTS];
   for (const r of all) assert.ok(O.SRC[r.src], `出典がない: ${JSON.stringify(r)}`);
   for (const [name, url] of Object.values(O.SRC)) assert.match(url, /^https:\/\/(eco\.mtk\.nao\.ac\.jp|www\.nao\.ac\.jp)\//, name);
 });
@@ -25,6 +25,21 @@ test('新月・満月の時刻が計算（Meeus）と2分以内で一致する',
     const diffMin = Math.abs(calc[i].ms - Date.parse(r.at)) / 60000;
     assert.ok(diffMin <= 2, `${r.at} は計算と ${diffMin.toFixed(1)} 分ずれている`);
   });
+});
+
+test('上弦・下弦の時刻が計算（Meeus）と2分以内で一致する（暦要項の朔弦望の表から書き写した分）', () => {
+  const from = Date.parse(O.MOON_QUARTERS[0].at) - 86400000, to = Date.parse(O.MOON_QUARTERS.at(-1).at) + 86400000;
+  const calc = E.moonQuarters(from, to);
+  assert.strictEqual(calc.length, O.MOON_QUARTERS.length, '回数が合わない（抜け・重複の疑い）');
+  O.MOON_QUARTERS.forEach((r, i) => {
+    assert.strictEqual(calc[i].type, r.type === 'first' ? 'first-quarter' : 'last-quarter', r.at);
+    const diffMin = Math.abs(calc[i].ms - Date.parse(r.at)) / 60000;
+    assert.ok(diffMin <= 2, `${r.at} は計算と ${diffMin.toFixed(1)} 分ずれている`);
+  });
+  // 新月・上弦・満月・下弦が交互に並ぶ（4 つを合わせて時刻順にすると 新→上→満→下 の繰り返し）
+  const all = [...O.MOON_PHASES, ...O.MOON_QUARTERS].sort((a, b) => Date.parse(a.at) - Date.parse(b.at)).map(r => r.type);
+  const order = ['new', 'first', 'full', 'last'];
+  for (let i = 1; i < all.length; i++) assert.strictEqual(all[i], order[(order.indexOf(all[i - 1]) + 1) % 4], `${i} 番目`);
 });
 
 test('満月の注記・お月見の日付は満月の前後に入っている', () => {

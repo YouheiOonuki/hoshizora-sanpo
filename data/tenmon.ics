@@ -1,0 +1,1364 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//yorozu-craft//hoshizora-sanpo tenmon//JA
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:天文カレンダー（yorozu-craft）
+X-WR-TIMEZONE:Asia/Tokyo
+X-WR-CALDESC:天文カレンダー（yorozu-craft ほしぞらさんぽ）
+ 。新月・上弦・満月・下弦（朔弦望）、流星群の極大
+ 、日食・月食。日時は日本時間で、国立天文台の発表
+ を書き写したもの（クレジット: 国立天文台）。\nライ
+ センス: CC0 1.0（パブリック・ドメイン提供） https://creat
+ ivecommons.org/publicdomain/zero/1.0/deed.ja\n確認日: 2026-09-23（新
+ 月・満月・流星群・日食・月食）、2026-10-02（上弦・下
+ 弦）。新月・上弦・満月・下弦は自前の計算（Meeus）と
+ 2分以内で一致することを確かめた\n範囲: 2026-09-23〜2027-
+ 12-31（日食・月食はデータベースの日付まで）。先の分
+ は国立天文台の発表のあとに足す\nページ: https://yorozu-c
+ raft.com/hoshizora-sanpo/calendar/\n出典（各予定の説明欄にも
+ ）:\nhttps://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou263.html\nhttps://
+ www.nao.ac.jp/astro/sky/2026/10.html\nhttps://www.nao.ac.jp/astro/sky/2026
+ /11.html\nhttps://www.nao.ac.jp/astro/sky/2026/12-topics02.html\nhttps://w
+ ww.nao.ac.jp/astro/sky/2026/12.html\nhttps://www.nao.ac.jp/astro/sky/2027/
+ 01-topics03.html\nhttps://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou273.ht
+ ml\nhttps://www.nao.ac.jp/astro/sky/2027/01.html\nhttps://eco.mtk.nao.ac.j
+ p/koyomi/yoko/2027/rekiyou275.html\nhttps://www.nao.ac.jp/astro/sky/2027/0
+ 4.html\nhttps://www.nao.ac.jp/astro/sky/2027/05.html\nhttps://www.nao.ac.j
+ p/astro/sky/2027/07.html\nhttps://www.nao.ac.jp/astro/sky/2027/08.html\nht
+ tps://www.nao.ac.jp/astro/sky/2027/10.html\nhttps://www.nao.ac.jp/astro/sk
+ y/2027/11.html\nhttps://www.nao.ac.jp/astro/sky/2027/12.html\nhttps://eco.
+ mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi
+REFRESH-INTERVAL;VALUE=DURATION:P1W
+X-PUBLISHED-TTL:P1W
+BEGIN:VEVENT
+UID:tenmon-moon-2026-09-27-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20260926T164900Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2026年9月27日 1時49分です。\n出典: 国立天文台 暦
+ 計算室「令和8年（2026）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2026/rekiyou263.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-10-03-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261003T132500Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2026年10月3日 22時25分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和8年（2026
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiy
+ ou263.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-10-11-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261010T155000Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2026年10月11日 0時50分です。月明かりがなく、星
+ 空の観察に向いた時期です。\n出典: 国立天文台 暦計算
+ 室「令和8年（2026）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2026/rekiyou263.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-10-19-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261018T161300Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2026年10月19日 1時13分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和8年（2026
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiy
+ ou263.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-orionids-2026@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20261022
+DTEND;VALUE=DATE:20261023
+SUMMARY:オリオン座流星群が極大
+DESCRIPTION:極大は2026年10月22日ごろで、見ごろは極大を中
+ 心とした前後数日間の夜半から未明、流星数のめやす
+ は1時間に5〜10個程度です（未明に月が沈んだ後は条件
+ が良い）。\n出典: 国立天文台「ほしぞら情報 2026年10月
+ 」 https://www.nao.ac.jp/astro/sky/2026/10.html\nくわしく: https://yo
+ rozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#orionids
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#o
+ rionids
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-10-26-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261026T041200Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2026年10月26日 13時12分です。\n出典: 国立天文台 
+ 暦計算室「令和8年（2026）暦要項 朔弦望」 https://eco.mtk.
+ nao.ac.jp/koyomi/yoko/2026/rekiyou263.html\nくわしく: https://yorozu-c
+ raft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-11-02-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261101T202800Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2026年11月2日 5時28分です。左半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和8年（2026）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou2
+ 63.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-taurids-s-2026@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:おうし座南流星群が極大
+DESCRIPTION:極大は2026年11月6日ごろで、見ごろは11月上旬で
+ 、ほぼ一晩中見える、流星数のめやすは1時間に2〜3個
+ 程度です（夜半前は月の条件が良い）。\n出典: 国立天
+ 文台「ほしぞら情報 2026年11月」 https://www.nao.ac.jp/astro/sk
+ y/2026/11.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/cal
+ endar/meteor-showers.html#taurids-s
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#t
+ aurids-s
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-11-09-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261109T070200Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2026年11月9日 16時02分です。月明かりがなく、星
+ 空の観察に向いた時期です。\n出典: 国立天文台 暦計算
+ 室「令和8年（2026）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2026/rekiyou263.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-taurids-n-2026@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:おうし座北流星群が極大
+DESCRIPTION:極大は2026年11月13日ごろで、見ごろは11月上旬
+ から中旬で、ほぼ一晩中見える、流星数のめやすは1時
+ 間に2個程度です（月の条件は比較的良い）。\n出典: 国
+ 立天文台「ほしぞら情報 2026年11月」 https://www.nao.ac.jp/as
+ tro/sky/2026/11.html\nくわしく: https://yorozu-craft.com/hoshizora-san
+ po/calendar/meteor-showers.html#taurids-n
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#t
+ aurids-n
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-11-17-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261117T114800Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2026年11月17日 20時48分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和8年（2026
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiy
+ ou263.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-leonids-2026@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261118T000000Z
+SUMMARY:しし座流星群が極大
+DESCRIPTION:極大は日本時間で2026年11月18日 9時00分ごろで、
+ 見ごろは11月18日未明、流星数のめやすは1時間に5個程
+ 度です（月の条件は良い）。\n出典: 国立天文台「ほし
+ ぞら情報 2026年11月」 https://www.nao.ac.jp/astro/sky/2026/11.html\
+ nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-sh
+ owers.html#leonids
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#l
+ eonids
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-11-24-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261124T145400Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2026年11月24日 23時54分です。\n出典: 国立天文台 
+ 暦計算室「令和8年（2026）暦要項 朔弦望」 https://eco.mtk.
+ nao.ac.jp/koyomi/yoko/2026/rekiyou263.html\nくわしく: https://yorozu-c
+ raft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-12-01-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261201T060900Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2026年12月1日 15時09分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和8年（2026
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiy
+ ou263.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-12-09-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261209T005200Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2026年12月9日 9時52分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和8年（2026）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2026/rekiyou263.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-geminids-2026@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261214T140000Z
+SUMMARY:ふたご座流星群が極大
+DESCRIPTION:極大は日本時間で2026年12月14日 23時00分ごろで
+ 、見ごろは14日深夜から15日未明（最も多いのは15日0時
+ から2時ごろ）、流星数のめやすは1時間に60個程度です
+ （月明かりがなく、極大時刻も良いため絶好の条件）
+ 。\n出典: 国立天文台「ふたご座流星群が極大（2026年12
+ 月）」 https://www.nao.ac.jp/astro/sky/2026/12-topics02.html\nくわし
+ く: https://yorozu-craft.com/hoshizora-sanpo/calendar/geminids.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/geminids.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-12-17-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261217T054300Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2026年12月17日 14時43分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和8年（2026
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiy
+ ou263.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-12-24-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261224T012800Z
+SUMMARY:満月（2026年で地球に最も近い満月）
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2026年12月24日 10時28分です。2026年で地球に最も近
+ い満月です。\n出典: 国立天文台 暦計算室「令和8年（20
+ 26）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rek
+ iyou263.html\n出典: 国立天文台「ほしぞら情報 2026年12月」
+  https://www.nao.ac.jp/astro/sky/2026/12.html\nくわしく: https://yoroz
+ u-craft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2026-12-31-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20261230T185900Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2026年12月31日 3時59分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和8年（2026
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiy
+ ou263.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-quadrantids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270104T030000Z
+SUMMARY:しぶんぎ座流星群が極大
+DESCRIPTION:極大は日本時間で2027年1月4日 12時00分ごろで、
+ 見ごろは4日未明（最も多いのは5時ごろ）、流星数のめ
+ やすは1時間に15〜20個程度です（月の条件は良い。流星
+ 数は年による当たり外れが大きい）。\n出典: 国立天文
+ 台「しぶんぎ座流星群が極大（2027年1月）」 https://www.na
+ o.ac.jp/astro/sky/2027/01-topics03.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/quadrantids.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/quadrantids.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-01-08-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270107T202400Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年1月8日 5時24分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-01-16-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270115T203500Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年1月16日 5時35分です。右半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-01-22-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270122T121700Z
+SUMMARY:満月（2027年で地球に最も近い満月）
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年1月22日 21時17分です。2027年で地球に最も近
+ い満月です。\n出典: 国立天文台 暦計算室「令和9年（20
+ 27）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rek
+ iyou273.html\n出典: 国立天文台「ほしぞら情報 2027年1月」 
+ https://www.nao.ac.jp/astro/sky/2027/01.html\nくわしく: https://yorozu
+ -craft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-01-29-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270129T105500Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年1月29日 19時55分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2027-02-07-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20270207
+DTEND;VALUE=DATE:20270208
+SUMMARY:金環日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による金環日食の日（2027年2
+ 月6〜7日）で、日本では見られません。\n出典: 国立天
+ 文台 暦計算室「令和9年（2027）暦要項 日食・月食など
+ 」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou275.html\nくわし
+ く: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-02-07-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270206T155600Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年2月7日 0時56分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-02-14-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270214T075800Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年2月14日 16時58分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-02-21-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270220T232400Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年2月21日 8時24分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-02-28-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270228T051700Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年2月28日 14時17分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-03-08-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270308T092900Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年3月8日 18時29分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-03-16-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270315T162500Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年3月16日 1時25分です。右半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-03-22-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270322T104400Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年3月22日 19時44分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-03-30-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270330T005400Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年3月30日 9時54分です。左半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-04-07-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270406T235100Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年4月7日 8時51分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-04-14-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270413T225700Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年4月14日 7時57分です。右半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-04-21-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270420T222700Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年4月21日 7時27分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-lyrids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270423T020000Z
+SUMMARY:4月こと座流星群が極大
+DESCRIPTION:極大は日本時間で2027年4月23日 11時00分ごろで、
+ 見ごろは23日未明、流星数のめやすは1時間に5個程度で
+ す（月が明るく条件は悪い）。\n出典: 国立天文台「ほ
+ しぞら情報 2027年4月」 https://www.nao.ac.jp/astro/sky/2027/04.htm
+ l\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-
+ showers.html#lyrids
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#l
+ yrids
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-04-29-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270428T201800Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年4月29日 5時18分です。左半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-05-06-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270506T105900Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年5月6日 19時59分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-eta-aquariids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270506T150000Z
+SUMMARY:みずがめ座η（エータ）流星群が極大
+DESCRIPTION:極大は日本時間で2027年5月7日 0時00分ごろで、
+ 見ごろは6日〜8日の未明、流星数のめやすは1時間に5〜1
+ 0個程度です（月明かりがなく絶好の条件）。\n出典: 国
+ 立天文台「ほしぞら情報 2027年5月」 https://www.nao.ac.jp/ast
+ ro/sky/2027/05.html\nくわしく: https://yorozu-craft.com/hoshizora-sanp
+ o/calendar/meteor-showers.html#eta-aquariids
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#e
+ ta-aquariids
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-05-13-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270513T044400Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年5月13日 13時44分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-05-20-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270520T105900Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年5月20日 19時59分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-05-28-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270528T135800Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年5月28日 22時58分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-06-05-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270604T194000Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年6月5日 4時40分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-06-11-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270611T105600Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年6月11日 19時56分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-06-19-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270619T004400Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年6月19日 9時44分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-06-27-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270627T045400Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年6月27日 13時54分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-07-04-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270704T030200Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年7月4日 12時02分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-07-11-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270710T183900Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年7月11日 3時39分です。右半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-07-19-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270718T154500Z
+SUMMARY:満月（2027年で地球から最も遠い満月）
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年7月19日 0時45分です。2027年で地球から最も
+ 遠い満月です。\n出典: 国立天文台 暦計算室「令和9年
+ （2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/202
+ 7/rekiyou273.html\n出典: 国立天文台「ほしぞら情報 2027年7
+ 月」 https://www.nao.ac.jp/astro/sky/2027/07.html\nくわしく: https:/
+ /yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-07-27-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270726T165500Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年7月27日 1時55分です。左半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-delta-aquariids-s-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20270801
+DTEND;VALUE=DATE:20270802
+SUMMARY:みずがめ座δ（デルタ）南流星群が極大
+DESCRIPTION:極大は2027年8月1日ごろで、見ごろは極大を中心
+ とした数日間の深夜から未明、流星数のめやすは1時間
+ に5個程度です（月の条件は良い）。\n出典: 国立天文台
+ 「ほしぞら情報 2027年8月」 https://www.nao.ac.jp/astro/sky/2027/
+ 08.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/m
+ eteor-showers.html#delta-aquariids-s
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#d
+ elta-aquariids-s
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2027-08-02-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20270802
+DTEND;VALUE=DATE:20270803
+SUMMARY:皆既日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による皆既日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「令和
+ 9年（2027）暦要項 日食・月食など」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2027/rekiyou275.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/solar-eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-08-02-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270802T100500Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年8月2日 19時05分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-08-09-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270809T045400Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年8月9日 13時54分です。右半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-perseids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270813T080000Z
+SUMMARY:ペルセウス座流星群が極大
+DESCRIPTION:極大は日本時間で2027年8月13日 17時00分ごろで、
+ 見ごろは14日未明、流星数のめやすは1時間に35個程度で
+ す（未明に月が沈んだ後は条件が良い）。\n出典: 国立
+ 天文台「ほしぞら情報 2027年8月」 https://www.nao.ac.jp/astro/
+ sky/2027/08.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/c
+ alendar/perseids.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/perseids.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-08-17-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270817T072900Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年8月17日 16時29分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-08-25-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270825T022700Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年8月25日 11時27分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-09-01-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270831T174100Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年9月1日 2時41分です。月明かりがなく、星空
+ の観察に向いた時期です。\n出典: 国立天文台 暦計算室
+ 「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/ko
+ yomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/hos
+ hizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-09-08-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270907T183100Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年9月8日 3時31分です。右半分が光る半月のこ
+ ろです。\n出典: 国立天文台 暦計算室「令和9年（2027）
+ 暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou2
+ 73.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-09-16-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270915T230400Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年9月16日 8時04分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-09-23-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270923T102000Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年9月23日 19時20分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-09-30-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20270930T023600Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年9月30日 11時36分です。月明かりがなく、星
+ 空の観察に向いた時期です。\n出典: 国立天文台 暦計算
+ 室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-10-07-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271007T114700Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年10月7日 20時47分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-10-15-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271015T134700Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年10月15日 22時47分です。\n出典: 国立天文台 
+ 暦計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.
+ nao.ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-c
+ raft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-orionids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20271022
+DTEND;VALUE=DATE:20271023
+SUMMARY:オリオン座流星群が極大
+DESCRIPTION:極大は2027年10月22日ごろで、見ごろは極大を中
+ 心とした前後数日間の夜半から未明、流星数のめやす
+ は1時間に3〜5個程度です（月が明るく条件は悪い）。\n
+ 出典: 国立天文台「ほしぞら情報 2027年10月」 https://www.n
+ ao.ac.jp/astro/sky/2027/10.html\nくわしく: https://yorozu-craft.com/ho
+ shizora-sanpo/calendar/meteor-showers.html#orionids
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#o
+ rionids
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-10-23-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271022T172900Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年10月23日 2時29分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-10-29-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271029T133700Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年10月29日 22時37分です。月明かりがなく、星
+ 空の観察に向いた時期です。\n出典: 国立天文台 暦計算
+ 室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-taurids-s-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20271106
+DTEND;VALUE=DATE:20271107
+SUMMARY:おうし座南流星群が極大
+DESCRIPTION:極大は2027年11月6日ごろで、見ごろは11月上旬で
+ 、ほぼ一晩中見える、流星数のめやすは1時間に3〜4個
+ 程度です（夜半後は月の条件が良い）。\n出典: 国立天
+ 文台「ほしぞら情報 2027年11月」 https://www.nao.ac.jp/astro/sk
+ y/2027/11.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/cal
+ endar/meteor-showers.html#taurids-s
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#t
+ aurids-s
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-11-06-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271106T080000Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年11月6日 17時00分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-taurids-n-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20271113
+DTEND;VALUE=DATE:20271114
+SUMMARY:おうし座北流星群が極大
+DESCRIPTION:極大は2027年11月13日ごろで、見ごろは11月上旬
+ から中旬で、ほぼ一晩中見える、流星数のめやすは1時
+ 間に1〜2個程度です（月が明るく条件は悪い）。\n出典:
+  国立天文台「ほしぞら情報 2027年11月」 https://www.nao.ac.j
+ p/astro/sky/2027/11.html\nくわしく: https://yorozu-craft.com/hoshizora
+ -sanpo/calendar/meteor-showers.html#taurids-n
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#t
+ aurids-n
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-11-14-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271114T032600Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年11月14日 12時26分です。\n出典: 国立天文台 
+ 暦計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.
+ nao.ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-c
+ raft.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-leonids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271118T060000Z
+SUMMARY:しし座流星群が極大
+DESCRIPTION:極大は日本時間で2027年11月18日 15時00分ごろで
+ 、見ごろは18日未明と19日未明、流星数のめやすは1時間
+ に3〜5個程度です（月が明るく条件は悪い）。\n出典: 
+ 国立天文台「ほしぞら情報 2027年11月」 https://www.nao.ac.jp
+ /astro/sky/2027/11.html\nくわしく: https://yorozu-craft.com/hoshizora-
+ sanpo/calendar/meteor-showers.html#leonids
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/meteor-showers.html#l
+ eonids
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-11-21-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271121T004800Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年11月21日 9時48分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-11-28-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271128T032400Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年11月28日 12時24分です。月明かりがなく、星
+ 空の観察に向いた時期です。\n出典: 国立天文台 暦計算
+ 室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-12-06-first@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271206T052200Z
+SUMMARY:上弦の月
+DESCRIPTION:国立天文台の暦要項による上弦の時刻は、日本
+ 時間で2027年12月6日 14時22分です。右半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-12-14-full@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271213T160900Z
+SUMMARY:満月
+DESCRIPTION:国立天文台の暦要項による満月の時刻は、日本
+ 時間で2027年12月14日 1時09分です。\n出典: 国立天文台 暦
+ 計算室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao
+ .ac.jp/koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craf
+ t.com/hoshizora-sanpo/calendar/full-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/full-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-meteor-geminids-2027@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271214T200000Z
+SUMMARY:ふたご座流星群が極大
+DESCRIPTION:極大は日本時間で2027年12月15日 5時00分ごろで、
+ 見ごろは14日深夜から15日未明、流星数のめやすは1時間
+ に25個程度です（月がたいへん明るく悪条件）。\n出典:
+  国立天文台「ほしぞら情報 2027年12月」 https://www.nao.ac.j
+ p/astro/sky/2027/12.html\nくわしく: https://yorozu-craft.com/hoshizora
+ -sanpo/calendar/geminids.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/geminids.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-12-20-last@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271220T091100Z
+SUMMARY:下弦の月
+DESCRIPTION:国立天文台の暦要項による下弦の時刻は、日本
+ 時間で2027年12月20日 18時11分です。左半分が光る半月の
+ ころです。\n出典: 国立天文台 暦計算室「令和9年（2027
+ ）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiy
+ ou273.html\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calenda
+ r/
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-moon-2027-12-28-new@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART:20271227T201200Z
+SUMMARY:新月
+DESCRIPTION:国立天文台の暦要項による新月の時刻は、日本
+ 時間で2027年12月28日 5時12分です。月明かりがなく、星
+ 空の観察に向いた時期です。\n出典: 国立天文台 暦計算
+ 室「令和9年（2027）暦要項 朔弦望」 https://eco.mtk.nao.ac.jp
+ /koyomi/yoko/2027/rekiyou273.html\nくわしく: https://yorozu-craft.com/
+ hoshizora-sanpo/calendar/new-moon.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/new-moon.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2028-01-12-moon@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20280112
+DTEND;VALUE=DATE:20280113
+SUMMARY:部分月食（日本では見られない）
+DESCRIPTION:国立天文台の発表による部分月食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2028-01-27-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20280127
+DTEND;VALUE=DATE:20280128
+SUMMARY:金環日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による金環日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2028-07-07-moon@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20280707
+DTEND;VALUE=DATE:20280708
+SUMMARY:部分月食（日本で見られる）
+DESCRIPTION:国立天文台の発表による部分月食の日で、日本
+ で見られます。\n出典: 国立天文台 暦計算室「日月食等
+ データベース」（2026〜2030年、中央標準時、日本付近で
+ の見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi\n
+ くわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-ecli
+ pse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2028-07-22-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20280722
+DTEND;VALUE=DATE:20280723
+SUMMARY:皆既日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による皆既日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-01-01-moon@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20290101
+DTEND;VALUE=DATE:20290102
+SUMMARY:皆既月食（日本で見られる）
+DESCRIPTION:国立天文台の発表による皆既月食の日で、日本
+ で見られます。\n出典: 国立天文台 暦計算室「日月食等
+ データベース」（2026〜2030年、中央標準時、日本付近で
+ の見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi\n
+ くわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-ecli
+ pse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-01-15-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20290115
+DTEND;VALUE=DATE:20290116
+SUMMARY:部分日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による部分日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-06-12-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20290612
+DTEND;VALUE=DATE:20290613
+SUMMARY:部分日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による部分日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-06-26-moon@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20290626
+DTEND;VALUE=DATE:20290627
+SUMMARY:皆既月食（日本では見られない）
+DESCRIPTION:国立天文台の発表による皆既月食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-07-12-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20290712
+DTEND;VALUE=DATE:20290713
+SUMMARY:部分日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による部分日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-12-06-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20291206
+DTEND;VALUE=DATE:20291207
+SUMMARY:部分日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による部分日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2029-12-21-moon@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20291221
+DTEND;VALUE=DATE:20291222
+SUMMARY:皆既月食（日本で見られる）
+DESCRIPTION:国立天文台の発表による皆既月食の日で、日本
+ で見られます。\n出典: 国立天文台 暦計算室「日月食等
+ データベース」（2026〜2030年、中央標準時、日本付近で
+ の見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi\n
+ くわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-ecli
+ pse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2030-06-01-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20300601
+DTEND;VALUE=DATE:20300602
+SUMMARY:金環日食（日本付近で中心食）
+DESCRIPTION:国立天文台の発表による金環日食の日で、日本
+ 付近で中心食になります。\n出典: 国立天文台 暦計算室
+ 「日月食等データベース」（2026〜2030年、中央標準時、
+ 日本付近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/ec
+ lipsedb.cgi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calend
+ ar/solar-eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2030-06-16-moon@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20300616
+DTEND;VALUE=DATE:20300617
+SUMMARY:部分月食（日本で見られる）
+DESCRIPTION:国立天文台の発表による部分月食の日で、日本
+ で見られます。\n出典: 国立天文台 暦計算室「日月食等
+ データベース」（2026〜2030年、中央標準時、日本付近で
+ の見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi\n
+ くわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-ecli
+ pse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/lunar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:tenmon-eclipse-2030-11-25-sun@yorozu-craft.com
+DTSTAMP:20261002T000000Z
+DTSTART;VALUE=DATE:20301125
+DTEND;VALUE=DATE:20301126
+SUMMARY:皆既日食（日本では見られない）
+DESCRIPTION:国立天文台の発表による皆既日食の日で、日本
+ では見られません。\n出典: 国立天文台 暦計算室「日月
+ 食等データベース」（2026〜2030年、中央標準時、日本付
+ 近での見え方） https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.c
+ gi\nくわしく: https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-
+ eclipse.html
+URL:https://yorozu-craft.com/hoshizora-sanpo/calendar/solar-eclipse.html
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR
