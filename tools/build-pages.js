@@ -10,6 +10,7 @@ const { CONS, SEASON_KANA } = require('../data.js');
 const { CATALOG } = require('../catalog.js');
 const buildCalendar = require('./calendar-pages.js');
 const buildEn = require('./calendar-pages-en.js');
+const buildShinwa = require('./shinwa-pages.js');
 
 const ROOT = path.join(__dirname, '..');
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
@@ -44,7 +45,7 @@ function page({ rel, file, title, description, current, body, jsonld, alt }) {
 <link rel="canonical" href="${url}">
 ${alt ? hreflang(file, alt) + '\n' : ''}<meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:type" content="${/^(zukan|calendar)\/(?!index)/.test(file) ? 'article' : 'website'}">
+<meta property="og:type" content="${/^(zukan|calendar|shinwa)\/(?!index)(?!seiza\/index)/.test(file) ? 'article' : 'website'}">
 <meta property="og:url" content="${url}">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:image" content="${BASE}og-image.png">
@@ -68,7 +69,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 </main>
 <footer class="site"><div class="wrap">
-  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}calendar/">天文カレンダー</a><a href="${rel}hayamiban/">星座早見盤</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}calendar/">天文カレンダー</a><a href="${rel}hayamiban/">星座早見盤</a><a href="${rel}shinwa/">ギリシャ神話</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
 ${BEACON}
@@ -188,6 +189,9 @@ function neighbors(c) {
 /* ---------------- 天文カレンダー ---------------- */
 const calendar = buildCalendar({ page, esc, BASE, UPDATED });
 
+/* ---------------- ギリシャ神話（shinwa/。星座の話は図鑑と相互リンク） ---------------- */
+const shinwa = buildShinwa({ page, esc, CONS });
+
 /* ---------------- 星座のページ ---------------- */
 const GROUPS = [
   ['春の星座', ['春', '春（北の空）']],
@@ -220,6 +224,7 @@ function conPage(c, i) {
 <p>${esc(v.text)}</p>
 <h2>星座のお話</h2>
 <p>${c.adl}</p>
+${shinwa.zukanLinks[c.id] ? `<p class="myth-link"><a href="${shinwa.zukanLinks[c.id].href}">原典で読む「${esc(shinwa.zukanLinks[c.id].title)}（${esc(shinwa.zukanLinks[c.id].sub)}）」→</a></p>` : ''}
 <div class="box fun"><b>まめちしき</b>　${c.fun}</div>
 <h2>こどもと読む（ひらがな）</h2>
 <div class="box kids">${c.kid}</div>
@@ -251,6 +256,7 @@ function zukanIndex() {
 <h1>星座図鑑<small>${CONS.length}の星座の見つけ方と神話</small></h1>
 <p class="lead">季節ごとの星座を、星図・見ごろ・神話・主な星といっしょに紹介します。見ごろは東京で夜9時に見たときのめやすです。ひらがなの解説もあるので、お子さんといっしょに読めます。</p>
 <a class="cta" href="../">今夜の星空をプラネタリウムで見る →</a>
+<p class="myth-link">星座と結びついた神話を原典で読む → <a href="../shinwa/seiza/">星座の由来 12 本</a>・<a href="../shinwa/">ギリシャ神話の系図と神の一覧</a></p>
 ${sections}`;
   const description = `黄道12星座やオリオン座・北斗七星・南十字星など${CONS.length}星座の見つけ方と神話を、星図・見ごろ・主な星つきで紹介。子ども向けのひらがな解説も。`;
   return page({ rel: '../', file: 'zukan/index.html', title: '星座図鑑｜季節の星座の見つけ方と神話｜ほしぞらさんぽ', description, current: 'zukan/', body,
@@ -333,12 +339,16 @@ en.files.forEach(f => out(f.file, f.html));
 out('zukan/index.html', zukanIndex());
 ordered.forEach((c, i) => out(`zukan/${c.id}.html`, conPage(c, i)));
 calendar.files.forEach(f => out(f.file, f.html));
+fs.mkdirSync(path.join(ROOT, 'shinwa/seiza'), { recursive: true });
+shinwa.files.forEach(f => out(f.file, f.html));
 out('about.html', about());
 out('privacy-policy.html', privacy());
 
 const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
   ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly']),
   ['about.html', '0.4', 'yearly'],
+  // ギリシャ神話（tools/shinwa-pages.js）
+  ...shinwa.files.map(f => [f.file.replace(/index\.html$/, ''), f.file === 'shinwa/index.html' ? '0.7' : '0.6', 'monthly', require('./shinwa-data.js').CHECKED]),
   // 星座早見盤（hayamiban/。手で書いたページ。盤面は hayamiban/planisphere.js がブラウザで作る）
   ['hayamiban/', '0.8', 'monthly', '2026-09-25'], ['hayamiban/guide.html', '0.5', 'yearly', '2026-09-25'],
   // 英語版（本体の en/index.html は手で書いたもの。ほかは tools/calendar-pages-en.js で生成）
@@ -353,4 +363,4 @@ ${urls.map(([u, p, f, lastmod]) => `  <url>
   </url>`).join('\n')}
 </urlset>
 `);
-console.log(`zukan: ${ordered.length} pages + index, calendar: ${calendar.files.length} pages, en: ${en.files.length} pages, about, privacy-policy, sitemap (${urls.length} urls)`);
+console.log(`zukan: ${ordered.length} pages + index, calendar: ${calendar.files.length} pages, en: ${en.files.length} pages, shinwa: ${shinwa.files.length} pages, about, privacy-policy, sitemap (${urls.length} urls)`);
