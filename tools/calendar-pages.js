@@ -137,6 +137,18 @@ function eventItem(e, esc, { withYear = false } = {}) {
 }
 const monthKey = d => d.slice(0, 7);
 
+/** 「カレンダーに登録」（yorozu-plans ROADMAP 7.14 の 2、K129）。購読用の data/tenmon.ics（tools/build-ics.js）と共通の手順ページ /calendar-help.html */
+const ICS_PATH = 'yorozu-craft.com/hoshizora-sanpo/data/tenmon.ics';
+function subscribeBox() {
+  return `<section class="box cal-sub" id="calendar-subscribe" aria-labelledby="h-cal-sub">
+<p><b id="h-cal-sub">カレンダーに登録</b></p>
+<p>新月・上弦・満月・下弦、流星群の極大、日食・月食を、スマホやパソコンのカレンダーで購読できます。国立天文台の発表を見て予定を足すと、登録したカレンダーにも入ります。</p>
+<p><a class="btn" href="webcal://${ICS_PATH}">カレンダーに登録する</a></p>
+<p><label for="ics-url">URL（Google カレンダーの「URL で追加」に貼る）</label><br><input id="ics-url" type="text" readonly value="https://${ICS_PATH}" onfocus="this.select()"></p>
+<p class="lead"><a href="../../calendar-help.html">Google カレンダー・iPhone・Outlook での登録のしかた</a>。データは CC0 で、各予定の説明に出典があります。</p>
+</section>`;
+}
+
 /* ---------------- ページ ---------------- */
 module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   const events = allEvents();
@@ -172,6 +184,7 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
 </div>
 <nav class="toc" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a></nav>
 ${list}
+${subscribeBox()}
 <p class="lead">${yTo}年12月より先の現象は、国立天文台が暦要項（毎年2月に翌年分を発表）や「ほしぞら情報」で発表したあとに追加します。</p>
 ${sourceList(inRange.flatMap(e => e.src), esc)}`;
     add('calendar/index.html', `天文カレンダー${yFrom}-${yTo}｜流星群・満月・日食月食・惑星の見ごろ｜ほしぞらさんぽ`,
