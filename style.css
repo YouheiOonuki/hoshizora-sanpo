@@ -182,3 +182,7 @@ body.red #redFilter{display:block;}
   #plate h1{font-size:17px;}
   .sh-name{font-size:22px;}
 }
+
+/* 共有される結果（K124）: 説明シートの中の結果カード。演出はシートが上がる 1 つだけにする（カード自身は動かさない） */
+#sheet .share-card{animation:none;margin:4px 0 0;}
+#sheet .share-card .tbtn{padding:10px 14px;}
