@@ -119,5 +119,40 @@
       .observe($('print-row'));
   }
 
+  /* ---------------- 共有される結果（yorozu-plans K124・企画書 60） ----------------
+     #<緯度>,<経度>,<UNIX 秒>（sky-share.js。プラネタリウムと同じ形）。札幌・東京・那覇はそのまま、緯度を入れた場所は 1 度単位に丸める。
+     URL は月ごとの着地ページ s/<月>.html（OG 画像だけが違う） */
+  const SITE = 'https://yorozu-craft.com/hoshizora-sanpo/hayamiban/';
+  const S = window.SkyShare;
+  function shareLabel(lat, lon, preset) { return preset ? `${PLACE_NAMES[preset.id]}の星座早見盤` : `北緯 ${lat}°・東経 ${lon}° の星座早見盤`; }
+  $('share-btn').addEventListener('click', () => {
+    const P = place();
+    if (!P) return;
+    const ms = whenMs(), hash = S.encode({ lat: P.lat, lon: P.lon }, ms, H.PRESETS), d = S.decode(hash, H.PRESETS);
+    window.ShareCard.mount($('share-host'), {
+      label: '星座早見盤メーカー', result: shareLabel(d.lat, d.lon, d.place), whenLabel: '盤を合わせた日時', when: d.ms, tz: 'Asia/Tokyo',
+      url: SITE + 's/' + S.kind(d.ms, 'Asia/Tokyo') + '.html' + hash, title: '星座早見盤｜ほしぞらさんぽ', btnClass: 'btn',
+      note: 'URL に入るのは場所（札幌・東京・那覇か、1 度単位に丸めた緯度・経度）と日時だけです。',
+    });
+  });
+  // 共有の URL で開いたとき: その場所・日時の盤を出す（開いただけでは保存しない。自分で設定を変えたら保存する）
+  const shared = S.decode(location.hash, H.PRESETS);
+  if (shared && (shared.place || (shared.lat >= H.LAT_MIN && shared.lat <= H.LAT_MAX))) {
+    st = normalize(shared.place ? Object.assign({}, st, { place: shared.place.id })
+      : Object.assign({}, st, { place: 'custom', lat: shared.lat, lon: shared.lon >= H.LON_MIN && shared.lon <= H.LON_MAX ? shared.lon : '' }));
+    const d = new Date(shared.ms + 9 * 3600000);
+    $('pv-date').value = d.toISOString().slice(0, 10);
+    $('pv-time').value = d.toISOString().slice(11, 16);
+    window.ShareCard.mount($('share-host'), {
+      shared: true, label: '星座早見盤メーカー', result: shareLabel(shared.lat, shared.lon, shared.place), whenLabel: '盤を合わせた日時', when: shared.ms, tz: 'Asia/Tokyo',
+      btnClass: 'btn', again: { label: '自分の場所で作る', onClick: () => {
+        st = load(); $('pv-date').value = ''; $('pv-time').value = ''; when = defaultWhen();
+        $('share-host').replaceChildren();
+        try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* 古いブラウザ */ }
+        sync(); render(); window.scrollTo(0, 0);
+      } },
+    });
+  }
+
   sync(); render();
 })();

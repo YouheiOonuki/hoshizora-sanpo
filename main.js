@@ -900,6 +900,40 @@ function toast(msg){
 onClick('helpBtn',()=>$('help').classList.add('open'));
 onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet(KEY+'seen','1'); cv.focus({preventScroll:true}); });
 
+/* ---------------- 共有される結果（yorozu-plans K124・企画書 60） ----------------
+   「この空を共有」: 場所と時刻を #<緯度>,<経度>,<UNIX 秒>（sky-share.js）にして、月ごとの着地ページ s/<月>.html（OG 画像だけが違う）の URL に。
+   一覧に無い場所（いまいる場所）は 1 度単位に丸める。向き・星座線・ひらがなモードなどの設定は入れない */
+const SHARE_SITE='https://yorozu-craft.com/hoshizora-sanpo/';
+const SHARE_PLACES=[...LOCS,...LOCS_WORLD.filter(l=>!LOCS.includes(l))];
+function skyPlaceLabel(d){
+  if(d.place) return `${placeName(d.place)}の${kids?'そら':'空'}`;
+  const ns=d.lat>=0?`北緯${d.lat}°`:`南緯${-d.lat}°`, ew=d.lon>=0?`東経${d.lon}°`:`西経${-d.lon}°`;
+  return `${ns}・${ew}あたりの${kids?'そら':'空'}`;
+}
+function openShare(){
+  closePanels();
+  const ms=simNow(), hash=SkyShare.encode(loc,ms,SHARE_PLACES), d=SkyShare.decode(hash,SHARE_PLACES);
+  showSheet('',{type:'share'});
+  ShareCard.mount(sheetBody,{label:'ほしぞらさんぽ', result:skyPlaceLabel(d), whenLabel:kids?'じかん':'空の日時', when:ms, tz:loc.tz,
+    url:SHARE_SITE+'s/'+SkyShare.kind(ms,loc.tz)+'.html'+hash, title:'この空｜ほしぞらさんぽ', btnClass:'tbtn',
+    note:'URL に入るのは場所（一覧の都市か、1 度単位に丸めた緯度・経度）と日時だけです。'});
+}
+if($('bShare')) onClick('bShare',openShare);   // 日本語版だけ（英語版は # で開くだけ）
+/** 共有の URL で開いたとき: その場所・時刻の空にする（場所は保存しない）。日本語版は送った人の空をカードで出す */
+function openShared(sh,home){
+  loc=sh.place||{id:'custom',name:skyPlaceLabel(sh).replace(/の(空|そら)$/,''),kana:'',en:`${sh.lat}°, ${sh.lon}°`,lat:sh.lat,lon:sh.lon,
+    tz:SkyShare.tzFor(sh.lat,sh.lon,deviceTz())};
+  updateLabels(); jumpTo(sh.ms); faceDefault();
+  toast(T('linkedToast',localParts(sh.ms,loc.tz),placeName(loc)));
+  if(EN) return;
+  showSheet('',{type:'share'});
+  ShareCard.mount(sheetBody,{shared:true,label:'ほしぞらさんぽ',result:skyPlaceLabel(sh),whenLabel:'空の日時',when:sh.ms,tz:loc.tz,btnClass:'tbtn',
+    again:{label:'いまの空にもどる',onClick:()=>{
+      loc=home; updateLabels(); jumpTo(Date.now()); faceDefault(); closeSheet();
+      try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+    }}});
+}
+
 /* ---------------- はじまり ---------------- */
 (function init(){
   const saved=lsGet(KEY+'loc');
@@ -908,9 +942,10 @@ onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet(KEY+'seen','
   if(lsGet(KEY+'red')==='1') setRed(true);
   faceDefault(); updateLabels(); dockFade();
 
+  const shared=SkyShare.decode(location.hash,SHARE_PLACES);
   const params=new URLSearchParams(location.search);
-  const target=CONS.find(c=>c.id===params.get('c'));
-  const linked=openAt(params);
+  const target=shared?null:CONS.find(c=>c.id===params.get('c'));
+  const linked=shared?(openShared(shared,loc),true):openAt(params);
   if(linked){ /* カレンダーから: 指定の日時・方角で開いた */ }
   else if(target){ focusCon(target); }
   else if(!nightNow()){
