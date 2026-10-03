@@ -20,7 +20,7 @@
   var TEXT = {
     ja: { msg: 'この端末なら、天の川や暗い星まで描くフル版がおすすめです。', link: 'フル版を開く', close: 'とじる' },
     kana: { msg: 'この たんまつ なら フルばん が おすすめ だよ。', link: 'フルばんを ひらく' },
-    en: { msg: 'The full version is recommended for this device.', link: 'Open full version', close: 'Close' }
+    en: { msg: 'Try the full version', link: 'Open full version', close: 'Close' }
   };
 
   /** WebGL を作れるか（hoshizora-night render/gate.js の webglOk と同じ基準）。確かめた文脈は手放す */
