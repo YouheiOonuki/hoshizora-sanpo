@@ -18,6 +18,7 @@
 - **ギリシャ神話** — `shinwa/`（K119）。系図（押して親子をたどる、`shinwa/keizu.js`）・神の一覧（英語名・ローマ名）・星座の由来 12 本（星座図鑑と相互リンク）・惑星と元素の名前の由来・表記の一覧。話はアポロドーロス・ヘシオドス・オウィディウス・アラトスの著作権の切れた英訳で確かめて書いた。データと出典は `tools/shinwa-data.js`（`CHECKED`）、ページは `tools/shinwa-pages.js`（`node tools/build-pages.js` で作る）。本文のカタカナと表記の一覧の突き合わせ・相互リンク・元素の由来とクイズ広場の一致は `tests/shinwa.test.js`
 - **天文カレンダー** — 流星群の極大・満月・新月・日食・月食・惑星の見ごろ（`calendar/`）。日付は国立天文台の発表から。「この日の星空を見る」でプラネタリウムをその日時・方角で開く
 - **星座早見盤を印刷して作る** — `/hoshizora-sanpo/hayamiban/`。札幌・東京・那覇または北緯 23〜50°・東経を入れて、星図盤と窓の盤を A4 2 枚（または 1 枚）に印刷。切って中心を割りピンで留める。等距離方位図法（天の北極が中心）、星は J2000.0、時刻の目盛りは経度の差で回してある。見本は日時を変えて回せる
+- **月の出・月の入り** — `/hoshizora-sanpo/tsuki/`（K41、yorozu-plans 企画書 63）。札幌・東京・大阪・福岡・那覇・石垣島・今いる場所・緯度経度（日本の中）と日付から、月の出・月の入りの時刻と方角（16 方位と度）、南中の時刻と高さ、月齢（正午）。1 か月の表を A4 1 枚に印刷。定義は国立天文台 暦計算室「各地のこよみ」と同じ（月の中心が地平線、地平大気差 35′8″、標高 0 m、日本標準時）。月の位置は `astro.js` の `moon()` に視差をかけた地表の位置。国立天文台の表（`tests/fixtures/naoj-moon.json`、2026-10-03 取得、10 か月分）と時刻 1 分・方位と南中高度 0.2°・月齢 0.1 日以内（`tests/moonrise.test.js`）。保存しない（共有は `#p=<場所>&d=<日付>`、今いる場所の緯度経度は入れない）
 - **英語版** — `/hoshizora-sanpo/en/`（本体・天文カレンダー・使い方・印刷する星座早見盤 `en/planisphere/`）。場所は世界の都市・位置情報・緯度経度から選ぶ。星座の神話・図鑑・ひらがなモードは日本語のみ
 - **オフライン対応** — Service Worker で一度開けば電波がなくても動く。ホーム画面に追加可能
 
@@ -38,11 +39,13 @@
 | （運営者情報・プライバシーポリシー） | yorozu-craft 共通ページ（`https://yorozu-craft.com/about.html`・`/privacy-policy.html`）にある。`privacy-policy.html` はそこへ移動する案内ページ |
 | `hayamiban/planisphere.js` | 星座早見盤の盤面（幾何と SVG）。astro.js の恒星時・data.js の星座・catalog.js の星から作る。ブラウザと Node の両方で読める |
 | `hayamiban/index.html`・`app.js`・`hayamiban.css`・`guide.html` | 星座早見盤の画面（手で書く）と使い方。印刷は `@media print` で紙だけを A4 原寸で出す |
+| `tsuki/moonrise.js`・`tsuki/index.html`・`app.js`・`tsuki.css`・`guide.html` | 月の出・月の入り（手で書く）。`moonrise.js` はブラウザと Node の両方で読める |
 | `print/index.html` | 印刷した早見盤のクレジット（`yorozu-craft.com/hoshizora-sanpo/print/`）から来た人の着地ページ（noindex、sitemap に載せない） |
 | `pages.css` | 読みものページのスタイル |
 | `sw.js` / `manifest.webmanifest` | オフライン対応・PWA |
 | `tests/astro.test.js` | 天文計算を PyEphem の値と照合するテスト |
 | `tests/hayamiban.test.js` | 早見盤の目盛りを合わせたときの星の位置を、プラネタリウムと同じ計算（歳差・恒星時・高度方位）の空と比べるテスト（2026〜2050 年・5 地点で 1° 以内、窓の内外が地平線の上下と一致） |
+| `tests/moonrise.test.js` | 月の出・南中・月の入り・方位・月齢を国立天文台「各地のこよみ」の表と照合（時刻 1 分以内） |
 | `tests/calendar.test.js` | カレンダーのデータを計算と突き合わせ、書き写しの誤りを見つけるテスト |
 
 ## 開発

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>月の出・月の入りの時刻と方角｜今日の月と 1 か月の表（札幌・東京・那覇ほか）｜ほしぞらさんぽ</title>
+<meta name="description" content="今日の月の出・月の入りの時刻と方角（東北東など）、南中の時刻と高さ、月齢。場所を選ぶと 1 か月分の表も出て印刷できます。国立天文台と同じ定義で計算。無料・登録なし。">
+<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/tsuki/">
+<meta property="og:title" content="月の出・月の入りの時刻と方角｜ほしぞらさんぽ">
+<meta property="og:description" content="今日の月の出・月の入りの時刻と方角、南中、月齢。1 か月分の表も印刷できます。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yorozu-craft.com/hoshizora-sanpo/tsuki/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://yorozu-craft.com/hoshizora-sanpo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="yorozu-craft">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070b18">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "月の出・月の入りの時刻と方角",
+ "description": "今日の月の出・月の入りの時刻と方角、南中の時刻と高さ、月齢。1 か月分の表も印刷できます。",
+ "url": "https://yorozu-craft.com/hoshizora-sanpo/tsuki/",
+ "applicationCategory": "EducationalApplication",
+ "operatingSystem": "All",
+ "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+ "inLanguage": "ja",
+ "isPartOf": { "@type": "WebSite", "name": "ほしぞらさんぽ", "url": "https://yorozu-craft.com/hoshizora-sanpo/" }
+}
+</script>
+<!-- 読みもの・計算のページなので広告タグを入れる（全画面のプラネタリウム本体ではない）。印刷には出さない -->
+<meta name="google-adsense-account" content="ca-pub-5375267956079717">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5375267956079717"
+     crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../pages.css">
+<link rel="stylesheet" href="./tsuki.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="logo" href="../"><img src="../favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
+  <nav aria-label="サイト内"><a href="../">プラネタリウム</a><a href="../zukan/">星座図鑑</a><a href="../calendar/">天文カレンダー</a><a href="./" aria-current="page">月の出入り</a><a href="../hayamiban/">星座早見盤</a></nav>
+</div></header>
+
+<main class="wrap">
+  <h1>月の出・月の入りの時刻と方角</h1>
+  <p class="lead noprint">場所と日付を選ぶと、月が出る時刻と方角を出します。入力は外部に送信しません。</p>
+
+  <section class="form noprint" aria-label="場所と日付">
+    <fieldset class="tiles">
+      <legend>場所</legend>
+      <label><input type="radio" name="place" value="sapporo"><span>札幌</span></label>
+      <label><input type="radio" name="place" value="tokyo" checked><span>東京</span></label>
+      <label><input type="radio" name="place" value="osaka"><span>大阪</span></label>
+      <label><input type="radio" name="place" value="fukuoka"><span>福岡</span></label>
+      <label><input type="radio" name="place" value="naha"><span>那覇</span></label>
+      <label><input type="radio" name="place" value="ishigaki"><span>石垣島</span></label>
+      <label><input type="radio" name="place" value="here"><span>今いる場所</span></label>
+      <label><input type="radio" name="place" value="custom"><span>緯度・経度</span></label>
+    </fieldset>
+    <div class="custom" id="custom" hidden>
+      <label>北緯<input type="number" id="lat" inputmode="decimal" min="20" max="46" step="0.01" placeholder="例: 34.69"></label>
+      <label>東経<input type="number" id="lon" inputmode="decimal" min="122" max="154" step="0.01" placeholder="例: 135.50"></label>
+      <p class="hint">日本の中（北緯 20〜46°・東経 122〜154°）。Google マップで長押しした場所の数字です。</p>
+    </div>
+    <p class="hint" id="here-msg" hidden></p>
+    <div>
+      <label class="lbl" for="date">日付</label>
+      <input type="date" id="date" min="1900-01-01" max="2099-12-31">
+    </div>
+  </section>
+
+  <section class="result" aria-live="polite" id="result">
+    <p class="when" id="when">—</p>
+    <dl class="big">
+      <dt>月の出</dt><dd id="rise">—</dd>
+      <dt>月の入り</dt><dd id="set">—</dd>
+    </dl>
+    <p id="transit"></p>
+    <p id="age"></p>
+    <p class="hint">計算の目安です。山や建物は考えていません。<a href="./guide.html">時刻と方角の決め方</a></p>
+    <p class="hint" id="sky-link-p"><a id="sky-link" href="../">この時刻の月をプラネタリウムで見る</a></p>
+  </section>
+
+  <details class="month" id="month-box">
+  <summary class="noprint" id="month-sum">1 か月の表（印刷できます）</summary>
+  <h2 id="month-title">1 か月の月の出入り</h2>
+  <div class="month-nav noprint">
+    <button type="button" class="btn sub" id="prev">◀ 前の月</button>
+    <button type="button" class="btn sub" id="next">次の月 ▶</button>
+    <button type="button" class="btn" id="print">この表を印刷する</button>
+  </div>
+  <div class="scroll">
+    <table class="moon">
+      <thead><tr><th scope="col">日</th><th scope="col">月の出・方角</th><th scope="col">南中・高さ</th><th scope="col">月の入り・方角</th><th scope="col">月齢</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <p class="print-only" id="print-note"></p>
+  <p class="hint noprint">--:-- はその日に起きないこと（翌日の 0 時台にずれた）を表します。</p>
+
+  </details>
+
+  <p class="noprint"><a href="./guide.html">使い方・時刻と方角の決め方・よくある質問</a></p>
+</main>
+<footer class="site noprint"><div class="wrap">
+  <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="../">プラネタリウム</a><a href="../calendar/">天文カレンダー</a><a href="./guide.html">月の出入りの使い方</a><a href="../../about.html">運営者情報</a><a href="../../privacy-policy.html">プライバシーポリシー</a></nav>
+  &copy; 2026 yorozu-craft. All rights reserved.
+</div></footer>
+<script src="../astro.js"></script>
+<script src="../data.js"></script>
+<script src="./moonrise.js"></script>
+<script src="./app.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

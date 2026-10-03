@@ -182,7 +182,7 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   <div><span class="chip">次の新月</span> <span data-next="new">${esc(summaryOf(nn))}</span></div>
   <div><span class="chip">次の流星群</span> <span data-next="meteor">${esc(summaryOf(nm))}</span></div>
 </div>
-<nav class="toc" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a></nav>
+<nav class="toc" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a><a href="../tsuki/">月の出・月の入り</a></nav>
 ${list}
 ${subscribeBox()}
 <p class="lead">${yTo}年12月より先の現象は、国立天文台が暦要項（毎年2月に翌年分を発表）や「ほしぞら情報」で発表したあとに追加します。</p>
