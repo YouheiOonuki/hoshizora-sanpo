@@ -37,6 +37,11 @@ const PRECACHE_URLS = [
   './zukan/',
   './calendar/',
   './about.html',
+  // 月の出・月の入り（tsuki/）
+  './tsuki/',
+  './tsuki/tsuki.css',
+  './tsuki/moonrise.js',
+  './tsuki/app.js',
   // 英語版（本体と天文カレンダーの一覧。ほかの英語ページは開いたものから保存される）
   './en/',
   './en/manifest.webmanifest',

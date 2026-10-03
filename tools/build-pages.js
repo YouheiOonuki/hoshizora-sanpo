@@ -351,6 +351,8 @@ const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.ma
   ...shinwa.files.map(f => [f.file.replace(/index\.html$/, ''), f.file === 'shinwa/index.html' ? '0.7' : '0.6', 'monthly', require('./shinwa-data.js').CHECKED]),
   // 星座早見盤（hayamiban/。手で書いたページ。盤面は hayamiban/planisphere.js がブラウザで作る）
   ['hayamiban/', '0.8', 'monthly', '2026-09-25'], ['hayamiban/guide.html', '0.5', 'yearly', '2026-09-25'],
+  // 月の出・月の入り（tsuki/。手で書いたページ。計算は tsuki/moonrise.js がブラウザで行う）
+  ['tsuki/', '0.8', 'monthly', '2026-10-03'], ['tsuki/guide.html', '0.5', 'yearly', '2026-10-03'],
   // 英語版（本体の en/index.html は手で書いたもの。ほかは tools/calendar-pages-en.js で生成）
   ['en/', '0.9', 'weekly'], ['en/planisphere/', '0.8', 'monthly', '2026-09-25'], ['en/planisphere/guide.html', '0.5', 'yearly', '2026-09-25'], ...en.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.7' : f.file.endsWith('guide.html') ? '0.4' : '0.6', f.file.endsWith('guide.html') ? 'yearly' : 'weekly'])];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>

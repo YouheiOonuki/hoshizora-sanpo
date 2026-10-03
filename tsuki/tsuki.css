@@ -1,0 +1,55 @@
+/* 月の出・月の入り（tsuki/）: pages.css に足す分 */
+.form{display:grid;gap:12px;}
+fieldset{border:0;margin:0;padding:0;min-width:0;}
+legend,.lbl{font-size:13px;color:var(--ink-dim);padding:0;margin-bottom:6px;display:block;}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.tiles legend{grid-column:1/-1;}
+.tiles label{position:relative;}
+.tiles input{position:absolute;opacity:0;inset:0;margin:0;}
+.tiles span{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;padding:6px 4px;
+  border:1px solid var(--edge);border-radius:12px;background:#0a1122;text-align:center;line-height:1.3;cursor:pointer;font-weight:600;font-size:14px;}
+.tiles input:checked+span{border-color:var(--gold);background:rgba(240,200,110,.14);color:var(--gold);}
+.tiles input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px;}
+.custom{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;}
+.custom label{display:inline-flex;align-items:center;gap:8px;}
+.custom[hidden],p[hidden]{display:none;}
+input[type=number],input[type=date]{min-height:44px;padding:6px 10px;border-radius:10px;border:1px solid var(--edge);background:#0a1122;color:var(--ink);font:inherit;color-scheme:dark;}
+input[type=number]{width:8.5em;}
+.hint{font-size:12.5px;color:var(--ink-dim);margin:0;line-height:1.7;}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 20px;border-radius:999px;
+  border:1px solid var(--gold);background:rgba(240,200,110,.16);color:var(--gold);font:inherit;font-weight:700;cursor:pointer;text-decoration:none;}
+.btn.sub{border-color:var(--edge);background:transparent;color:var(--ink);font-weight:400;}
+.result{margin:14px 0 0;border:1px solid rgba(240,200,110,.55);border-radius:14px;padding:14px 16px;background:rgba(13,20,40,.9);}
+.result .when{margin:0 0 6px;color:var(--ink-dim);font-size:14px;}
+.result .big{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0 0 8px;font-size:20px;font-weight:700;line-height:1.5;}
+.result .big dt{color:var(--gold);}
+.result .big dd{margin:0;}
+.result .big small{font-size:14px;font-weight:400;color:var(--ink-dim);}
+.result p{margin:0 0 6px;}
+.month-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px;}
+.scroll{overflow-x:auto;}
+table.moon{border-collapse:collapse;width:100%;font-size:14px;line-height:1.45;}
+table.moon th,table.moon td{border:1px solid var(--edge);padding:5px 6px;text-align:center;white-space:nowrap;}
+table.moon th{color:var(--ink-dim);font-weight:400;font-size:12.5px;}
+table.moon td small{display:block;font-size:12px;color:var(--ink-dim);}
+table.moon tr.today td{background:rgba(240,200,110,.14);}
+.print-only{display:none;}
+details.month{margin:18px 0 0;border:1px solid var(--edge);border-radius:14px;padding:0 14px;}
+details.month>summary{cursor:pointer;min-height:44px;padding:12px 0;font-weight:700;color:var(--gold);}
+details.month h2{margin-top:6px;}
+@media print{
+  @page{size:A4 portrait;margin:10mm;}
+  html,body{background:#fff !important;color:#000;}
+  header.site,footer.site,.noprint,form,.form,.result,.month-nav,ins.adsbygoogle,.google-auto-placed,iframe[id^="aswift"],iframe[id^="google_ads"]{display:none !important;}
+  main{padding:0;}
+  h1{color:#000;font-size:12pt;margin:0;}
+  h2{color:#000;border:0;margin:0 0 4px;font-size:15pt;}
+  .print-only{display:block;font-size:9pt;color:#333;margin:4px 0 0;}
+  table.moon{font-size:9pt;line-height:1.25;}
+  table.moon th,table.moon td{border-color:#999;padding:1px 4px;color:#000;}
+  table.moon td small,table.moon th{color:#333;}
+  table.moon tr.today td{background:none;}
+  table.moon td small{display:inline;margin-left:4px;}
+  details.month>summary{display:none;}
+  details.month{border:0;padding:0;margin:0;}
+}
