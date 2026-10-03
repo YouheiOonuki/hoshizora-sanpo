@@ -164,6 +164,7 @@ function render(now){
   if(W!==innerWidth||H!==innerHeight||W===0) resize();
   if(W===0||H===0){ requestAnimationFrame(render); return; }
   const dt=Math.min(100,now-lastFrame); lastFrame=now;
+  suggestTick(now);
   if(playing && !scrubbing){ offsetMs+=dt*SPEEDS[speedIdx]; scrubBase=offsetMs; }
   stepAnim(now);
 
@@ -899,6 +900,32 @@ function toast(msg){
 /* help */
 onClick('helpBtn',()=>$('help').classList.add('open'));
 onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet(KEY+'seen','1'); cv.focus({preventScroll:true}); });
+
+/* ---------------- フル版のおすすめ（suggest-full.js。オーナー決定 2026-10-03） ----------------
+   最初の 3 秒の fps の中央値と WebGL で、フル版の段階判定と同じ基準を満たす端末にだけ、ドックの上に 1 行を出す。
+   使い方カードが開いている間は待つ。閉じたら二度と出さない。reduced motion では現れ方を動かさない（style.css） */
+const SF=window.SuggestFull;
+let sfProbe=SF&&!SF.isDismissed(localStorageSafe())?SF.probe():null, sfReady=false;
+function localStorageSafe(){ try{ return localStorage; }catch(e){ return null; } }
+function suggestTick(now){
+  if(sfProbe){
+    const fps=sfProbe.tick(now); if(fps==null) return;
+    sfProbe=null;
+    let saveData=false; try{ saveData=!!(navigator.connection&&navigator.connection.saveData); }catch(e){}
+    sfReady=SF.decide({ dismissed:SF.isDismissed(localStorageSafe()), fromFull:/\/hoshizora-night\//.test(document.referrer||''),
+      saveData, fps, webgl:()=>SF.webglOk(document.createElement('canvas')) })==='show';
+  }
+  if(sfReady && !$('help').classList.contains('open')){
+    sfReady=false;
+    SF.mount($('app'),{document,storage:localStorageSafe(),location,en:EN});
+  }
+}
+/* 使い方カードの「フル版を見る」も、開いた URL の時刻・場所をフル版に渡す */
+document.querySelectorAll('#helpLinks a[href^="/hoshizora-night/"]').forEach(a=>{
+  if(!SF) return;
+  const set=()=>a.setAttribute('href',SF.fullUrl(EN,location.search,location.hash));
+  set(); a.addEventListener('click',set);
+});
 
 /* ---------------- 共有される結果（yorozu-plans K124・企画書 60） ----------------
    「この空を共有」: 場所と時刻を #<緯度>,<経度>,<UNIX 秒>（sky-share.js）にして、月ごとの着地ページ s/<月>.html（OG 画像だけが違う）の URL に。

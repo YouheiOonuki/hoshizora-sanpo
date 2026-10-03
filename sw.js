@@ -12,7 +12,7 @@
 'use strict';
 
 const CACHE_PREFIX = 'hoshizora-sanpo-';
-const CACHE_NAME   = `${CACHE_PREFIX}v6`; // キャッシュする中身の構成を変えたら上げる
+const CACHE_NAME   = `${CACHE_PREFIX}v7`; // キャッシュする中身の構成を変えたら上げる
 
 /** 初回インストール時に取得しておくファイル（プラネタリウム本体。図鑑は開いたページから順に保存される） */
 const PRECACHE_URLS = [
@@ -27,6 +27,7 @@ const PRECACHE_URLS = [
   './sky-share.js',
   './share-card.js',
   './reset-storage.js',
+  './suggest-full.js',
   './manifest.webmanifest',
   './favicon.svg',
   './icon-192.png',
