@@ -13,22 +13,23 @@ X-WR-CALDESC:天文カレンダー（yorozu-craft ほしぞらさんぽ）
  ivecommons.org/publicdomain/zero/1.0/deed.ja\n確認日: 2026-09-23（新
  月・満月・流星群・日食・月食）、2026-10-02（上弦・下
  弦）。新月・上弦・満月・下弦は自前の計算（Meeus）と
- 2分以内で一致することを確かめた\n範囲: 2026-09-23〜2027-
- 12-31（日食・月食はデータベースの日付まで）。先の分
- は国立天文台の発表のあとに足す\nページ: https://yorozu-c
- raft.com/hoshizora-sanpo/calendar/\n出典（各予定の説明欄にも
- ）:\nhttps://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou263.html\nhttps://
- www.nao.ac.jp/astro/sky/2026/10.html\nhttps://www.nao.ac.jp/astro/sky/2026
- /11.html\nhttps://www.nao.ac.jp/astro/sky/2026/12-topics02.html\nhttps://w
- ww.nao.ac.jp/astro/sky/2026/12.html\nhttps://www.nao.ac.jp/astro/sky/2027/
- 01-topics03.html\nhttps://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou273.ht
- ml\nhttps://www.nao.ac.jp/astro/sky/2027/01.html\nhttps://eco.mtk.nao.ac.j
- p/koyomi/yoko/2027/rekiyou275.html\nhttps://www.nao.ac.jp/astro/sky/2027/0
- 4.html\nhttps://www.nao.ac.jp/astro/sky/2027/05.html\nhttps://www.nao.ac.j
- p/astro/sky/2027/07.html\nhttps://www.nao.ac.jp/astro/sky/2027/08.html\nht
- tps://www.nao.ac.jp/astro/sky/2027/10.html\nhttps://www.nao.ac.jp/astro/sk
- y/2027/11.html\nhttps://www.nao.ac.jp/astro/sky/2027/12.html\nhttps://eco.
- mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi
+ 2分以内で一致することを確かめた\n生成日: 2026-10-03（
+ このファイルの中身が変わった日）\n範囲: 2026-09-23〜202
+ 7-12-31（日食・月食はデータベースの日付まで）。先の
+ 分は国立天文台の発表のあとに足す\nページ: https://yoroz
+ u-craft.com/hoshizora-sanpo/calendar/\n出典（各予定の説明欄に
+ も）:\nhttps://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou263.html\nhttps
+ ://www.nao.ac.jp/astro/sky/2026/10.html\nhttps://www.nao.ac.jp/astro/sky/2
+ 026/11.html\nhttps://www.nao.ac.jp/astro/sky/2026/12-topics02.html\nhttps:
+ //www.nao.ac.jp/astro/sky/2026/12.html\nhttps://www.nao.ac.jp/astro/sky/20
+ 27/01-topics03.html\nhttps://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou273
+ .html\nhttps://www.nao.ac.jp/astro/sky/2027/01.html\nhttps://eco.mtk.nao.a
+ c.jp/koyomi/yoko/2027/rekiyou275.html\nhttps://www.nao.ac.jp/astro/sky/202
+ 7/04.html\nhttps://www.nao.ac.jp/astro/sky/2027/05.html\nhttps://www.nao.a
+ c.jp/astro/sky/2027/07.html\nhttps://www.nao.ac.jp/astro/sky/2027/08.html\
+ nhttps://www.nao.ac.jp/astro/sky/2027/10.html\nhttps://www.nao.ac.jp/astro
+ /sky/2027/11.html\nhttps://www.nao.ac.jp/astro/sky/2027/12.html\nhttps://e
+ co.mtk.nao.ac.jp/cgi-bin/koyomi/eclipsedb.cgi
 REFRESH-INTERVAL;VALUE=DURATION:P1W
 X-PUBLISHED-TTL:P1W
 BEGIN:VEVENT

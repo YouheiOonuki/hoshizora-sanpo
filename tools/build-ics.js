@@ -6,7 +6,10 @@
  * 入れるもの: 朔弦望（新月・上弦・満月・下弦）、流星群の極大、日食・月食（COVERAGE.from 以降）。お月見・惑星は入れない
  * - UID は現象と日付から作る（同じ現象なら書き出し直しても同じ UID。購読している端末で予定が重ならない）
  * - DTSTAMP は確認日（同じデータなら同じファイル）。時刻のある現象は UTC（末尾 Z）で書き、VTIMEZONE を持たない
- * - 各予定の説明は 1 文＋出典（名前と URL）＋くわしいページ */
+ * - 各予定の説明は 1 文＋出典（名前と URL）＋くわしいページ
+ * - 同じ予定を data/tenmon.json（CC0。yorozu-plans ROADMAP 7.17 の K133）にも書き出す
+ * - 生成日（generated。ACCEPTANCE 7.10.3 e）: 中身（生成日を除く）が今のファイルと同じなら今の生成日をそのまま使い、
+ *   中身が変わったときだけその日（日本時間。環境変数 GENERATED=YYYY-MM-DD で指定もできる）にする（seido-keisan の tools/build-data.mjs と同じ決まり） */
 const fs = require('fs');
 const path = require('path');
 const O = require('./official-events.js');
@@ -16,6 +19,8 @@ const ROOT = path.join(__dirname, '..');
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
 const ICS_URL = BASE + 'data/tenmon.ics';
 const FILE = path.join(ROOT, 'data/tenmon.ics');
+const JSON_URL = BASE + 'data/tenmon.json';
+const JSON_FILE = path.join(ROOT, 'data/tenmon.json');
 const JST = 9 * 3600000;
 
 /* ---------- iCalendar の書き方（RFC 5545。seido-keisan の lib/kaitei.js と同じ） ---------- */
@@ -89,12 +94,20 @@ function events() {
   return ev.sort((a, b) => Date.parse(a.sort) - Date.parse(b.sort) || a.uid.localeCompare(b.uid));
 }
 
-function calDesc(ev) {
+/** 日本時間の今日（YYYY-MM-DD）。GENERATED があればそれ */
+function today() {
+  const g = process.env.GENERATED;
+  if (g && /^\d{4}-\d{2}-\d{2}$/.test(g)) return g;
+  return new Date(Date.now() + JST).toISOString().slice(0, 10);
+}
+
+function calDesc(ev, generated = today()) {
   const urls = [...new Set(ev.flatMap(e => e.srcs.map(k => src(k).url)))];
   return [
     '天文カレンダー（yorozu-craft ほしぞらさんぽ）。新月・上弦・満月・下弦（朔弦望）、流星群の極大、日食・月食。日時は日本時間で、国立天文台の発表を書き写したもの（クレジット: 国立天文台）。',
     'ライセンス: CC0 1.0（パブリック・ドメイン提供） https://creativecommons.org/publicdomain/zero/1.0/deed.ja',
     `確認日: ${O.CHECKED}（新月・満月・流星群・日食・月食）、${O.CHECKED_QUARTERS}（上弦・下弦）。新月・上弦・満月・下弦は自前の計算（Meeus）と2分以内で一致することを確かめた`,
+    `生成日: ${generated}（このファイルの中身が変わった日）`,
     `範囲: ${O.COVERAGE.from}〜${O.COVERAGE.to}（日食・月食はデータベースの日付まで）。先の分は国立天文台の発表のあとに足す`,
     'ページ: ' + BASE + 'calendar/',
     '出典（各予定の説明欄にも）:',
@@ -111,7 +124,7 @@ function eventLines(e, stamp) {
     'SUMMARY:' + icsText(e.summary), 'DESCRIPTION:' + icsText(desc), 'URL:' + BASE + e.page, 'TRANSP:TRANSPARENT', 'END:VEVENT'];
 }
 
-function buildIcs() {
+function buildIcs(generated = today()) {
   const ev = events();
   const latest = [O.CHECKED, O.CHECKED_QUARTERS].sort().at(-1);
   const stamp = ymd(latest) + 'T000000Z';
@@ -123,7 +136,7 @@ function buildIcs() {
     'METHOD:PUBLISH',
     'X-WR-CALNAME:' + icsText('天文カレンダー（yorozu-craft）'),
     'X-WR-TIMEZONE:Asia/Tokyo',
-    'X-WR-CALDESC:' + icsText(calDesc(ev)),
+    'X-WR-CALDESC:' + icsText(calDesc(ev, generated)),
     'REFRESH-INTERVAL;VALUE=DURATION:P1W',
     'X-PUBLISHED-TTL:P1W',
     ...ev.flatMap(e => eventLines(e, stamp)),
@@ -132,12 +145,66 @@ function buildIcs() {
   return lines.map(fold).join('\r\n') + '\r\n';
 }
 
-module.exports = { buildIcs, events, calDesc, fold, icsText, ICS_URL, FILE };
+/* ---------- 同じ予定の JSON（data/tenmon.json） ---------- */
+function buildJson(generated = today()) {
+  const ev = events();
+  const urls = [...new Set(ev.flatMap(e => e.srcs.map(k => src(k).url)))];
+  const data = {
+    title: '天文カレンダー（朔弦望・流星群の極大・日食と月食）',
+    license: 'CC0-1.0',
+    license_url: 'https://creativecommons.org/publicdomain/zero/1.0/deed.ja',
+    publisher: 'yorozu-craft（Youhei Oonuki）',
+    credit: '国立天文台（日時は国立天文台の発表を書き写したもの）',
+    homepage: BASE + 'calendar/',
+    data_url: JSON_URL,
+    ics_url: ICS_URL,
+    repository: 'https://github.com/YouheiOonuki/hoshizora-sanpo',
+    generated_from: 'tools/official-events.js（tools/build-ics.js で書き出し）',
+    checked: [O.CHECKED, O.CHECKED_QUARTERS].sort().at(-1),
+    checked_detail: { moon_new_full_meteor_eclipse: O.CHECKED, moon_quarters: O.CHECKED_QUARTERS },
+    generated,
+    source: urls,
+    coverage: { from: O.COVERAGE.from, to: O.COVERAGE.to, note: '日食・月食はデータベースの日付まで' },
+    note: '時刻のある予定の start は UTC の ISO 8601（日本時間は +9 時間）、日付だけの予定（流星群の「このころ」・日食・月食）は日本の日付。お月見・惑星の見ごろは入れていない。',
+    events: ev.map(e => ({
+      id: e.uid,
+      ...(e.start.time ? { start: new Date(Date.parse(e.start.time)).toISOString().replace(/\.000Z$/, 'Z') } : { date: e.start.date }),
+      summary: e.summary,
+      description: e.desc,
+      url: BASE + e.page,
+      sources: e.srcs.map(k => src(k)),
+    })),
+  };
+  return JSON.stringify(data, null, 2) + '\n';
+}
+
+/** 今のファイルの生成日（無ければ null） */
+function generatedOf(text) {
+  if (text == null) return null;
+  const m = text.replace(/\r\n[ \t]/g, '').match(/"generated": "(\d{4}-\d{2}-\d{2})"|生成日: (\d{4}-\d{2}-\d{2})/);
+  return m ? (m[1] || m[2]) : null;
+}
+/** 中身が同じなら今の生成日を残し、変わったときだけ今日にする */
+function stamp(build, now) {
+  const prev = generatedOf(now);
+  if (prev && build(prev) === now) return now;
+  return build(today());
+}
+const readOr = f => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null);
+function outputs() {
+  return { [FILE]: stamp(buildIcs, readOr(FILE)), [JSON_FILE]: stamp(buildJson, readOr(JSON_FILE)) };
+}
+
+module.exports = { buildIcs, buildJson, events, calDesc, fold, icsText, generatedOf, stamp, outputs, today, ICS_URL, JSON_URL, FILE, JSON_FILE };
 
 if (require.main === module) {
-  const body = buildIcs();
-  const now = fs.existsSync(FILE) ? fs.readFileSync(FILE, 'utf8') : null;
-  if (now === body) console.log('data/tenmon.ics: 変更なし');
-  else if (process.argv.includes('--check')) { console.error('data/tenmon.ics が tools/official-events.js と合っていない。node tools/build-ics.js を実行する'); process.exit(1); }
-  else { fs.mkdirSync(path.dirname(FILE), { recursive: true }); fs.writeFileSync(FILE, body); console.log('data/tenmon.ics を書き出した'); }
+  let bad = 0;
+  for (const [file, body] of Object.entries(outputs())) {
+    const rel = path.relative(ROOT, file);
+    const now = readOr(file);
+    if (now === body) console.log(rel + ': 変更なし');
+    else if (process.argv.includes('--check')) { console.error(rel + ' が tools/official-events.js と合っていない。node tools/build-ics.js を実行する'); bad++; }
+    else { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, body); console.log(rel + ' を書き出した'); }
+  }
+  if (bad) process.exit(1);
 }
