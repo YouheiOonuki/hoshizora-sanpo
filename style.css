@@ -119,7 +119,7 @@ body:not(.kids) .kd,body.kids .ad{display:none !important;}
        text-shadow:0 1px 8px rgba(0,0,0,.8);}
 #plate h1{font-family:var(--serif);font-weight:600;font-size:20px;letter-spacing:.14em;
           color:var(--gold);margin:0;}
-#plate .sub{font-size:11.5px;color:var(--ink-dim);margin-top:3px;letter-spacing:.05em;
+#plate .sub{font-size:12px;color:var(--ink-dim);margin-top:3px;letter-spacing:.05em;
             font-variant-numeric:tabular-nums;line-height:1.55;}
 #plate .sub b{color:var(--ink);font-weight:600;}
 
@@ -133,7 +133,7 @@ body:not(.kids) .kd,body.kids .ad{display:none !important;}
           color:var(--ink-dim);font-size:12px;text-decoration:none;font-family:var(--sans);}
 #langLink:focus-visible{outline:2px solid var(--gold);}
 /* 英語版: 緯度・経度の入力 */
-#locForm{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--ink-dim);}
+#locForm{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--ink-dim);}
 #locForm label{display:flex;flex-direction:column;gap:3px;flex:1 1 90px;}
 #locForm input{background:transparent;border:1px solid var(--panel-edge);border-radius:8px;color:var(--ink);
                padding:8px;font-size:14px;width:100%;box-sizing:border-box;font-family:var(--sans);}
@@ -178,7 +178,7 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 #tpNow{font-family:var(--serif);font-size:17px;color:var(--gold);text-align:center;
        letter-spacing:.06em;font-variant-numeric:tabular-nums;}
 #tpSlider{width:100%;margin:12px 0 4px;accent-color:var(--gold);}
-#tpHint{font-size:10.5px;color:var(--ink-dim);text-align:center;margin-bottom:10px;}
+#tpHint{font-size:12px;color:var(--ink-dim);text-align:center;margin-bottom:10px;}
 .tpRow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
 .tpRow + .tpRow{margin-top:8px;}
 .tbtn{border:1px solid var(--panel-edge);background:transparent;color:var(--ink);font-family:var(--sans);
@@ -190,7 +190,7 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 #locList{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;}
 #locList .tbtn{padding:10px 6px;}
 #locHere{width:100%;margin-top:8px;}
-#locNote{font-size:10.5px;color:var(--ink-dim);text-align:center;margin-top:8px;line-height:1.6;}
+#locNote{font-size:12px;color:var(--ink-dim);text-align:center;margin-top:8px;line-height:1.6;}
 
 /* ---- info sheet ---- */
 #sheet{position:absolute;left:50%;transform:translate(-50%,105%);bottom:0;z-index:7;
@@ -204,12 +204,12 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 @media (prefers-reduced-motion:reduce){#sheet,#sheet.open{transition:none;}}
 #sheetClose{position:absolute;top:10px;right:12px;width:32px;height:32px;border-radius:50%;
             border:none;background:rgba(255,255,255,.08);color:var(--ink-dim);font-size:15px;cursor:pointer;}
-.sh-kana{font-size:11px;color:var(--ink-dim);letter-spacing:.35em;}
+.sh-kana{font-size:12px;color:var(--ink-dim);letter-spacing:.35em;}
 .sh-name{font-family:var(--serif);font-size:26px;color:var(--gold);letter-spacing:.1em;
          margin:2px 0 2px;font-weight:600;text-wrap:balance;}
 .sh-en{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--ink-dim);}
 .sh-chips{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap;}
-.chip{font-size:10.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--panel-edge);
+.chip{font-size:12px;padding:3px 10px;border-radius:999px;border:1px solid var(--panel-edge);
       color:var(--ink-dim);letter-spacing:.06em;}
 .chip.season{border-color:rgba(240,200,110,.5);color:var(--gold);}
 .chip.up{border-color:rgba(140,230,170,.5);color:#9fe6b8;}
@@ -221,7 +221,7 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 .sh-fun b{color:var(--gold);font-family:var(--serif);letter-spacing:.1em;}
 .sh-stars{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
 .star-chip{display:flex;align-items:center;gap:7px;border:1px solid var(--panel-edge);
-           border-radius:10px;padding:7px 11px;font-size:11.5px;color:var(--ink);}
+           border-radius:10px;padding:7px 11px;font-size:12px;color:var(--ink);}
 .star-chip .dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 6px currentColor;}
 .star-chip small{color:var(--ink-dim);font-variant-numeric:tabular-nums;}
 .sh-link{display:inline-block;margin-top:14px;font-size:12.5px;color:var(--line);text-decoration:none;
@@ -233,7 +233,7 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
   background:linear-gradient(90deg,#8fb0ff,#dfe6ff,#fff6e0,#ffc98a,#ff8a5c);}
 .tempbar .mk{position:absolute;top:-4px;width:4px;height:18px;background:#fff;border-radius:2px;
              box-shadow:0 0 6px #fff;transform:translateX(-50%);}
-.tempbar .lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-dim);margin-top:5px;}
+.tempbar .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-dim);margin-top:5px;}
 
 /* ---- help overlay ---- */
 #help{position:absolute;inset:0;z-index:9;background:rgba(3,5,12,.8);display:none;
@@ -251,7 +251,7 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 #helpStart{margin-top:4px;border:1px solid var(--gold);background:rgba(240,200,110,.12);
            color:var(--gold);border-radius:999px;padding:11px 34px;font-size:14px;
            font-family:var(--serif);letter-spacing:.25em;cursor:pointer;}
-#helpLinks{margin-top:18px;font-size:11.5px;line-height:2;color:var(--ink-dim);}
+#helpLinks{margin-top:18px;font-size:12px;line-height:2;color:var(--ink-dim);}
 #helpLinks a{color:var(--ink-dim);text-decoration:none;border-bottom:1px solid rgba(154,165,196,.35);margin:0 5px;}
 #helpReset{margin-top:14px;border:1px solid var(--panel-edge);background:transparent;color:var(--ink-dim);
            border-radius:999px;padding:8px 16px;font-size:12px;cursor:pointer;}
