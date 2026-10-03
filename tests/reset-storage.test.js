@@ -17,10 +17,12 @@ const PAGE_PREFIXES = {
     "hzs_kids",
     "hzs_red",
     "hzs_loc",
-    "hzs_seen"
+    "hzs_seen",
+    "hoshizora-sanpo_suggest-full"
   ],
   "en/index.html": [
-    "hzs_en_"
+    "hzs_en_",
+    "hoshizora-sanpo_suggest-full"
   ],
   "hayamiban/index.html": [
     "hoshizora-sanpo_hayamiban"

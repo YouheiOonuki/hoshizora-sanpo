@@ -265,6 +265,21 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 #toast.show{opacity:1;}
 body.quizzing #toast{top:calc(var(--top) + 128px);}
 
+/* ---- フル版のおすすめ（suggest-full.js）: ドックの上に 1 行。パネル・説明シートが開いたらその下に隠れる ---- */
+#suggestFull{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(64px + env(safe-area-inset-bottom));z-index:5;
+             display:flex;align-items:center;gap:8px;width:max-content;max-width:min(calc(100vw - 32px),520px);box-sizing:border-box;
+             background:var(--panel);border:1px solid var(--panel-edge);border-radius:12px;padding:6px 6px 6px 14px;
+             font-size:12.5px;line-height:1.5;color:var(--ink-dim);box-shadow:0 4px 20px rgba(0,0,0,.5);
+             animation:sfIn .4s ease-out;}
+#suggestFull .sf-msg{flex:1 1 auto;}
+#suggestFull .sf-link{flex:0 0 auto;color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(240,200,110,.45);white-space:nowrap;}
+#suggestFull .sf-close{flex:0 0 auto;width:36px;height:36px;border:none;background:transparent;color:var(--ink-dim);
+                       font-size:14px;cursor:pointer;border-radius:50%;}
+#suggestFull .sf-close:focus-visible,#suggestFull .sf-link:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.panel.open ~ #suggestFull,#sheet.open ~ #suggestFull{display:none;}
+@keyframes sfIn{from{opacity:0;}to{opacity:1;}}
+@media (prefers-reduced-motion:reduce){#suggestFull{animation:none;}}
+
 /* ---- 赤いライト（夜目を守る） ---- */
 #redFilter{position:fixed;inset:0;z-index:50;background:#ff1a00;mix-blend-mode:multiply;
            pointer-events:none;display:none;}
