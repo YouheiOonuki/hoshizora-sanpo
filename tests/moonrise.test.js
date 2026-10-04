@@ -51,7 +51,9 @@ test('ページの決まり: 保存しない・共通ページへのリンク・
     const h = fs.readFileSync(path.join(root, 'tsuki', f), 'utf8');
     assert.ok(h.includes('href="../../about.html"') && h.includes('href="../../privacy-policy.html"'), f);
     assert.equal((h.match(/beacon\.min\.js/g) || []).length, 1, f);
-    assert.equal((h.match(/adsbygoogle\.js\?client=/g) || []).length, 1, f);
+    // index.html は AdSense 審査中（2026-10-04）なので広告 script を外し meta だけ
+    assert.equal((h.match(/adsbygoogle\.js\?client=/g) || []).length, f === 'index.html' ? 0 : 1, f);
+    assert.equal((h.match(/name="google-adsense-account"/g) || []).length, 1, f);
     assert.ok(h.includes(`<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/tsuki/${f === 'index.html' ? '' : f}">`), f);
   }
   const sm = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
