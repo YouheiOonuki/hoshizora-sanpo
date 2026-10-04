@@ -8,6 +8,8 @@ const A = require('../astro.js');
 const O = require('./official-events.js');
 const E = require('./events.js');
 const { CONS } = require('../data.js');
+const Y = require('./meteor-year.js');
+const R = require('../tsuki/moonrise.js');
 
 const DEG = A.DEG, HOUR = 3600000, DAY = 86400000, JST = 9 * HOUR;
 const YOBI = '日月火水木金土';
@@ -19,12 +21,14 @@ const PLANET_JP = { mercury: '水星', venus: '金星', mars: '火星', jupiter:
 const SHOWERS = {
   perseids: { name: 'ペルセウス座流星群', page: 'perseids', cons: ['per'], radiant: [48, 58], season: '例年8月中旬（お盆のころ）',
     parent: 'スイフト・タットル彗星（109P/Swift-Tuttle）', naoj: 'https://www.nao.ac.jp/astro/basic/perseid.html', big: true,
+    care: '夏の夜なので、虫よけと水分を用意しましょう。',
     feature: '夏休みの時期で夜も寒くなく、毎年安定して多くの流星が見られます。放射点は夕方にはすでに地平線の上にあり、明け方に向かって高くなるので、夜半すぎから空が白み始めるまでが観察しやすい時間帯です。' },
   geminids: { name: 'ふたご座流星群', page: 'geminids', cons: ['gem'], radiant: [112, 33], season: '例年12月中旬',
     parent: '小惑星フェートン（3200 Phaethon）。過去に彗星活動をしたことのある小惑星と考えられています', naoj: 'https://www.nao.ac.jp/astro/basic/geminid.html', big: true,
     feature: '年間で最も多くの流星が見られる流星群のひとつです。放射点はほぼ一晩中空にあるので、夕方から明け方まで流れ星を見るチャンスがあります。一年で最も寒い時期なので、防寒をしっかりしましょう。' },
   quadrantids: { name: 'しぶんぎ座流星群', page: 'quadrantids', cons: ['boo', 'dra'], radiant: [230, 49], season: '例年1月上旬（年明けすぐ）',
     parent: '諸説あり、まだ確定していません。近年は小惑星 2003 EH1 が有力視されています', naoj: 'https://www.nao.ac.jp/astro/basic/quadrantid.html', big: true,
+    care: '明け方は冷えこむので、手袋・帽子・ひざ掛けなどで防寒をしっかりと。',
     feature: '三大流星群のひとつですが、活動が活発な期間が短く、年によって流星数が大きく変わります。名前の「しぶんぎ座」はいまは使われていない星座の名前で、放射点はうしかい座とりゅう座の境界付近にあります。放射点は夜半すぎに高くなり、夜明け前が見ごろです。' },
   orionids: { name: 'オリオン座流星群', cons: ['ori'], season: '例年10月下旬' },
   leonids: { name: 'しし座流星群', cons: ['leo'], season: '例年11月中旬' },
@@ -150,6 +154,8 @@ function subscribeBox() {
 }
 
 /* ---------------- ページ ---------------- */
+/** 三大流星群のページに「年ごとの条件」と「観察のこつ」を足した日（構造化データの dateModified・sitemap の lastmod） */
+const MODIFIED_SHOWERS = '2026-10-04';
 module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   const events = allEvents();
   const files = [];
@@ -264,36 +270,76 @@ ${sourceList(O.MOON_PHASES.map(r => r.src), esc)}`;
 <tbody><tr><th>放射点の高さ</th>${cells.join('')}</tr></tbody></table></div>
 <p class="lead">東京で ${p.y}年${p.m}月${p.d}日の0時前後に見たときの計算値（ほしぞらさんぽの計算によるめやす）。放射点が高いほど、たくさんの流星が見えます。</p>`;
   }
+  /* 年ごとの条件（tools/meteor-year.js の計算。極大の日時と見ごろの時刻は国立天文台の発表） */
+  const t10 = ms => { const p = Y.jst(Math.round(ms / 600000) * 600000); return { d: p.d, s: `${p.h}時${p.min ? p.min + '分' : ''}` }; };
+  /** 夜の基準の日（夕方の日）から見た時刻の言い方 */
+  const nightClock = (ms, eveD) => { const t = t10(ms); return `${t.d === eveD ? '' : t.d + '日'}${t.s}`; };
+  /** 「14日1時50分〜3時20分」（終わりが始まりと同じ日なら日を書かない） */
+  const range = (a, b, eveD) => `${nightClock(a, eveD)}〜${nightClock(b, t10(a).d)}`;
+  function yearBlock(s, rec) {
+    const y = Y.yearCondition(rec, s.radiant);
+    const p = parts(rec.peak), eveMs = y.dark[0] ? y.dark[0].from : y.viewMs, eveD = Y.jst(eveMs).d;
+    const out = [];
+    out.push(`極大のときの月齢は${y.age.toFixed(1)}（${y.phase}。光っている部分は約${Math.round(y.illum * 100)}%）。`);
+    const ev = y.moonEvents.map(e => `${nightClock(e.ms, eveD)}ごろ${R.dir16(e.az)}に${e.type === 'rise' ? '昇り' : '沈み'}`);
+    const night = `${eveD}日の夜`;
+    if (!y.moonlessHours) out.push(`${night}は月が${ev.length ? ev.join('、') : '一晩中空にあり'}${ev.length ? 'ます。空が暗いあいだずっと月が出ていて、月明かりのない時間はありません。' : '、月明かりのない時間はありません。'}`);
+    else if (y.moonlessHours >= y.darkHours - 0.1) out.push(`${night}は空が暗いあいだ（${range(y.dark[0].from, y.dark.at(-1).to, eveD)}）月は地平線の下で${ev.length ? `（月は${ev.join('、')}ます）` : ''}、約${y.darkHours.toFixed(0)}時間ずっと月明かりがありません。`);
+    else out.push(`${night}は月が${ev.join('、')}ます。空が暗い約${y.darkHours.toFixed(0)}時間のうち、月明かりのない時間は${y.moonless.map(x => range(x.from, x.to, eveD)).join('と')}の約${y.moonlessHours.toFixed(1)}時間です。`);
+    out.push(`見ごろの${nightClock(y.viewMs, eveD)}には、放射点は${R.dir16(y.radiant.az)}の空の高さ約${Math.round(y.radiant.alt)}°、月は${y.viewMoonAlt < 0 ? '地平線の下' : `${R.dir16(y.viewMoonAz)}の空の高さ約${Math.round(y.viewMoonAlt)}°`}です。`);
+    if (y.radHigh.length) out.push(`放射点が30°より高く、空も暗いのは${y.radHigh.map(x => range(x.from, x.to, eveD)).join('と')}です。`);
+    return `<h3>${p.y}年（${dayLabel(rec.peak, false)}${p.hasTime ? timeLabel(rec.peak) + 'ごろ' : ''}に極大）</h3>\n<p>${esc(out.join(''))}</p>`;
+  }
+  /** 観察のこつ: 放射点の動き（東京、その年の見ごろの夜）と、その季節の注意 */
+  function tips(s, rec) {
+    const y = Y.yearCondition(rec, s.radiant), eveD = Y.jst(y.dark[0].from).d;
+    const d0 = y.dark[0].from, d1 = y.dark.at(-1).to;
+    let hi = -Infinity, hiMs = 0, riseMs = null, prev = null;
+    for (let t = d0 - 6 * 3600000; t <= d1; t += 5 * 60000) {        // 夕方から空が明るくなり始めるまで
+      const a = Y.radiantAltAz(s.radiant, t).alt;
+      if (t >= d0 && a > hi) { hi = a; hiMs = t; }
+      if (prev !== null && prev < 0 && a >= 0 && riseMs === null) riseMs = t;
+      prev = a;
+    }
+    const endAlt = Math.round(Y.radiantAltAz(s.radiant, d1).alt);
+    const items = [];
+    const decNow = A.precessor(d0)(s.radiant[0] * DEG, s.radiant[1] * DEG)[1] / DEG, lowest = E.TOKYO.lat - 90 + decNow;
+    if (lowest > 0) items.push(`放射点は東京では沈みません（いちばん低いときで約${Math.round(lowest)}°）。21時には高さ約${Math.round(y.radiantAt21)}°と低く、空が明るくなり始める${nightClock(d1, eveD)}には約${endAlt}°まで上がります。`);
+    else if (riseMs !== null && y.radiantAt21 < 0) items.push(`放射点は21時にはまだ地平線の下で、${nightClock(riseMs, eveD)}ごろ昇り、空が明るくなり始める${nightClock(d1, eveD)}には約${endAlt}°です。観察は夜明け前に。`);
+    else if (riseMs !== null) items.push(`放射点は${nightClock(riseMs, eveD)}ごろ地平線から昇り、21時には高さ約${Math.round(y.radiantAt21)}°、${nightClock(hiMs, eveD)}ごろ最も高く（約${Math.round(hi)}°）なるので、夕方からでも観察できます。`);
+    items.push(`空が暗い時間（太陽が地平線の下18°より深い時間）は、この夜で約${y.darkHours.toFixed(0)}時間（${range(d0, d1, eveD)}）。`);
+    if (y.viewMoonAlt > 0) items.push(`見ごろの時刻にも月が${R.dir16(y.viewMoonAz)}の空に出ているので、月が視野に入らない向きで見ましょう。`);
+    if (s.care) items.push(s.care);
+    return `<ul>${items.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  }
   for (const [id, s] of Object.entries(SHOWERS).filter(([, s]) => s.big)) {
     const rows = meteorRows(id), next = rows.find(upcoming) || rows.at(-1);
     const year = next ? parts(next.rec.peak).y : '';
     const cons = s.cons.map(c => `<a href="../zukan/${c}.html">${esc(conName(c))}</a>`).join('と');
+    const yv = next ? Y.yearCondition(next.rec, s.radiant) : null;
     const body = `${crumbs(s.name)}
 <h1>${s.name}<small>いつ・どの方角・何時ごろ見える？</small></h1>
 <p class="lead">${esc(s.name)}は三大流星群のひとつで、${esc(s.season)}に活動が最も活発になります（極大）。${esc(s.feature)}</p>
 <h2>いつ見える？（極大の予報）</h2>
 ${meteorTable(rows, false)}
-<p>極大の日時は年ごとに少しずつ変わります。上の予報は国立天文台の発表（国際流星機構 IMO の予報にもとづく）です。極大の時刻が日本の昼間でも、その前後の夜に多くの流星が見られます。</p>
+<h2>年ごとの月明かりと見ごろ（東京）</h2>
+${rows.map(e => yearBlock(s, e.rec)).join('\n')}
+<p class="lead">月齢・月の出入り・高さは東京での計算値（国立天文台の月の出入りの表と1分以内で一致）。</p>
 ${next ? `<a class="cta" href="${skyLink(next.view, next.look)}">${year}年の見ごろの星空をプラネタリウムで見る →</a>` : ''}
 <h2>どの方角を見ればいい？</h2>
-<p>流星は、放射点という空の一点から放射状に飛び出すように流れます。${esc(s.name)}の放射点は${cons}${s.cons.length > 1 ? 'の境界付近' : ''}にあります。ただし流星は放射点のまわりだけでなく空全体に現れるので、方角にこだわらず、なるべく空の広い範囲を見渡すのがコツです。</p>
+<p>放射点は${cons}${s.cons.length > 1 ? 'の境界付近' : ''}。${yv ? `${year}年の見ごろには${R.dir16(yv.radiant.az)}の空の高さ約${Math.round(yv.radiant.alt)}°にあります。` : ''}流星は放射点から四方へ飛び、空のどこにでも現れるので、放射点だけでなく空を広く見渡します。</p>
 <h2>何時ごろが見ごろ？</h2>
 ${next ? radiantTable(s, next.rec) : ''}
-<h2>観察のしかた</h2>
-<ul>
-<li>街明かりの少ない、空の広く見える場所を選びましょう。</li>
-<li>目が暗さに慣れるまで、最低でも15分ほどは見続けましょう。スマホの画面を見ると目が明るさに戻ってしまうので、ほしぞらさんぽの「赤いライト」を使うのがおすすめです。</li>
-<li>レジャーシートに寝転んだり、背もたれを倒せるイスに座ったりすると楽な姿勢で見られます。双眼鏡や望遠鏡は視野がせまくなるので使いません。</li>
-<li>月が明るい年は流星数が減ります。表の「月の条件」も確認してください。</li>
-<li>夜の外出は、事故や防寒・防虫に気をつけ、お子さんは大人といっしょに。マナーを守って観察しましょう。</li>
-</ul>
+<h2>観察のこつ</h2>
+${next ? tips(s, next.rec) : ''}
+<p>暗い場所の選び方・目の慣らし方・姿勢は<a href="./meteor-showers.html#kansatsu">流星群カレンダー</a>に。夜の外出は安全に気をつけ、お子さんは大人といっしょに。</p>
 <h2>流星のもとになる天体（母天体）</h2>
-<p>流星群は、彗星などが通り道にまき散らしたチリの粒が、地球の大気に飛び込んで光る現象です。${esc(s.name)}の母天体は、${esc(s.parent)}。</p>
-<p>もっと詳しくは、国立天文台の解説ページ「<a href="${s.naoj}">${esc(s.name)}</a>」「<a href="https://www.nao.ac.jp/astro/basic/obs-meteor-shower.html">流星群の観察方法</a>」をご覧ください。ほかの流星群は<a href="./meteor-showers.html">流星群カレンダー</a>にまとめています。</p>
+<p>${esc(s.name)}の母天体は、${esc(s.parent)}。</p>
+<p>もっと詳しくは、国立天文台の解説ページ「<a href="${s.naoj}">${esc(s.name)}</a>」「<a href="https://www.nao.ac.jp/astro/basic/obs-meteor-shower.html">流星群の観察方法</a>」をご覧ください。</p>
 ${sourceList(rows.map(e => e.src[0]), esc)}`;
     add(`calendar/${s.page}.html`, `${s.name}${year}はいつ？見える方角・時間・見方｜ほしぞらさんぽ`,
       `${s.name}${year ? year + '年' : ''}の極大はいつ？国立天文台の発表をもとに、極大の日時・見ごろの時間帯・流星数のめやす・月の条件、見る方角と観察のしかたを解説。見ごろの星空をプラネタリウムで確かめられます。`, body,
-      [{ '@context': 'https://schema.org', '@type': 'Article', headline: `${s.name}はいつ？見える方角・時間・見方`, inLanguage: 'ja', dateModified: UPDATED,
+      [{ '@context': 'https://schema.org', '@type': 'Article', headline: `${s.name}はいつ？見える方角・時間・見方`, inLanguage: 'ja', dateModified: MODIFIED_SHOWERS,
         author: { '@type': 'Organization', name: 'yorozu-craft', url: 'https://yorozu-craft.com/' }, mainEntityOfPage: `${BASE}calendar/${s.page}.html` },
        breadcrumb(s.name, `calendar/${s.page}.html`)]);
   }
@@ -310,6 +356,14 @@ ${meteorTable(all, true)}
 <ul class="cards">${Object.entries(SHOWERS).filter(([, s]) => s.big).map(([, s]) => `<li><a href="./${s.page}.html"><div><b>${esc(s.name)}</b><span>${esc(s.season)}</span></div></a></li>`).join('')}</ul>
 <h2>そのほかの流星群</h2>
 ${others}
+<h2 id="kansatsu">流星群の観察のしかた</h2>
+<ul>
+<li>街明かりの少ない、空の広く見える場所を選びましょう。</li>
+<li>目が暗さに慣れるまで、最低でも15分ほどは見続けましょう。スマホの画面を見ると目が明るさに戻ってしまうので、ほしぞらさんぽの「赤いライト」を使うのがおすすめです。</li>
+<li>レジャーシートに寝転んだり、背もたれを倒せるイスに座ったりすると楽な姿勢で見られます。双眼鏡や望遠鏡は視野がせまくなるので使いません。</li>
+<li>月が明るい年は流星数が減ります。予報の「月の条件」も確認してください。</li>
+<li>夜の外出は、事故や防寒・防虫に気をつけ、お子さんは大人といっしょに。マナーを守って観察しましょう。</li>
+</ul>
 <h2>流星群とは</h2>
 <p>彗星などが通り道にまき散らしたチリの粒の集まりに地球が毎年同じ時期に飛び込むため、決まった時期に流星が多く流れます。流星が空の一点（放射点）から飛び出すように見えることから、放射点のある星座の名前で呼ばれます。</p>
 ${sourceList(all.map(e => e.src[0]), esc)}`;
@@ -396,4 +450,4 @@ ${sourceList(rows.map(e => e.src[0]), esc)}`;
   return { files, showerLinks };
 };
 /* 英語版（tools/calendar-pages-en.js）が同じデータ・同じ計算を使うための部品 */
-Object.assign(module.exports, { allEvents, SHOWERS, parts, isoJst, midnightJst, planetView, fullMoonView });
+Object.assign(module.exports, { MODIFIED_SHOWERS, allEvents, SHOWERS, parts, isoJst, midnightJst, planetView, fullMoonView });
