@@ -11,10 +11,13 @@ const { CATALOG } = require('../catalog.js');
 const buildCalendar = require('./calendar-pages.js');
 const buildEn = require('./calendar-pages-en.js');
 const buildShinwa = require('./shinwa-pages.js');
+const Z = require('./zukan-sky.js');
+const E = require('./events.js');
 
 const ROOT = path.join(__dirname, '..');
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
 const UPDATED = '2026-09-23';
+const ZUKAN_UPDATED = '2026-10-04';   // 星座図鑑に「見つけ方」「見ごろの季節と時刻」「明るい星」の計算値を足した日
 const TOKYO = { lat: 35.681, lon: 139.767 };
 const DEG = A.DEG;
 
@@ -146,15 +149,8 @@ function altAt(c0, ms, lat, lon) {
 function viewing(c) {
   const c0 = center(c), decD = c0.dec / DEG;
   const maxAlt = 90 - Math.abs(TOKYO.lat - decD);
-  // 夜9時（日本時間）に南中する日: 5日おきに1年分しらべる
-  let best = null, bestH = Infinity;
-  for (let d = 0; d < 365; d += 5) {
-    const ms = Date.UTC(2027, 0, 1, 12, 0) + d * 86400000;
-    const lst = A.lstRad(ms, TOKYO.lon);
-    let H = ((lst - c0.ra) % A.TAU + A.TAU) % A.TAU; if (H > Math.PI) H -= A.TAU;
-    if (Math.abs(H) < bestH) { bestH = Math.abs(H); best = new Date(ms); }
-  }
-  const month = best.getUTCMonth() + 1, day = best.getUTCDate();
+  // 夜9時（日本時間）に南中する日（本文の「見ごろの季節と時刻」と同じ計算: tools/zukan-sky.js）
+  const { m: month, d: day } = Z.transitDay(Z.centerEq(c), 21);
   const part = day <= 10 ? '上旬' : day <= 20 ? '中旬' : '下旬';
   // 夜9時に高度20°以上になる月
   const months = [];
@@ -190,6 +186,94 @@ function neighbors(c) {
   }).filter(x => x[1] < 32).sort((a, b) => a[1] - b[1]).slice(0, 4).map(x => x[0]);
 }
 
+/* ---------------- 見つけ方・見ごろ・明るい星の文（数字は tools/zukan-sky.js の計算だけを使う） ---------------- */
+const COLOR = { '青白': '青白い', '白': '白い', '黄白': '黄色みがかった白の', '黄': '黄色い', 'だいだい': 'だいだい色の', '赤': '赤い' };
+const magStr = m => (Math.round(m * 10) / 10).toFixed(1);
+/** 10 分単位に丸めた日本時間。基準の日と違えば「翌」「前日の」 */
+function clock(ms, baseDay) {
+  const t = new Date(Math.round(ms / 600000) * 600000 + 9 * 3600000);
+  const d = t.getUTCDate(), h = t.getUTCHours(), mi = t.getUTCMinutes();
+  return `${d === baseDay ? '' : d === baseDay + 1 || (baseDay >= 28 && d === 1) ? '翌' : '前日の'}${h}時${mi ? mi + '分' : ''}`;
+}
+const md = p => `${p.m}月${p.d}日`;
+/** 月の並び → 「8月〜10月」（年をまたぐ並びもつなぐ） */
+function monthRange(ms) {
+  if (!ms.length) return '';
+  if (ms.length === 12) return '一年中';
+  const set = new Set(ms);
+  let start = ms.find(m => !set.has(m === 1 ? 12 : m - 1));
+  if (start === undefined) start = ms[0];
+  const run = [start]; while (set.has(run.at(-1) % 12 + 1) && run.length < ms.length) run.push(run.at(-1) % 12 + 1);
+  if (run.length !== ms.length) return ms.map(m => m + '月').join('・');
+  return run.length === 1 ? `${run[0]}月` : `${run[0]}月〜${run.at(-1)}月`;
+}
+function findText(c) {
+  const g = Z.guide(c), t = g.target, b = Z.bright(c);
+  const label = t.kind === 'center' ? '星座のまんなか' : t.name;
+  const minMag = magStr(Math.min(...c.ss.filter(s => !s[6]).map(s => s[2])));
+  const out = [];
+  if (t.kind === 'star') {
+    const st = c.ss.find(s => s[4] && s[4].split('（')[0] === t.name);
+    out.push(`目印は${COLOR[bvName(st[3] ?? 0.3)]}${t.name}（${magStr(t.mag)}等）。`);
+  } else if (t.kind === 'cluster') {
+    out.push(`いちばん明るい星でも${minMag}等なので、目印は${t.name}です。`);
+  } else {
+    out.push(`いちばん明るい星でも${minMag}等なので、まわりの明るい星からまんなかをたどります。`);
+  }
+  if (g.anchors.length) {
+    const top = Z.season(c).top;
+    out.push(`${g.loc === '東京' ? '' : g.loc + 'で'}${c.jp}が${g.loc === '東京' && top >= 75 ? '頭上' : g.anchors[0].facing + 'の空'}で最も高いころ、${g.anchors.map(a => `${a.con}の${a.name}${a.word ? 'の' + a.word : 'から'}約${a.sep}°`).join('、')}${g.anchors.some(a => !a.word) ? 'の所' : ''}に${label}があります。`);
+  }
+  if (g.inner.length) out.push(`${t.name}から${g.inner.map(x => `${x.word ? x.word + '約' : '約'}${x.sep}°に${x.name}`).join('、')}。`);
+  if (c.id === 'umi') {
+    const p = Z.pointerToPolaris();
+    out.push(`おおぐま座のメラクからドゥーベへの間隔（約${Math.round(p.gap)}°）を、ドゥーベの先へ約${Math.round(p.ratio)}倍のばすとポラリスです。`);
+  }
+  for (const a of g.aster) {
+    out.push(a.close ? `${a.star}は${a.name}の頂点で、残りは${a.others.join('と')}。`
+      : `${a.name}は${a.names.map(n => n.name).join('→')}と結ぶ曲線で、${a.star}は${a.index + 1}番目です。`);
+  }
+  return out.join('');
+}
+function seasonText(c) {
+  const s = Z.season(c), out = [];
+  const high = monthRange(s.high);
+  const when = `20時なら${md(s.at20)}ごろ、21時なら${md(s.at21)}ごろ`;
+  if (s.top < 0) {
+    out.push(`東京では昇りません（まんなかは最も高いときでも地平線の下約${-s.top}°）。石垣島（北緯${Z.ISHIGAKI.lat.toFixed(1)}°）では約${s.ishigakiTop}°、シドニーでは約${s.sydneyTop}°まで昇ります。`);
+    return out.join('');
+  }
+  if (s.top < 10) {
+    out.push(`東京では南の地平線から約${s.top}°までしか上がらず、最も高くなるのは${when}。石垣島では約${s.ishigakiTop}°、シドニーでは約${s.sydneyTop}°です。`);
+  } else if (s.circumpolar) {
+    out.push(`${s.allUp ? '東京では沈まない星座で' : `東京ではまんなかは沈みませんが、${s.settingNamed.length ? s.settingNamed.join('・') + 'などは' : '一部の星は'}地平線の下に入ります。`}北の空で最も高く（約${s.top}°）なるのは${when}、約12時間後に最も低く（約${s.low}°）なります。`);
+  } else {
+    const where = s.top >= 80 ? '頭の真上近く' : s.north ? '北寄りの高い空' : '真南';
+    out.push(`東京では${where}で約${s.top}°まで昇り、その時刻は${when}です。`);
+  }
+  if (high && s.top >= 10) out.push(`20〜21時に高く見えるのは${high}。`);
+  if (s.rs && s.rs.rise && s.rs.set) {
+    const r = s.rs, day = 15, light = ms => E.sunAlt(ms) > -6;
+    out.push(`${s.best}月15日は${clock(r.rise.ms, day)}ごろ${Z.dir16(r.rise.az)}から昇り${light(r.rise.ms) ? '（まだ明るい）' : ''}、${clock(r.transit.ms, day)}ごろ最も高く、${clock(r.set.ms, day)}ごろ${Z.dir16(r.set.az)}に沈みます${light(r.set.ms) ? '（もう明るい）' : ''}。`);
+  } else if (s.rs) {
+    out.push(`${s.best}月15日なら${clock(s.rs.transit.ms, 15)}ごろが最も高い時刻です。`);
+  }
+  return out.join('');
+}
+function brightText(c) {
+  const b = Z.bright(c), out = [];
+  if (b.first + b.second) out.push(`線の${b.count}星のうち、1.5等より明るいのは${b.first}個、1.5〜2.5等は${b.second}個、最も暗いのは${magStr(b.faintest)}等。`);
+  else out.push(`線の${b.count}星はどれも2.5等より暗く、${magStr(Math.min(...c.ss.filter(s => !s[6]).map(s => s[2])))}〜${magStr(b.faintest)}等。`);
+  const far = b.named.filter(s => s.ly);
+  if (far.length >= 2) {
+    const sorted = far.slice().sort((x, y) => x.ly - y.ly);
+    out.push(`${sorted[0].name}（約${sorted[0].ly}光年）が最も近く、${sorted.at(-1).name}（約${sorted.at(-1).ly}光年）が最も遠い星です。`);
+  }
+  const colors = [...new Map(b.named.map(s => [bvName(s.bv ?? 0.3), s])).values()];
+  if (colors.length >= 2) out.push(`色は${colors.slice(0, 3).map(s => `${s.name}が${bvName(s.bv ?? 0.3)}`).join('、')}（色は表面温度のめやす）。`);
+  return out.join('');
+}
+
 /* ---------------- 天文カレンダー ---------------- */
 const calendar = buildCalendar({ page, esc, BASE, UPDATED });
 
@@ -215,31 +299,34 @@ function conPage(c, i) {
   const seasonLabel = c.season === '南半球' ? '南半球の星座' : `${c.season}の星座`;
   const rows = named.map(s => `<tr><td><span class="dot" style="color:${bvColor(s[3] ?? 0.3)};background:${bvColor(s[3] ?? 0.3)}"></span>${esc(s[4])}</td>`
     + `<td class="num">${s[6] ? '—' : s[2].toFixed(1) + '等'}</td><td class="num">${s[5] ? '約' + s[5] + '光年' : '—'}</td><td>${s[6] ? '星の集まり' : bvName(s[3] ?? 0.3)}</td></tr>`).join('');
-  const nb = neighbors(c).map(o => `<a href="./${o.id}.html">${esc(o.jp)}</a>`).join('・');
+  const nb = neighbors(c).map(o => { const d = Z.neighborDir(c, o); return `<a href="./${o.id}.html">${esc(o.jp)}</a>（${d.word || (d.below ? '地平線の下' : '頭上')}）`; }).join('・');
   const showers = (calendar.showerLinks[c.id] || []).map(m => `<li><a href="${m.href}">${esc(m.name)}</a>（${esc(m.season)}に極大）</li>`).join('');
   const title = `${c.jp}の見つけ方と神話｜${seasonLabel}｜ほしぞらさんぽ`;
   const description = `${c.jp}（${c.en}）は${seasonLabel}。${v.short}。${firstSentence(c.adl)}主な星・まめちしき・子ども向けのひらがな解説を星図つきで紹介します。`;
   const body = `<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ <a href="./">星座図鑑</a> ／ ${esc(c.jp)}</div>
 <h1>${esc(c.jp)}<small>${esc(c.kana)}ざ ・ ${esc(c.en)}</small></h1>
 <div class="chips"><span class="chip gold">${esc(seasonLabel)}</span><span class="chip">${esc(v.short)}</span></div>
-<figure class="chart">${chartSvg(c)}<figcaption>北が上・東が左（空を見上げたときの向き）。線でつないだ星が${esc(c.jp)}、うすい点はまわりの星（5等星まで）。</figcaption></figure>
+<figure class="chart">${chartSvg(c)}<figcaption>北が上・東が左（見上げた向き）。うすい点は5等星まで。</figcaption></figure>
 <a class="cta" href="../?c=${c.id}">プラネタリウムで${esc(c.jp)}を見る →</a>
 <h2>見つけ方</h2>
-<p>${esc(v.text)}</p>
+<p>${esc(findText(c))}</p>
+<h2>見ごろの季節と時刻</h2>
+<p>${esc(seasonText(c))}</p>
+<p class="lead"><a href="./#keisan">計算のしかた</a></p>
 <h2>星座のお話</h2>
 <p>${c.adl}</p>
 ${shinwa.zukanLinks[c.id] ? `<p class="myth-link"><a href="${shinwa.zukanLinks[c.id].href}">原典で読む「${esc(shinwa.zukanLinks[c.id].title)}（${esc(shinwa.zukanLinks[c.id].sub)}）」→</a></p>` : ''}
 <div class="box fun"><b>まめちしき</b>　${c.fun}</div>
 <h2>こどもと読む（ひらがな）</h2>
 <div class="box kids">${c.kid}</div>
-${named.length ? `<h2>主な星</h2><div class="scroll"><table><thead><tr><th>名前</th><th>明るさ</th><th>距離</th><th>色</th></tr></thead><tbody>${rows}</tbody></table></div>
-<p class="lead">色は星の表面温度のめやすです。青白い星ほど熱く、赤い星ほど温度が低くなります。</p>` : ''}
+${named.length ? `<h2>主な星</h2><p>${esc(brightText(c))}</p><div class="scroll"><table><thead><tr><th>名前</th><th>明るさ</th><th>距離</th><th>色</th></tr></thead><tbody>${rows}</tbody></table></div>
+` : ''}
 ${showers ? `<h2>この星座から流れる流星群</h2><ul>${showers}</ul>` : ''}
-${nb ? `<h2>近くの星座</h2><p>${nb}</p>` : ''}
+${nb ? `<h2>近くの星座</h2><p>${esc(c.jp)}が最も高いころの向き: ${nb}</p>` : ''}
 <nav class="pager" aria-label="前後の星座"><a href="./${prev.id}.html">← ${esc(prev.jp)}</a><a href="./${next.id}.html">${esc(next.jp)} →</a></nav>`;
   const jsonld = [{
     '@context': 'https://schema.org', '@type': 'Article', headline: `${c.jp}の見つけ方と神話`, description,
-    inLanguage: 'ja', dateModified: UPDATED, image: BASE + 'og-image.png',
+    inLanguage: 'ja', dateModified: ZUKAN_UPDATED, image: BASE + 'og-image.png',
     author: { '@type': 'Organization', name: 'yorozu-craft', url: 'https://yorozu-craft.com/' },
     mainEntityOfPage: `${BASE}zukan/${c.id}.html`,
   }, {
@@ -261,7 +348,15 @@ function zukanIndex() {
 <p class="lead">季節ごとの星座を、星図・見ごろ・神話・主な星といっしょに紹介します。見ごろは東京で夜9時に見たときのめやすです。ひらがなの解説もあるので、お子さんといっしょに読めます。</p>
 <a class="cta" href="../">今夜の星空をプラネタリウムで見る →</a>
 <p class="myth-link">星座と結びついた神話を原典で読む → <a href="../shinwa/seiza/">星座の由来 12 本</a>・<a href="../shinwa/">ギリシャ神話の系図と神の一覧</a></p>
-${sections}`;
+${sections}
+<h2 id="keisan">見ごろと見つけ方の計算のしかた</h2>
+<p>各星座のページの高さ・時刻・向きは、東京（北緯35.7°）で${Z.REF_YEAR}年について、線でつないだ星の位置（歳差を反映）から計算しためやすです。大気による浮き上がりは入れていません。</p>
+<ul>
+<li>高さと時刻は星座のまんなか（線でつないだ星の方向の平均）のもの</li>
+<li>「20〜21時に高く見える」: 毎月15日の20時と21時の両方で、最も高いときより${Z.HIGH_MARGIN}°以上低くならない月</li>
+<li>見つけ方と近くの星座の向き: その星座が最も高くなったころに、2つの星の中ほどを見上げたときの上下左右（上は天頂の側）</li>
+<li>明るさ・距離・色は、ほしぞらさんぽの星のデータ（線でつないだ星）の値</li>
+</ul>`;
   const description = `黄道12星座やオリオン座・北斗七星・南十字星など${CONS.length}星座の見つけ方と神話を、星図・見ごろ・主な星つきで紹介。子ども向けのひらがな解説も。`;
   return page({ rel: '../', file: 'zukan/index.html', title: '星座図鑑｜季節の星座の見つけ方と神話｜ほしぞらさんぽ', description, current: 'zukan/', body,
     jsonld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: '星座図鑑', description, url: BASE + 'zukan/', inLanguage: 'ja' } });
@@ -348,8 +443,10 @@ shinwa.files.forEach(f => out(f.file, f.html));
 out('about.html', about());
 out('privacy-policy.html', privacy());
 
-const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
-  ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly']),
+const MOD = require('./calendar-pages.js').MODIFIED_SHOWERS;
+const showerFile = f => /^calendar\/(perseids|geminids|quadrantids|meteor-showers)\.html$/.test(f);
+const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly', ZUKAN_UPDATED], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly', ZUKAN_UPDATED]),
+  ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly', showerFile(f.file) ? MOD : undefined]),
   ['about.html', '0.4', 'yearly'],
   // ギリシャ神話（tools/shinwa-pages.js）
   ...shinwa.files.map(f => [f.file.replace(/index\.html$/, ''), f.file === 'shinwa/index.html' ? '0.7' : '0.6', 'monthly', require('./shinwa-data.js').CHECKED]),
