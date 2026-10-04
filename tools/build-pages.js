@@ -24,6 +24,10 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 const ADSENSE = `<meta name="google-adsense-account" content="ca-pub-5375267956079717">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5375267956079717"
      crossorigin="anonymous"></script>`;
+// AdSense 審査が通るまで本文の薄いページは広告 script を外し、所有確認の meta だけにする（2026-10-04）。
+// 通ったら本文を足したページからここを外して戻す（サイト本体 tools/check-site.mjs の REVIEW_NO_AD_PAGES と同じ）
+const ADSENSE_META = ADSENSE.split('\n')[0];
+const reviewNoAd = file => /^zukan\/[a-z]+\.html$/.test(file) || file === 'shinwa/seiza/index.html';
 const BEACON = `<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->`;
 
 /** 日英の対（README「ツールを追加するとき」23）: 両方のページに ja・en・x-default（＝日本語）の 3 行 */
@@ -57,7 +61,7 @@ ${alt ? hreflang(file, alt) + '\n' : ''}<meta property="og:title" content="${esc
 <link rel="icon" href="${rel}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${rel}apple-touch-icon.png">
 <link rel="manifest" href="${rel}manifest.webmanifest">
-${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${ADSENSE}
+${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${reviewNoAd(file) ? ADSENSE_META : ADSENSE}
 <link rel="stylesheet" href="${rel}pages.css">
 </head>
 <body>
