@@ -161,3 +161,9 @@ tr:target{background:rgba(240,200,110,.1);}
 table.gods{min-width:760px;} table.kz-table{min-width:620px;} table.els{min-width:600px;}
 .scroll{-webkit-overflow-scrolling:touch;}
 details.kz-all{margin:18px 0;} details.kz-all summary{cursor:pointer;color:var(--line);font-family:var(--serif);font-size:17px;}
+
+/* 星座の由来の「読んでもらう」（K140）。押したときだけ録音を読む */
+.listen{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;margin:.8rem 0}
+.listen-btn{font:inherit;font-size:1.1rem;min-height:48px;padding:.4rem 1.2rem;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.listen-btn.playing{outline:3px solid currentColor}
+.listen span{font-size:.85rem;opacity:.8}

@@ -9,6 +9,8 @@ module.exports = function buildShinwa({ page, esc, CONS }) {
   const latin = Object.fromEntries(D.NAMES.map(n => [n[0], n[1]]));
   const conById = Object.fromEntries(CONS.map(c => [c.id, c]));
   const storyBySlug = Object.fromEntries(D.STORIES.map(s => [s.slug, s]));
+  // 読み上げの録音（K140。tools/build-shinwa-audio.mjs が作る）。無い話はボタンを出さない
+  const AUDIO = (() => { try { return require('../shinwa/audio/index.json').files; } catch (e) { return {}; } })();
   const cites = c => !c ? [] : Array.isArray(c[0]) ? c : [c];
   const citeHtml = c => cites(c).map(x => `<span class="cite">〔${esc(D.cite(x))}〕</span>`).join('');
   const kz = (id, rel) => person[id] ? `<a href="${rel}keizu.html#p-${id}">${esc(person[id].ja)}</a>` : esc(id);
@@ -39,6 +41,7 @@ module.exports = function buildShinwa({ page, esc, CONS }) {
     const body = `${crumbs('../', s.title)}
 <h1>${esc(s.title)}<small>${esc(s.sub)}</small></h1>
 <p class="answer">${esc(s.lead)}</p>
+${AUDIO[s.slug] ? `<p class="listen"><button type="button" class="listen-btn" data-audio="../audio/${s.slug}.mp3">🔊 読んでもらう</button><span>AI の声・約 ${Math.max(1, Math.round(AUDIO[s.slug].seconds / 60))} 分。読み間違えることがあります</span></p>` : ''}
 ${subnav('../', 'seiza/')}
 ${secs}
 <h2>星空で見る</h2>
@@ -49,7 +52,7 @@ ${secs}
 <ul class="names">${s.who.map(id => `<li>${kz(id, '../')}</li>`).join('')}</ul>
 <p class="lead">${SRC_LINE}言い伝えは本によって違います。このページは、下の版で確かめられたことだけを書いた要約です。</p>
 ${srcDetails([...used].filter(k => D.SOURCES[k]))}
-<nav class="pager" aria-label="前後の話"><a href="./${prev.slug}.html">← ${esc(prev.title)}</a><a href="./${next.slug}.html">${esc(next.title)} →</a></nav>`;
+<nav class="pager" aria-label="前後の話"><a href="./${prev.slug}.html">← ${esc(prev.title)}</a><a href="./${next.slug}.html">${esc(next.title)} →</a></nav>${AUDIO[s.slug] ? '\n<script src="../listen.js" defer></script>' : ''}`;
     const description = `${s.lead.split('。')[0]}。${s.title}を、原典の英訳（${[...used].filter(k => ['hes', 'hh', 'apo', 'ovm', 'ovf', 'ara'].includes(k)).map(k => D.SOURCES[k].title.replace(/『.*』/, '')).filter((v, j, a) => a.indexOf(v) === j).join('・')}）で確かめて書きました。`;
     files.push({ file, html: page({ rel: '../../', file, title: `${s.title}｜${s.sub}｜ギリシャ神話｜ほしぞらさんぽ`, description, current: 'shinwa/', body,
       jsonld: [article(`${s.title}（${s.sub}）`, description, file), breadcrumbLd([['ほしぞらさんぽ', BASE], ['ギリシャ神話', BASE + 'shinwa/'], ['星座の由来', BASE + 'shinwa/seiza/'], [s.title, BASE + file]])] }) });

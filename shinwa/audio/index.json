@@ -1,0 +1,56 @@
+{
+ "model": "@cf/myshell-ai/melotts",
+ "format": "mp3 32kbps 16kHz mono",
+ "source": "tools/shinwa-yomi.js の yomi",
+ "files": {
+  "ari": {
+   "bytes": 428112,
+   "seconds": 107
+  },
+  "cen": {
+   "bytes": 374544,
+   "seconds": 94
+  },
+  "crb": {
+   "bytes": 351936,
+   "seconds": 88
+  },
+  "gem": {
+   "bytes": 488592,
+   "seconds": 122
+  },
+  "lyr": {
+   "bytes": 303264,
+   "seconds": 76
+  },
+  "oph": {
+   "bytes": 422208,
+   "seconds": 105
+  },
+  "ori": {
+   "bytes": 531072,
+   "seconds": 133
+  },
+  "per": {
+   "bytes": 607968,
+   "seconds": 152
+  },
+  "psc": {
+   "bytes": 286560,
+   "seconds": 72
+  },
+  "tau": {
+   "bytes": 411120,
+   "seconds": 103
+  },
+  "uma": {
+   "bytes": 507312,
+   "seconds": 127
+  },
+  "vir": {
+   "bytes": 369504,
+   "seconds": 92
+  }
+ },
+ "made": "2026-10-10"
+}
