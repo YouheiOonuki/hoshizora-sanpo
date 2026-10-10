@@ -440,7 +440,7 @@ ${sources(rows.map(e => e.src[0]))}`;
 
   /* ---- 使い方（en/guide.html） ---- */
   {
-    const form = 'https://docs.google.com/forms/d/e/1FAIpQLSd8B90qh5lEIyr25iw1jOjdQjOyaPZ1_z2wMB4kH-EmEeJYWw/viewform?usp=pp_url&amp;entry.585564634=hoshizora-sanpo';
+    const form = '/post/?from=/hoshizora-sanpo/en/guide.html'; // 投書箱（yorozu-plans K161。Google フォームから張り替え）
     const body = `<h1>How the web planetarium works<small>Use, accuracy and sources</small></h1>
 <p class="lead">What this page covers: how to use the planetarium, how accurate it is, what is in English, and where the data comes from.</p>
 <a class="cta" href="./">Open the planetarium →</a>
@@ -468,7 +468,7 @@ ${sources(rows.map(e => e.src[0]))}`;
 <li>Sky calendar: National Astronomical Observatory of Japan (NAOJ)</li>
 </ul>
 <h2>Your data</h2>
-<p>Your settings and chosen place are saved only in this browser (localStorage) and are never sent anywhere. “Use my location” rounds your position to 0.1° (about 10 km) before saving. <a href="${form}" target="_blank" rel="noopener">Feedback form</a> (Google Forms, in Japanese; you can write in English). We read every message but do not reply.</p>`;
+<p>Your settings and chosen place are saved only in this browser (localStorage) and are never sent anywhere. “Use my location” rounds your position to 0.1° (about 10 km) before saving. <a href="${form}">Feedback box</a> (in Japanese; you can write in English). We read every message but do not reply.</p>`;
     files.push({ file: 'en/guide.html', html: pageEn({ rel: '', file: 'en/guide.html', jaFile: 'about.html', title: 'How the Web Planetarium Works: Accuracy and Sources',
       description: 'How to use the free web planetarium, why it works for any place on Earth, how accurate the star, Moon and planet positions are, and the data sources.',
       current: 'guide.html', body, script: false }) });
