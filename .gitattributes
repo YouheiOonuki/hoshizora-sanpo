@@ -1,1 +1,3 @@
 data/*.ics -text
+s/*.html -text
+hayamiban/s/*.html -text
