@@ -899,7 +899,7 @@ function toast(msg){
 
 /* help */
 onClick('helpBtn',()=>$('help').classList.add('open'));
-onClick('helpStart',()=>{ $('help').classList.remove('open'); lsSet(KEY+'seen','1'); cv.focus({preventScroll:true}); });
+onClick('helpStart',()=>{ $('help').classList.remove('open'); cv.focus({preventScroll:true}); });
 
 /* ---------------- フル版のおすすめ（suggest-full.js。オーナー決定 2026-10-03） ----------------
    最初の 3 秒の fps の中央値と WebGL で、フル版の段階判定と同じ基準を満たす端末にだけ、ドックの上に 1 行を出す。
@@ -980,7 +980,6 @@ function openShared(sh,home){
     jumpTo(nextLocalHour(Date.now(),21));
     setTimeout(()=>toast(T('dayJump')),600);
   }
-  if(!lsGet(KEY+'seen') && !target && !linked) $('help').classList.add('open');
   requestAnimationFrame(render);
 })();
 
