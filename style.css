@@ -140,7 +140,6 @@ body:not(.kids) .kd,body.kids .ad{display:none !important;}
 html[lang="en"]{--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
 html[lang="en"] #plate h1,html[lang="en"] .sh-name,html[lang="en"] #helpCard h2{letter-spacing:.03em;}
 html[lang="en"] .sh-kana,html[lang="en"] #helpCard .tag{letter-spacing:.12em;}
-html[lang="en"] #helpCard li .k{flex-basis:92px;}
 
 /* ---- quiz bar ---- */
 #quizBar{position:absolute;top:calc(var(--top) + 76px);left:50%;transform:translateX(-50%);z-index:6;display:none;
@@ -244,11 +243,7 @@ html[lang="en"] #helpCard li .k{flex-basis:92px;}
 #helpCard h2{font-family:var(--serif);color:var(--gold);letter-spacing:.2em;font-size:20px;
              margin:0 0 4px;font-weight:600;}
 #helpCard .tag{font-size:12px;color:var(--ink-dim);letter-spacing:.3em;}
-#helpCard ul{list-style:none;padding:0;margin:18px 0;text-align:left;display:grid;gap:11px;}
-#helpCard li{font-size:13px;line-height:1.7;display:flex;gap:12px;align-items:baseline;}
-#helpCard li .k{flex:0 0 78px;color:var(--gold);font-family:var(--serif);font-size:12.5px;
-                letter-spacing:.06em;text-align:right;}
-#helpStart{margin-top:4px;border:1px solid var(--gold);background:rgba(240,200,110,.12);
+#helpStart{margin-top:18px;border:1px solid var(--gold);background:rgba(240,200,110,.12);
            color:var(--gold);border-radius:999px;padding:11px 34px;font-size:14px;
            font-family:var(--serif);letter-spacing:.25em;cursor:pointer;}
 #helpLinks{margin-top:18px;font-size:12px;line-height:2;color:var(--ink-dim);}
