@@ -64,7 +64,8 @@
 
 <main class="wrap">
   <h1>Printable planisphere for your latitude</h1>
-  <p class="lead">Pick your city, print on A4 or US Letter, then cut out and pin the center. Your inputs never leave this browser.</p>
+  <!-- data-keep: A2 の定型（入力は端末の外に出ない） -->
+  <p class="lead" data-keep>Your inputs never leave this browser.</p>
 
   <section class="box form" aria-label="Settings">
     <fieldset class="tiles">
@@ -94,7 +95,8 @@
     <div class="print-row" id="print-row">
       <button type="button" class="btn" id="print">Print or save as PDF</button>
     </div>
-    <p class="hint">Print at 100% scale (Actual size). Card stock works best.</p>
+    <!-- data-keep: 印刷の設定（倍率）。違うと盤の大きさが合わない -->
+    <p class="hint" data-keep>Print at 100% scale (Actual size). Card stock works best.</p>
   </section>
 
   <figure class="preview" id="preview">

@@ -56,7 +56,8 @@
 
 <main class="wrap">
   <h1>星座早見盤を印刷して作る</h1>
-  <p class="lead">場所を選んで A4 に印刷し、切って中心を留めるだけ。入力は外部に送信しません。</p>
+  <!-- data-keep: A2 の定型（入力は端末の外に出ない） -->
+  <p class="lead" data-keep>入力は外部に送信しません。</p>
 
   <section class="box form" aria-label="設定">
     <fieldset class="tiles">
@@ -69,7 +70,7 @@
     <div class="custom" id="custom" hidden>
       <label>北緯<input type="number" id="lat" inputmode="decimal" min="23" max="50" step="0.1" placeholder="例: 34.7"></label>
       <label>東経<input type="number" id="lon" inputmode="decimal" min="122" max="154" step="0.1" placeholder="例: 135.5"></label>
-      <p class="hint" id="custom-msg">Google マップで場所を長押しすると出る 2 つの数字の、前が北緯・後が東経です。</p>
+      <output class="hint" id="custom-msg">Google マップで場所を長押しすると出る 2 つの数字の、前が北緯・後が東経です。</output>
     </div>
     <fieldset class="seg">
       <legend>紙</legend>
@@ -79,7 +80,9 @@
     <div class="print-row" id="print-row">
       <button type="button" class="btn" id="print">印刷する・PDF に保存</button>
     </div>
-    <p class="hint">印刷の設定: A4・倍率 100%（実際のサイズ）。厚紙がおすすめ。<a href="../../print-help.html">スマホで印刷する</a></p>
+    <!-- data-keep: 印刷の設定（紙・倍率）。違うと盤の大きさが合わない -->
+    <p class="hint" data-keep>印刷の設定: A4・倍率 100%（実際のサイズ）。厚紙がおすすめ。</p>
+    <p class="hint"><a href="../../print-help.html">スマホで印刷する</a></p>
   </section>
 
   <figure class="preview" id="preview">
