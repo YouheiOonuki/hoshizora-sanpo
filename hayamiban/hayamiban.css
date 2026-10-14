@@ -55,3 +55,5 @@ details.opt[open] summary{margin-bottom:10px;}
   #print-sheets .sheet:last-child{break-after:auto;page-break-after:auto;}
   #print-sheets svg{display:block;width:210mm;height:297mm;}
 }
+
+output#custom-msg{display:block;}

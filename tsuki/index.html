@@ -47,7 +47,8 @@
 
 <main class="wrap">
   <h1>月の出・月の入りの時刻と方角</h1>
-  <p class="lead noprint">場所と日付を選ぶと、月が出る時刻と方角を出します。入力は外部に送信しません。</p>
+  <!-- data-keep: A2 の定型（入力は端末の外に出ない） -->
+  <p class="lead noprint" data-keep>入力は外部に送信しません。</p>
 
   <section class="form noprint" aria-label="場所と日付">
     <fieldset class="tiles">
@@ -64,7 +65,6 @@
     <div class="custom" id="custom" hidden>
       <label>北緯<input type="number" id="lat" inputmode="decimal" min="20" max="46" step="0.01" placeholder="例: 34.69"></label>
       <label>東経<input type="number" id="lon" inputmode="decimal" min="122" max="154" step="0.01" placeholder="例: 135.50"></label>
-      <p class="hint">日本の中（北緯 20〜46°・東経 122〜154°）。Google マップで長押しした場所の数字です。</p>
     </div>
     <p class="hint" id="here-msg" hidden></p>
     <div>
@@ -81,7 +81,9 @@
     </dl>
     <p id="transit"></p>
     <p id="age"></p>
-    <p class="hint">計算の目安です。山や建物は考えていません。<a href="./guide.html">時刻と方角の決め方</a></p>
+    <!-- data-keep: 計算の目安であること（山や建物を考えない）。D117 と同じ役目 -->
+    <p class="hint" data-keep>計算の目安です。山や建物は考えていません。</p>
+    <p class="hint"><a href="./guide.html">時刻と方角の決め方</a></p>
     <p class="hint" id="sky-link-p"><a id="sky-link" href="../">この時刻の月をプラネタリウムで見る</a></p>
   </section>
 
