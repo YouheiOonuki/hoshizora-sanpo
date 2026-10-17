@@ -204,7 +204,7 @@ test('ページ: hreflang の対・canonical・ビーコン・広告・保存キ
   assert.match(idx, /<link rel="canonical" href="https:\/\/yorozu-craft\.com\/hoshizora-sanpo\/en\/planisphere\/">/);
   assert.match(guide, /<link rel="canonical" href="https:\/\/yorozu-craft\.com\/hoshizora-sanpo\/en\/planisphere\/guide\.html">/);
   for (const [name, html] of [['index', idx], ['guide', guide]]) {
-    assert.match(html, /<html lang="en">/, name);
+    assert.match(html, /<html lang="en"[ >]/, name);
     assert.strictEqual((html.match(/data-cf-beacon/g) || []).length, 1, name);
     assert.match(html, /ca-pub-5375267956079717/, name);
     assert.match(html, /href="https:\/\/yorozu-craft\.com\/en\/"/, name + ' 英語のトップ');

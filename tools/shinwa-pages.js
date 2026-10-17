@@ -178,7 +178,7 @@ ${srcDetails(['iau06', 'gaz', 'nasa', 'ciaaw', 'lanl'])}`;
     const groups = KIND_ORDER.map(k => {
       const list = D.NAMES.filter(n => n[2] === k);
       if (!list.length) return '';
-      return `<h3>${esc(k)}</h3><div class="scroll"><table class="hyoki"><thead><tr><th>このサイトの表記</th><th>ラテン文字</th><th>使わない表記</th></tr></thead><tbody>${list.map(([ja, la, , v]) =>
+      return `<h2 class="hyoki-h">${esc(k)}</h2><div class="scroll"><table class="hyoki"><thead><tr><th>このサイトの表記</th><th>ラテン文字</th><th>使わない表記</th></tr></thead><tbody>${list.map(([ja, la, , v]) =>
         `<tr><td>${esc(ja)}</td><td lang="en">${esc(la)}</td><td class="variant">${(v || []).map(esc).join('・') || ''}</td></tr>`).join('')}</tbody></table></div>`;
     }).join('\n');
     const body = `${crumbs('./', '表記の一覧')}
@@ -187,7 +187,7 @@ ${srcDetails(['iau06', 'gaz', 'nasa', 'ciaaw', 'lanl'])}`;
 ${subnav('./', 'hyoki.html')}
 <p>ギリシャの神と人はギリシャ語の名から、ローマの神はラテン語の名から書きます。伸ばす音は、広く使われている形に合わせて省いています。星座の名は日本の正式な名（ペガスス座など）です。本文と一覧が合っているかは、ページを作るたびに機械で突き合わせています。</p>
 ${groups}
-<h3>星座・星・元素の名</h3><p class="names">${D.ASTRO.map(esc).join('・')}</p>
+<h2 class="hyoki-h">星座・星・元素の名</h2><p class="names">${D.ASTRO.map(esc).join('・')}</p>
 <p class="lead">${SRC_LINE}</p>`;
     const description = 'ギリシャ神話の固有名のカタカナ表記の一覧。ゼウス／ユピテル、エウロペ／エウロパなど、このサイトで使う表記とラテン文字、使わない表記。';
     files.push({ file, html: page({ rel: '../', file, title: 'ギリシャ神話の表記の一覧｜ほしぞらさんぽ', description, current: 'shinwa/', body,

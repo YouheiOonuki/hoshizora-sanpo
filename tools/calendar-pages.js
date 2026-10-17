@@ -201,7 +201,7 @@ ${sourceList(inRange.flatMap(e => e.src), esc)}`;
   /* ---- 満月・新月 ---- */
   const moonTable = (kind) => {
     const rows = events.filter(e => e.kind === kind);
-    return `<div class="scroll" data-empty="次の予定は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>時刻</th><th>メモ</th><th></th></tr></thead><tbody>${rows.map(e =>
+    return `<div class="scroll" data-empty="次の予定は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>時刻</th><th>メモ</th><th><span class="visually-hidden">プラネタリウム</span></th></tr></thead><tbody>${rows.map(e =>
       `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${dayLabel(e.date)}</td><td class="num">${timeLabel(e.at)}</td><td>${esc(e.sub)}</td><td><a href="${skyLink(e.view, e.look)}">星空を見る →</a></td></tr>`).join('')}</tbody></table></div>`;
   };
   {
@@ -218,7 +218,7 @@ ${moonTable('full')}
 <p>月の通り道（軌道）は少しだけ楕円なので、地球との距離は満月ごとに変わります。地球に近いときの満月は少し大きく明るく見え、「スーパームーン」と呼ばれることもあります。表のメモ欄に、その年でいちばん近い・遠い満月を書いています。</p>
 <h2 id="otsukimi">お月見（中秋の名月・十三夜）</h2>
 <p>「中秋の名月」は、明治5年まで使われていた暦（太陰太陽暦）の8月15日の夜の月です。この日は新月の日を1日目として数えるため、天文学でいう満月の日と1〜2日ずれることがよくあります。「十三夜」は同じ暦の9月13日の夜の月で、日本独自のお月見の風習です。</p>
-<div class="scroll" data-empty="次のお月見の日付は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>名前</th><th>メモ</th><th></th></tr></thead><tbody>${views}</tbody></table></div>
+<div class="scroll" data-empty="次のお月見の日付は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>名前</th><th>メモ</th><th><span class="visually-hidden">プラネタリウム</span></th></tr></thead><tbody>${views}</tbody></table></div>
 <h2>月を観察するときは</h2>
 <p>月は道具がなくても楽しめますが、双眼鏡を使うとクレーターや「うさぎのもちつき」の模様がよく見えます。満月より、半月のころのほうが、影のおかげでクレーターの凹凸がくっきり見えます。<a href="./new-moon.html">新月カレンダー</a>もあわせてどうぞ。</p>
 ${sourceList([...O.MOON_PHASES.map(r => r.src), ...O.MOON_NOTES.map(n => n.src), ...O.MOON_VIEWING.map(v => v.src)], esc)}`;
@@ -424,7 +424,7 @@ ${sourceList(O.ECLIPSES.filter(e => e.body === 'sun').map(e => e.src), esc)}`;
   /* ---- 惑星 ---- */
   {
     const rows = events.filter(e => e.kind === 'planet');
-    const table = `<div class="scroll" data-empty="次の予定は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>現象</th><th>見え方</th><th></th></tr></thead><tbody>${rows.map(e =>
+    const table = `<div class="scroll" data-empty="次の予定は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>現象</th><th>見え方</th><th><span class="visually-hidden">プラネタリウム</span></th></tr></thead><tbody>${rows.map(e =>
       `<tr data-date="${e.date}" data-kind="planet" data-summary="${esc(summaryOf(e))}"><td>${dayLabel(e.date)}</td><td>${esc(e.title)}</td><td>${esc(e.sub)}</td><td><a href="${skyLink(e.view, e.look)}">星空を見る →</a></td></tr>`).join('')}</tbody></table></div>`;
     const body = `${crumbs('惑星の見ごろ')}
 <h1>惑星の見ごろカレンダー<small>火星・木星・土星の衝と、水星・金星の最大離角</small></h1>
