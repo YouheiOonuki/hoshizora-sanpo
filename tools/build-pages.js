@@ -15,6 +15,8 @@ const Z = require('./zukan-sky.js');
 const E = require('./events.js');
 
 const ROOT = path.join(__dirname, '..');
+// 書き出し先。既定はリポジトリ（生成済みのページを上書き）。--out <dir> で別の場所へ（tests/build-pages.test.js が一時フォルダに出して突き合わせる）
+const OUT = process.argv.includes('--out') ? path.resolve(process.argv[process.argv.indexOf('--out') + 1]) : ROOT;
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
 const UPDATED = '2026-09-23';
 const ZUKAN_UPDATED = '2026-10-04';   // 星座図鑑に「見つけ方」「見ごろの季節と時刻」「明るい星」の計算値を足した日
@@ -373,7 +375,7 @@ function about() {
 <dt>見まわす</dt><dd>画面をドラッグ（スマホは指でなぞる）。パソコンでは矢印キーでも動かせます。</dd>
 <dt>ズーム</dt><dd>2本指でひろげる・つまむ、またはマウスホイール。ズームすると暗い星や星の名前が見えてきます。</dd>
 <dt>くわしく見る</dt><dd>星座・明るい星・月・惑星・太陽をタップすると、説明がひらきます。</dd>
-<dt>時間たび</dt><dd>スライダーで前後12時間、ボタンで1日・1ヶ月ずつ動かせます。「早送り」で星がまわる日周運動を見られます（速さは60倍・600倍・3600倍）。</dd>
+<dt>時間たび</dt><dd>スライダーで前後12時間、ボタンで1日・1ヶ月ずつ動かせます。「早送り」で星がまわる日周運動を見られます（速さは60倍・600倍・3600倍）。昼に開くと今夜21時の空を出します。今の空に戻すときは「いまに戻る」です。</dd>
 <dt>場所</dt><dd>札幌・東京・大阪・福岡・那覇・石垣島・シドニーと、いまいる場所（位置情報）から選べます。時刻はその土地の時刻で表示します。</dd>
 <dt>クイズ</dt><dd>いま空に出ている星座から5問。見つからないときは「ヒント」で答えの方向へ視点が動きます。</dd>
 <dt>ひらがなモード</dt><dd>画面の文字と解説がすべてひらがなになります。</dd>
@@ -419,6 +421,7 @@ function privacy() {
 <meta name="robots" content="noindex, follow">
 <link rel="canonical" href="https://yorozu-craft.com/privacy-policy.html">
 <meta http-equiv="refresh" content="0; url=https://yorozu-craft.com/privacy-policy.html">
+  <link rel="manifest" href="/hoshizora-sanpo/manifest.webmanifest">
 </head>
 <body>
 <p>プライバシーポリシーは、yorozu-craft のすべてのツールで共通のページに移りました。</p>
@@ -429,16 +432,16 @@ function privacy() {
 }
 
 /* ---------------- 書き出し ---------------- */
-fs.mkdirSync(path.join(ROOT, 'zukan'), { recursive: true });
-fs.mkdirSync(path.join(ROOT, 'calendar'), { recursive: true });
-fs.mkdirSync(path.join(ROOT, 'en/calendar'), { recursive: true });
-const out = (file, html) => fs.writeFileSync(path.join(ROOT, file), html);
+fs.mkdirSync(path.join(OUT, 'zukan'), { recursive: true });
+fs.mkdirSync(path.join(OUT, 'calendar'), { recursive: true });
+fs.mkdirSync(path.join(OUT, 'en/calendar'), { recursive: true });
+const out = (file, html) => fs.writeFileSync(path.join(OUT, file), html);
 const en = buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON });
 en.files.forEach(f => out(f.file, f.html));
 out('zukan/index.html', zukanIndex());
 ordered.forEach((c, i) => out(`zukan/${c.id}.html`, conPage(c, i)));
 calendar.files.forEach(f => out(f.file, f.html));
-fs.mkdirSync(path.join(ROOT, 'shinwa/seiza'), { recursive: true });
+fs.mkdirSync(path.join(OUT, 'shinwa/seiza'), { recursive: true });
 shinwa.files.forEach(f => out(f.file, f.html));
 out('about.html', about());
 out('privacy-policy.html', privacy());
