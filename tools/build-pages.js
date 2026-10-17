@@ -43,7 +43,7 @@ function page({ rel, file, title, description, current, body, jsonld, alt }) {
   const nav = [['', 'プラネタリウム'], ['zukan/', '星座図鑑'], ['calendar/', '天文カレンダー'], ['about.html', 'このアプリについて']]
     .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
   return `<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-skin="base">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -411,7 +411,7 @@ function about() {
 function privacy() {
   // プライバシーポリシーは yorozu-craft 全体で共通のページに移した。古い URL で来た人をそちらへ案内する
   return `<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-skin="base">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

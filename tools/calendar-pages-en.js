@@ -170,7 +170,7 @@ module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
     const nav = [['', 'Planetarium'], ['calendar/', 'Sky calendar'], ['planisphere/', 'Planisphere'], ['guide.html', 'How it works']]
       .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
     return `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-skin="base">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
