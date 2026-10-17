@@ -193,6 +193,7 @@ module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#070b18">
 <link rel="icon" href="${rel}../favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/hoshizora-sanpo/manifest.webmanifest">
 <link rel="apple-touch-icon" href="${rel}../apple-touch-icon.png">
 ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${ADSENSE}
 <link rel="stylesheet" href="${rel}../pages.css">
