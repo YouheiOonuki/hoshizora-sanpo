@@ -411,7 +411,7 @@ function about() {
 function privacy() {
   // プライバシーポリシーは yorozu-craft 全体で共通のページに移した。古い URL で来た人をそちらへ案内する
   return `<!DOCTYPE html>
-<html lang="ja" data-skin="base">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
