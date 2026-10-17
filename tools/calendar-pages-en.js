@@ -258,7 +258,7 @@ ${sources(inRange.flatMap(e => e.src))}`;
   }
 
   /* ---- 満月・新月 ---- */
-  const moonTable = kind => `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date and time (UTC)</th><th>Your time</th><th>Note</th><th></th></tr></thead><tbody>${events.filter(e => e.kind === kind).map(e =>
+  const moonTable = kind => `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date and time (UTC)</th><th>Your time</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${events.filter(e => e.kind === kind).map(e =>
     `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${utcLabel(e.ms)}<br><span class="num">${utcTime(e.ms)}</span></td><td>${localTime(e.ms)}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('')}</tbody></table></div>`;
   {
     const views = events.filter(e => e.kind === 'moonview').map(e => `<tr data-date="${e.date}"><td>${jstDateLabel(e.date)}</td><td>${esc(TSUKIMI[O.MOON_VIEWING.find(v => v.date === e.date).name])}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('');
@@ -274,7 +274,7 @@ ${moonTable('full')}
 <p>The Moon’s orbit is slightly oval, so its distance changes from one full moon to the next. A full moon near its closest point looks a little bigger and brighter and is sometimes called a supermoon. The notes mark the year’s closest and farthest full moons, as listed by NAOJ.</p>
 <h2 id="tsukimi">Tsukimi: moon viewing in Japan</h2>
 <p>Chūshū no meigetsu, the mid-autumn moon, is the night of the 15th day of the 8th month in the old lunisolar calendar Japan used until 1872. That calendar counts days from the new moon, so the date often differs from the full moon by a day or two. Jūsan-ya is the 13th night of the 9th month, a moon-viewing custom unique to Japan.</p>
-<div class="scroll" data-empty="The next moon-viewing dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Name</th><th>Note</th><th></th></tr></thead><tbody>${views}</tbody></table></div>
+<div class="scroll" data-empty="The next moon-viewing dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Name</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${views}</tbody></table></div>
 ${sources([...O.MOON_PHASES.map(r => r.src), ...O.MOON_NOTES.map(n => n.src), ...O.MOON_VIEWING.map(v => v.src)])}`;
     add('full-moon.html', `Full Moon Calendar ${yFrom}–${yTo}: When Is the Next Full Moon?`,
       `When is the next full moon? Full moon dates and exact times for ${yFrom}–${yTo} from NAOJ, in UTC and your time zone, with the closest full moon of the year and Japan’s moon-viewing nights.`, body,
@@ -420,7 +420,7 @@ ${sources(O.ECLIPSES.filter(e => e.body === 'sun').map(e => e.src))}`;
   /* ---- 惑星 ---- */
   {
     const rows = events.filter(e => e.kind === 'planet');
-    const table = `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Event</th><th>What you see</th><th></th></tr></thead><tbody>${rows.map(e =>
+    const table = `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Event</th><th>What you see</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${rows.map(e =>
       `<tr data-date="${e.date}" data-kind="planet" data-summary="${esc(summaryOf(e))}"><td>${jstDateLabel(e.date)}</td><td>${esc(e.title)}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('')}</tbody></table></div>`;
     const body = `${crumbs('Planets')}
 <h1>Planet viewing calendar<small>Oppositions of Mars, Jupiter and Saturn; greatest elongations of Mercury and Venus</small></h1>

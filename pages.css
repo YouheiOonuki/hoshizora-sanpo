@@ -173,6 +173,7 @@ ul.evlist{list-style:none;padding:0;margin:0;}
 .ev-planet .chip{border-color:rgba(190,170,255,.6);color:#cfc2ff;}
 table.evtable td a{white-space:nowrap;}
 ul.src{font-size:13px;line-height:1.8;}
+ul.src a{display:inline-block;padding:3px 0;}   /* 押せる高さ 24px 以上（WCAG 2.5.8 target-size。出典が 2 行並ぶ暦のページ） */
 @media (max-width:520px){
   .ev{grid-template-columns:1fr;gap:2px;}
   .ev-date{display:flex;gap:8px;align-items:baseline;color:var(--gold);}
