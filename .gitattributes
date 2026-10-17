@@ -1,3 +1,7 @@
+# 生成するページ（node tools/build-pages.js）と data/tenmon.json（tools/build-ics.js）は LF で書き出す。作業ツリーも LF で取り出し、再生成しても git status に出ないようにする
+*.html text eol=lf
+sitemap.xml text eol=lf
+data/tenmon.json text eol=lf
 data/*.ics -text
 s/*.html -text
 hayamiban/s/*.html -text
