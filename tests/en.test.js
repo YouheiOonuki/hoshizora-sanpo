@@ -43,7 +43,7 @@ test('英語のカレンダーは日本語版と同じ瞬間を載せる（書�
     assert.ok(page('meteor-showers.html').includes(`datetime="${new Date(Date.parse(m.peak)).toISOString()}"`), m.peak);
   }
   for (const f of files) {
-    assert.match(f.html, /<html lang="en">/, f.file);
+    assert.match(f.html, /<html lang="en"[ >]/, f.file);
     assert.ok(!/[ぁ-んァ-ン一-龯]/.test(f.html.replace(/<a [^>]*lang="ja"[^>]*>日本語<\/a>/g, '').replace(/<link[^>]*>/g, '')), `${f.file} に日本語が残っている`);
   }
 });
