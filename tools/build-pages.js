@@ -406,7 +406,7 @@ function about() {
 <p><a href="/post/?from=/hoshizora-sanpo/about.html">ご要望・不具合の報告</a>：いただいた内容をもとに直します。お返事はしていません。</p>
 <p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
   return page({ rel: './', file: 'about.html', title: 'このアプリについて｜ほしぞらさんぽ',
-    description: 'Webプラネタリウム「ほしぞらさんぽ」のつかいかた、星の位置の計算のしくみと精度、データの出典。', current: 'about.html', body, alt: 'en/guide.html' });
+    description: '無料のWebプラネタリウム「ほしぞらさんぽ」の使い方。ドラッグとズームで見まわし、星座・月・惑星をタップして説明を読み、時間を進めて星の動きを見る。実在の星 約3,300個の位置を歳差まで計算するしくみと精度、データの出典もまとめています。', current: 'about.html', body, alt: 'en/guide.html' });
 }
 
 /* ---------------- プライバシーポリシー ---------------- */
