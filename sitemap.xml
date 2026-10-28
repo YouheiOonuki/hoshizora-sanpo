@@ -391,12 +391,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://yorozu-craft.com/hoshizora-sanpo/tsuki/</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://yorozu-craft.com/hoshizora-sanpo/tsuki/guide.html</loc>
     <lastmod>2026-10-03</lastmod>
     <changefreq>yearly</changefreq>
