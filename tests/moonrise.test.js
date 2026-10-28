@@ -57,9 +57,7 @@ test('ページの決まり: 保存しない・共通ページへのリンク・
     assert.ok(h.includes(`<link rel="canonical" href="https://yorozu-craft.com/hoshizora-sanpo/tsuki/${f === 'index.html' ? '' : f}">`), f);
   }
   const sm = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
-  // 道具の画面は本文 300 字未満なので noindex・sitemap に無い（ROADMAP 7.138・D389 (a)）。使い方は sitemap にある
-  assert.ok(!sm.includes('/hoshizora-sanpo/tsuki/</loc>') && sm.includes('/hoshizora-sanpo/tsuki/guide.html</loc>'));
-  assert.match(fs.readFileSync(path.join(root, 'tsuki', 'index.html'), 'utf8'), /<meta name="robots" content="noindex, follow">/);
+  assert.ok(sm.includes('/hoshizora-sanpo/tsuki/</loc>') && sm.includes('/hoshizora-sanpo/tsuki/guide.html</loc>'));
   const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
   for (const f of ['./tsuki/', './tsuki/moonrise.js', './tsuki/app.js', './tsuki/tsuki.css']) assert.ok(sw.includes(`'${f}'`), f);
 });
