@@ -246,3 +246,6 @@ details.kz-all{margin:18px 0;} details.kz-all summary{cursor:pointer;color:var(-
 
 /* 一覧・表・案内の 1 つだけ置くリンクも押せる高さに（読み物の型の 44px。文中のリンクは対象外。K192 の全巡回） */
 :where(main :is(li, td) > a:only-child, main .lead > a:only-child, main .ev-links a) { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* 暦の配信 URL の欄も押せる高さに（41px だった。7.144 の最初の便） */
+#ics-url { min-height: 44px; }
