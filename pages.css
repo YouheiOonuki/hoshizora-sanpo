@@ -188,7 +188,7 @@ ul.src a{display:inline-block;padding:3px 0;}   /* 押せる高さ 24px 以上�
 .mcard{margin:10px 0;}
 .mcard-h{font-size:15px;margin-bottom:6px;}
 .mcard-h b{color:var(--gold);font-family:var(--sans);letter-spacing:0;}
-.mcard dl.info{grid-template-columns:7.5em 1fr;margin:6px 0 8px;font-size:14px;}
+.mcard dl.info{grid-template-columns:7.5em 1fr;margin:6px 0 8px;}
 @media (max-width:520px){ .mcard dl.info{grid-template-columns:1fr;gap:0;} .mcard dl.info dd{margin-bottom:6px;} }
 
 /* ---- 英語版（en/）: 欧文のフォントと字間 ---- */
