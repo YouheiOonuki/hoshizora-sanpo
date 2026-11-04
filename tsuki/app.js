@@ -59,6 +59,7 @@
       $('sky-link').href = '../?t=' + encodeURIComponent(t) + '&loc=' + p.id + '&look=moon';
     }
     renderMonth(p, day);
+    window.yzUsed?.();
   }
 
   function renderMonth(p, day) {

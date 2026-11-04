@@ -127,6 +127,7 @@
       const url = URL.createObjectURL(new Blob([s], { type: 'image/svg+xml' })); urls.push(url);
       return `<a href="${url}" download="${base}-${sheets.length > 1 ? (i ? 'window' : 'star-wheel') : 'one-sheet'}.svg">${sheets.length > 1 ? (i ? 'Window' : 'Star wheel') : 'One sheet'}</a>`;
     }).join('');
+    window.yzUsed?.();
   }
 
   /* ---------------- 入力 ---------------- */
