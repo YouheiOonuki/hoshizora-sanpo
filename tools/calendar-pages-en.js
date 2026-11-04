@@ -205,6 +205,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 </div></header>
 <main class="wrap">
 ${body}
+<p class="small translation-note">This is an English translation of the <a href="${rel}../${jaFile.replace(/index\.html$/, '')}" hreflang="ja">Japanese page</a>. If the two differ, the Japanese version prevails.</p>
 </main>
 <footer class="site"><div class="wrap">
   <nav><a href="${top}">yorozu-craft</a><a href="${rel || './'}">Planetarium</a><a href="${rel}calendar/">Sky calendar</a><a href="${rel}planisphere/">Planisphere</a><a href="${rel}guide.html">How it works</a><a href="${top}about.html">About</a><a href="${top}privacy-policy.html">Privacy policy</a></nav>
