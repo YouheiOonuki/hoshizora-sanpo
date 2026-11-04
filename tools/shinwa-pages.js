@@ -95,7 +95,7 @@ ${subnav('./', 'keizu.html')}
 <div id="keizu-result" class="kz" aria-live="polite"><noscript><p>この図は JavaScript で動きます。下の「全員の一覧」からもたどれます。</p></noscript></div>
 <p>本によって親が違う神や人は、系図には 1 つの説を置き、ほかの説は「注」に書きました。</p>
 <details class="kz-all"><summary>全員の一覧（親と子・出典）</summary>
-<div class="scroll"><table class="kz-table"><thead><tr><th>名前</th><th>親</th><th>子</th><th>出典・注</th></tr></thead><tbody>
+<div class="scroll" tabindex="0"><table class="kz-table"><thead><tr><th>名前</th><th>親</th><th>子</th><th>出典・注</th></tr></thead><tbody>
 ${rows}
 </tbody></table></div></details>
 <p class="lead">${SRC_LINE}</p>
@@ -122,7 +122,7 @@ ${srcDetails(['hes', 'hh', 'apo'])}
 <h1>ギリシャ神話の神の一覧<small>英語名・ローマ名・星座と元素</small></h1>
 <p class="answer">主な神 ${D.GODS.length} 柱を、英語名・ローマ名（ラテン語の名）・司るものと、その神が出てくる星座の話・名前のついた惑星と元素で並べました。</p>
 ${subnav('./', 'kamigami.html')}
-<div class="scroll"><table class="gods"><thead><tr><th>神</th><th>英語名</th><th>ローマ名</th><th>司るもの</th><th>星座の話</th><th>惑星・元素</th></tr></thead><tbody>
+<div class="scroll" tabindex="0"><table class="gods"><thead><tr><th>神</th><th>英語名</th><th>ローマ名</th><th>司るもの</th><th>星座の話</th><th>惑星・元素</th></tr></thead><tbody>
 ${rows}
 </tbody></table></div>
 <p>ローマ名は、ローマの人がこのギリシャの神と同じとみた神の名です。「—」は、同じとみたことを下の原典や資料で確かめられなかったものです。司るものは、讃歌や『神統記』がその神について書いていることを短くしました。</p>
@@ -149,17 +149,17 @@ ${srcDetails(['hes', 'hh', 'apo', 'ovm', 'ovf', 'gaz', 'nasa', 'ciaaw'])}`;
 ${subnav('./', 'namae.html')}
 <h2 id="planet">惑星の名前の由来</h2>
 <p>惑星の英語名は IAU（国際天文学連合）が決めた名で、2006 年の決議は惑星を Mercury から Neptune までの 8 つとし、Pluto を準惑星としました。由来は NASA と IAU の惑星系命名作業部会の説明によります。</p>
-<div class="scroll"><table><thead><tr><th>惑星</th><th>ローマの神</th><th>ギリシャの神</th><th>由来の出典</th></tr></thead><tbody>
+<div class="scroll" tabindex="0"><table><thead><tr><th>惑星</th><th>ローマの神</th><th>ギリシャの神</th><th>由来の出典</th></tr></thead><tbody>
 ${planets}
 </tbody></table></div>
 <h2>衛星の名前の由来</h2>
 <p>木星の衛星はゼウス（ユピテル）が愛した相手や子孫の名、土星の衛星はティタンなどの名、と IAU が決めています。神話の人物から名づけられた衛星の一部です。</p>
-<div class="scroll"><table><thead><tr><th>衛星（IAU の名）</th><th>神話の人物</th><th>IAU の説明</th></tr></thead><tbody>
+<div class="scroll" tabindex="0"><table><thead><tr><th>衛星（IAU の名）</th><th>神話の人物</th><th>IAU の説明</th></tr></thead><tbody>
 ${moons}
 </tbody></table></div>
 <h2>元素の名前の由来</h2>
 <p>ギリシャ・ローマの神話の名がついた元素です。由来は IUPAC の委員会（CIAAW）の元素のページ、CIAAW にページの無い元素はロスアラモス国立研究所の周期表によります。日本語名は日本化学会の原子量表の名です。</p>
-<div class="scroll"><table class="els"><thead><tr><th>番号</th><th>記号</th><th>元素</th><th>名前の由来</th><th>出典</th></tr></thead><tbody>
+<div class="scroll" tabindex="0"><table class="els"><thead><tr><th>番号</th><th>記号</th><th>元素</th><th>名前の由来</th><th>出典</th></tr></thead><tbody>
 ${els}
 </tbody></table></div>
 <p>トリウム（北欧の神）とバナジウム（北欧の女神）も神の名ですが、ギリシャ・ローマの神話ではないので入れていません。</p>
@@ -178,7 +178,7 @@ ${srcDetails(['iau06', 'gaz', 'nasa', 'ciaaw', 'lanl'])}`;
     const groups = KIND_ORDER.map(k => {
       const list = D.NAMES.filter(n => n[2] === k);
       if (!list.length) return '';
-      return `<h2 class="hyoki-h">${esc(k)}</h2><div class="scroll"><table class="hyoki"><thead><tr><th>このサイトの表記</th><th>ラテン文字</th><th>使わない表記</th></tr></thead><tbody>${list.map(([ja, la, , v]) =>
+      return `<h2 class="hyoki-h">${esc(k)}</h2><div class="scroll" tabindex="0"><table class="hyoki"><thead><tr><th>このサイトの表記</th><th>ラテン文字</th><th>使わない表記</th></tr></thead><tbody>${list.map(([ja, la, , v]) =>
         `<tr><td>${esc(ja)}</td><td lang="en">${esc(la)}</td><td class="variant">${(v || []).map(esc).join('・') || ''}</td></tr>`).join('')}</tbody></table></div>`;
     }).join('\n');
     const body = `${crumbs('./', '表記の一覧')}
@@ -213,7 +213,7 @@ ${subnav('./', '')}
 <ul class="cards story">${D.STORIES.map(s => `<li><a href="./seiza/${s.slug}.html"><div><b>${esc(s.title)}</b><span>${esc(s.sub)}</span></div></a></li>`).join('')}</ul>
 <h2>原典と訳</h2>
 <p>話は、次の古い英訳（著作権の切れた版）を読んで、自分の言葉で書きました。訳文を写してはいません。原典で確かめられなかった話は書いていません。</p>
-<div class="scroll"><table><thead><tr><th>原典</th><th>版と訳者</th><th>読んだ場所</th></tr></thead><tbody>${srcRows}</tbody></table></div>
+<div class="scroll" tabindex="0"><table><thead><tr><th>原典</th><th>版と訳者</th><th>読んだ場所</th></tr></thead><tbody>${srcRows}</tbody></table></div>
 <p>同じ話でも本によって筋が違うときは、どの本の話かを書いて並べました。各段落の終わりの〔 〕は、原典の巻・章・行です。</p>
 <h2>注意とデータ</h2>
 <p>このページは言い伝えの要約で、原典の訳ではありません。くわしくは上の版をご覧ください。</p>

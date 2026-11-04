@@ -259,7 +259,7 @@ ${sources(inRange.flatMap(e => e.src))}`;
   }
 
   /* ---- 満月・新月 ---- */
-  const moonTable = kind => `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date and time (UTC)</th><th>Your time</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${events.filter(e => e.kind === kind).map(e =>
+  const moonTable = kind => `<div class="scroll" tabindex="0" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date and time (UTC)</th><th>Your time</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${events.filter(e => e.kind === kind).map(e =>
     `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${utcLabel(e.ms)}<br><span class="num">${utcTime(e.ms)}</span></td><td>${localTime(e.ms)}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('')}</tbody></table></div>`;
   {
     const views = events.filter(e => e.kind === 'moonview').map(e => `<tr data-date="${e.date}"><td>${jstDateLabel(e.date)}</td><td>${esc(TSUKIMI[O.MOON_VIEWING.find(v => v.date === e.date).name])}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('');
@@ -275,7 +275,7 @@ ${moonTable('full')}
 <p>The Moon’s orbit is slightly oval, so its distance changes from one full moon to the next. A full moon near its closest point looks a little bigger and brighter and is sometimes called a supermoon. The notes mark the year’s closest and farthest full moons, as listed by NAOJ.</p>
 <h2 id="tsukimi">Tsukimi: moon viewing in Japan</h2>
 <p>Chūshū no meigetsu, the mid-autumn moon, is the night of the 15th day of the 8th month in the old lunisolar calendar Japan used until 1872. That calendar counts days from the new moon, so the date often differs from the full moon by a day or two. Jūsan-ya is the 13th night of the 9th month, a moon-viewing custom unique to Japan.</p>
-<div class="scroll" data-empty="The next moon-viewing dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Name</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${views}</tbody></table></div>
+<div class="scroll" tabindex="0" data-empty="The next moon-viewing dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Name</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${views}</tbody></table></div>
 ${sources([...O.MOON_PHASES.map(r => r.src), ...O.MOON_NOTES.map(n => n.src), ...O.MOON_VIEWING.map(v => v.src)])}`;
     add('full-moon.html', `Full Moon Calendar ${yFrom}–${yTo}: When Is the Next Full Moon?`,
       `When is the next full moon? Full moon dates and exact times for ${yFrom}–${yTo} from NAOJ, in UTC and your time zone, with the closest full moon of the year and Japan’s moon-viewing nights.`, body,
@@ -316,7 +316,7 @@ ${sources(O.MOON_PHASES.map(r => r.src))}`;
       const alt = A.altAz(Math.sin(dec), Math.cos(dec), ra, A.lstRad(base + h * HOUR, 0), Math.sin(lat * DEG), Math.cos(lat * DEG))[0] / DEG;
       return `<td class="num">${alt < 0 ? 'below' : Math.round(alt) + '°'}</td>`;
     }).join('')}</tr>`).join('');
-    return `<div class="scroll"><table class="evtable"><thead><tr><th>Latitude</th>${hours.map(h => `<th>${(h + 24) % 24}:00</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
+    return `<div class="scroll" tabindex="0"><table class="evtable"><thead><tr><th>Latitude</th>${hours.map(h => `<th>${(h + 24) % 24}:00</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
 <p class="lead">Height of the radiant above the horizon on the night of ${(d => `${MON[d.getUTCMonth()]} ${d.getUTCDate()}`)(new Date(base - DAY))}–${+date.slice(8)}, ${date.slice(0, 4)}, calculated by this site. Times are local solar time, usually within an hour of standard clock time (add an hour under daylight saving time). The higher the radiant, the more meteors you see.</p>`;
   }
   for (const id of ['perseids', 'geminids', 'quadrantids']) {
@@ -373,7 +373,7 @@ ${sources(all.map(e => e.src[0]))}`;
   }
 
   /* ---- 日食・月食 ---- */
-  const eclipseTable = bodyId => `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Type</th><th>From Japan</th></tr></thead><tbody>${events.filter(e => e.kind === 'eclipse' && e.rec.body === bodyId).map(e => {
+  const eclipseTable = bodyId => `<div class="scroll" tabindex="0" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Type</th><th>From Japan</th></tr></thead><tbody>${events.filter(e => e.kind === 'eclipse' && e.rec.body === bodyId).map(e => {
     const r = e.rec, vis = r.japan === 'visible' ? '<b>Visible</b>' : r.japan === 'central' ? '<b>Central eclipse in part of the area</b>' : 'Not visible';
     return `<tr data-date="${e.date}" data-kind="${bodyId}-eclipse${r.japan !== 'none' ? '-jp' : ''}" data-summary="${esc(`${e.dateText || jstDateLabel(e.date)} (JST): ${e.title}`)}"><td>${esc(e.dateText || jstDateLabel(e.date))}</td><td>${esc(e.title)}</td><td>${vis}</td></tr>`;
   }).join('')}</tbody></table></div>`;
@@ -382,7 +382,7 @@ ${sources(all.map(e => e.src[0]))}`;
   {
     const nx = nextJp('moon'), ex = O.ECLIPSES.find(e => e.tokyo);
     const exRow = ex ? `<h2>Example: ${esc(ECLIPSE_TYPE[ex.type].toLowerCase())} of ${jstDateLabel(ex.date)} (Tokyo, JST)</h2>
-<div class="scroll"><table class="evtable"><thead><tr><th>Begins</th><th>Totality begins</th><th>Maximum</th><th>Totality ends</th><th>Ends</th></tr></thead>
+<div class="scroll" tabindex="0"><table class="evtable"><thead><tr><th>Begins</th><th>Totality begins</th><th>Maximum</th><th>Totality ends</th><th>Ends</th></tr></thead>
 <tbody><tr>${['start', 'totalStart', 'max', 'totalEnd', 'end'].map(k => `<td class="num">${ex.tokyo[k]}</td>`).join('')}</tr></tbody></table></div>
 <p class="lead">Times in hours:minutes (JST) from NAOJ’s Rekiyōkō; magnitude ${ex.tokyo.mag}. A lunar eclipse happens at the same moment everywhere; you can see it if the Moon is above your horizon then.</p>` : '';
     const body = `${crumbs('Lunar eclipses')}
@@ -421,7 +421,7 @@ ${sources(O.ECLIPSES.filter(e => e.body === 'sun').map(e => e.src))}`;
   /* ---- 惑星 ---- */
   {
     const rows = events.filter(e => e.kind === 'planet');
-    const table = `<div class="scroll" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Event</th><th>What you see</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${rows.map(e =>
+    const table = `<div class="scroll" tabindex="0" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date (JST)</th><th>Event</th><th>What you see</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${rows.map(e =>
       `<tr data-date="${e.date}" data-kind="planet" data-summary="${esc(summaryOf(e))}"><td>${jstDateLabel(e.date)}</td><td>${esc(e.title)}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('')}</tbody></table></div>`;
     const body = `${crumbs('Planets')}
 <h1>Planet viewing calendar<small>Oppositions of Mars, Jupiter and Saturn; greatest elongations of Mercury and Venus</small></h1>
