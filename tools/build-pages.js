@@ -446,24 +446,21 @@ shinwa.files.forEach(f => out(f.file, f.html));
 out('about.html', about());
 out('privacy-policy.html', privacy());
 
-const MOD = require('./calendar-pages.js').MODIFIED_SHOWERS;
-const showerFile = f => /^calendar\/(perseids|geminids|quadrantids|meteor-showers)\.html$/.test(f);
-const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly', ZUKAN_UPDATED], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly', ZUKAN_UPDATED]),
-  ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly', showerFile(f.file) ? MOD : undefined]),
+const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.map(c => [`zukan/${c.id}.html`, '0.7', 'monthly']),
+  ...calendar.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.8' : '0.7', 'weekly']),
   ['about.html', '0.4', 'yearly'],
   // ギリシャ神話（tools/shinwa-pages.js）
-  ...shinwa.files.map(f => [f.file.replace(/index\.html$/, ''), f.file === 'shinwa/index.html' ? '0.7' : '0.6', 'monthly', require('./shinwa-data.js').CHECKED]),
+  ...shinwa.files.map(f => [f.file.replace(/index\.html$/, ''), f.file === 'shinwa/index.html' ? '0.7' : '0.6', 'monthly']),
   // 星座早見盤（hayamiban/。手で書いたページ。盤面は hayamiban/planisphere.js がブラウザで作る）
-  ['hayamiban/', '0.8', 'monthly', '2026-09-25'], ['hayamiban/guide.html', '0.5', 'yearly', '2026-09-25'],
+  ['hayamiban/', '0.8', 'monthly'], ['hayamiban/guide.html', '0.5', 'yearly'],
   // 月の出・月の入り（tsuki/。手で書いたページ。計算は tsuki/moonrise.js がブラウザで行う）
-  ['tsuki/', '0.8', 'monthly', '2026-10-03'], ['tsuki/guide.html', '0.5', 'yearly', '2026-10-03'],
+  ['tsuki/', '0.8', 'monthly'], ['tsuki/guide.html', '0.5', 'yearly'],
   // 英語版（本体の en/index.html は手で書いたもの。ほかは tools/calendar-pages-en.js で生成）
-  ['en/', '0.9', 'weekly'], ['en/planisphere/', '0.8', 'monthly', '2026-09-25'], ['en/planisphere/guide.html', '0.5', 'yearly', '2026-09-25'], ...en.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.7' : f.file.endsWith('guide.html') ? '0.4' : '0.6', f.file.endsWith('guide.html') ? 'yearly' : 'weekly'])];
+  ['en/', '0.9', 'weekly'], ['en/planisphere/', '0.8', 'monthly'], ['en/planisphere/guide.html', '0.5', 'yearly'], ...en.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.7' : f.file.endsWith('guide.html') ? '0.4' : '0.6', f.file.endsWith('guide.html') ? 'yearly' : 'weekly'])];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(([u, p, f, lastmod]) => `  <url>
+${urls.map(([u, p, f]) => `  <url>
     <loc>${BASE}${u}</loc>
-    <lastmod>${lastmod || UPDATED}</lastmod>
     <changefreq>${f}</changefreq>
     <priority>${p}</priority>
   </url>`).join('\n')}

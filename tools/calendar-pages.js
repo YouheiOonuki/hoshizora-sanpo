@@ -154,7 +154,7 @@ function subscribeBox() {
 }
 
 /* ---------------- ページ ---------------- */
-/** 三大流星群のページに「年ごとの条件」と「観察のこつ」を足した日（構造化データの dateModified・sitemap の lastmod） */
+/** 三大流星群のページに「年ごとの条件」と「観察のこつ」を足した日（構造化データの dateModified） */
 const MODIFIED_SHOWERS = '2026-10-04';
 module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   const events = allEvents();
@@ -450,4 +450,4 @@ ${sourceList(rows.map(e => e.src[0]), esc)}`;
   return { files, showerLinks };
 };
 /* 英語版（tools/calendar-pages-en.js）が同じデータ・同じ計算を使うための部品 */
-Object.assign(module.exports, { MODIFIED_SHOWERS, allEvents, SHOWERS, parts, isoJst, midnightJst, planetView, fullMoonView });
+Object.assign(module.exports, { allEvents, SHOWERS, parts, isoJst, midnightJst, planetView, fullMoonView });
