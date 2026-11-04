@@ -321,7 +321,7 @@ ${shinwa.zukanLinks[c.id] ? `<p class="myth-link"><a href="${shinwa.zukanLinks[c
 <div class="box fun"><b>まめちしき</b>　${c.fun}</div>
 <h2>こどもと読む（ひらがな）</h2>
 <div class="box kids">${c.kid}</div>
-${named.length ? `<h2>主な星</h2><p>${esc(brightText(c))}</p><div class="scroll"><table><thead><tr><th>名前</th><th>明るさ</th><th>距離</th><th>色</th></tr></thead><tbody>${rows}</tbody></table></div>
+${named.length ? `<h2>主な星</h2><p>${esc(brightText(c))}</p><div class="scroll" tabindex="0"><table><thead><tr><th>名前</th><th>明るさ</th><th>距離</th><th>色</th></tr></thead><tbody>${rows}</tbody></table></div>
 ` : ''}
 ${showers ? `<h2>この星座から流れる流星群</h2><ul>${showers}</ul>` : ''}
 ${nb ? `<h2>近くの星座</h2><p>${esc(c.jp)}が最も高いころの向き: ${nb}</p>` : ''}
