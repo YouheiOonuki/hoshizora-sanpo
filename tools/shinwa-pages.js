@@ -9,7 +9,7 @@ module.exports = function buildShinwa({ page, esc, CONS }) {
   const latin = Object.fromEntries(D.NAMES.map(n => [n[0], n[1]]));
   const conById = Object.fromEntries(CONS.map(c => [c.id, c]));
   const storyBySlug = Object.fromEntries(D.STORIES.map(s => [s.slug, s]));
-  // 読み上げの録音（K140。tools/build-shinwa-audio.mjs が作る）。無い話はボタンを出さない
+  // 読み上げの録音（K140。2026-10 に melotts で作った shinwa/audio。作る道具は消した: README の開発の節）。無い話はボタンを出さない
   const AUDIO = (() => { try { return require('../shinwa/audio/index.json').files; } catch (e) { return {}; } })();
   const cites = c => !c ? [] : Array.isArray(c[0]) ? c : [c];
   const citeHtml = c => cites(c).map(x => `<span class="cite">〔${esc(D.cite(x))}〕</span>`).join('');
