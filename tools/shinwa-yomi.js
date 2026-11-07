@@ -1,5 +1,6 @@
 'use strict';
-/* 生成物（tools/build-shinwa-yomi.mjs。手で直さない。読みを直すときは OVERRIDES）。星座の由来 12 話の読み上げの元（K140）。
+/* 星座の由来 12 話の mp3（shinwa/audio）が読んでいる文の正本（K140。shinwa/audio/index.json の source が指す）。2026-10-11 に kuromoji で本文をかなにして作り、
+   mp3 と一緒に固定した（作る道具は 2026-11-07 に消した: README の開発の節。git 履歴にある）。mp3 を作り直さない限り、手で直さない。
    text: 本文（shinwa-data.js）、yomi: 読み（kuromoji の IPA 辞書の読み。カタカナの名前はそのまま、数字は助数詞とかなに）。確認日 2026-10-11 */
 const CHECKED = '2026-10-11';
 const YOMI = [

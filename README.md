@@ -64,7 +64,7 @@ node tools/build-catalog.js path/to/bsc5-all.json > catalog.js   # 星のカタ�
 - 英語版のカレンダーは場所を指定せず、見る人の場所の現地時刻で開きます: `?lt=<YYYY-MM-DDTHH:MM>` または `?d=<日付>&tw=evening|morning`（太陽高度 −6° のころ）
 - 天文カレンダーは `?t=<日時>&loc=<場所ID>&look=<向き>` でリンクします（例: `?t=2027-08-14T03:00+09:00&loc=tokyo&look=con:per`）。`look` は `moon`・惑星ID・`con:<星座ID>`・`radiant:<赤経°>,<赤緯°>`・`az:<方位°>`
 
-星座の由来の「読んでもらう」の mp3（`shinwa/audio/` の 12 本と `index.json`）は、Workers AI の `@cf/myshell-ai/melotts` で 2026-10 に作った。melotts は 2026-11-20 に Cloudflare が止めるので、作る道具（`tools/build-shinwa-audio.mjs`・`tools/tts-mp3.mjs`）は消した（git 履歴にある）。mp3 はリポジトリにあり、ページはそのまま読む。作り直すには別の TTS が要る。
+星座の由来の「読んでもらう」の mp3（`shinwa/audio/` の 12 本と `index.json`）は、Workers AI の `@cf/myshell-ai/melotts` で 2026-10 に作った。melotts は 2026-11-20 に Cloudflare が止めるので、作る道具（`tools/build-shinwa-audio.mjs`・`tools/tts-mp3.mjs`、読みを作る `tools/build-shinwa-yomi.mjs`）は消した（git 履歴にある）。mp3 はリポジトリにあり、ページはそのまま読む。mp3 が読んでいる文（かな）の正本は `tools/shinwa-yomi.js` で、mp3 と一緒に固定した。作り直すには別の TTS が要る。
 
 ## 星座早見盤（hayamiban/）の決まり
 
