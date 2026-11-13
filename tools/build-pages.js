@@ -18,7 +18,7 @@ const ROOT = path.join(__dirname, '..');
 // 書き出し先。既定はリポジトリ（生成済みのページを上書き）。--out <dir> で別の場所へ（tests/build-pages.test.js が一時フォルダに出して突き合わせる）
 const OUT = process.argv.includes('--out') ? path.resolve(process.argv[process.argv.indexOf('--out') + 1]) : ROOT;
 const BASE = 'https://yorozu-craft.com/hoshizora-sanpo/';
-const UPDATED = '2026-09-23';
+const UPDATED = require('./official-events.js').CHECKED;   // en/calendar の dateModified と「これから」の絞りの基準。確認日と同じ日（Q-224、日付を 2 か所に持たない）
 const ZUKAN_UPDATED = '2026-10-04';   // 星座図鑑に「見つけ方」「見ごろの季節と時刻」「明るい星」の計算値を足した日
 const TOKYO = { lat: 35.681, lon: 139.767 };
 const DEG = A.DEG;
