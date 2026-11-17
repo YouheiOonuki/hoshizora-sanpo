@@ -199,7 +199,7 @@ module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
 ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${ADSENSE}
 <link rel="stylesheet" href="${rel}../pages.css">
 </head>
-<body>
+<body${paper ? ' class="paper"' : ''}>
 <header class="site${np}"><div class="wrap">
   <a class="logo" href="${rel || './'}"><img src="${rel}../favicon.svg" alt="" width="28" height="28">Web Planetarium</a>
   <nav aria-label="Site">${nav}<a href="${rel}../${jaFile.replace(/index\.html$/, '')}" hreflang="ja" lang="ja">日本語</a></nav>

@@ -40,7 +40,7 @@ const hreflang = (jaFile, enFile) => `<link rel="alternate" hreflang="ja" href="
 <link rel="alternate" hreflang="en" href="${BASE + enFile.replace(/index\.html$/, '')}">
 <link rel="alternate" hreflang="x-default" href="${BASE + jaFile.replace(/index\.html$/, '')}">`;
 
-/* paper: 紙に刷る表のページ（天文カレンダーの一覧）。サイトの見出しと下の案内に no-print を付け、紙に出さない（pages.css） */
+/* paper: 紙に刷る表のページ（天文カレンダーの一覧）。サイトの見出しと下の案内に no-print を付け、紙に出さない。body の paper で紙だけ白い地に（pages.css） */
 function page({ rel, file, title, description, current, body, jsonld, alt, paper }) {
   const np = paper ? ' no-print' : '';
   const url = BASE + file.replace(/index\.html$/, '');
@@ -71,7 +71,7 @@ ${alt ? hreflang(file, alt) + '\n' : ''}<meta property="og:title" content="${esc
 ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${reviewNoAd(file) ? ADSENSE_META : ADSENSE}
 <link rel="stylesheet" href="${rel}pages.css">
 </head>
-<body>
+<body${paper ? ' class="paper"' : ''}>
 <header class="site${np}"><div class="wrap">
   <a class="logo" href="${rel}"><img src="${rel}favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
   <nav aria-label="サイト内">${nav}${alt ? `<a href="${rel}${alt.replace(/index\.html$/, '')}" hreflang="en" lang="en">English</a>` : ''}</nav>
