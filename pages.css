@@ -249,3 +249,6 @@ details.kz-all{margin:18px 0;} details.kz-all summary{cursor:pointer;color:var(-
 
 /* 暦の配信 URL の欄も押せる高さに（41px だった。7.144 の最初の便） */
 #ics-url { min-height: 44px; }
+
+/* 印刷に要らない欄（サイトの見出し・道すじ・ページの目次・登録の欄・この道具について・下の案内）は no-print で紙に出さない（DESIGN.md の印刷の線） */
+@media print { .no-print { display: none !important; } }

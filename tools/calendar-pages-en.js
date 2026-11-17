@@ -163,8 +163,9 @@ module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
   const whenOf = e => e.ms ? `${utcLabel(e.ms)}, ${utcTime(e.ms)}` : `${e.dateText || jstDateLabel(e.date)} (JST)`;
   const summaryOf = e => e ? `${whenOf(e)}: ${e.title}` : '';
 
-  /* 枠。rel は en/ から見た相対パス（'' か '../'） */
-  function pageEn({ rel, file, jaFile, title, description, current, body, jsonld, script = true }) {
+  /* 枠。rel は en/ から見た相対パス（'' か '../'）。paper: 紙に刷る一覧（日本語の page() と同じ。見出しと下の案内を紙に出さない） */
+  function pageEn({ rel, file, jaFile, title, description, current, body, jsonld, script = true, paper }) {
+    const np = paper ? ' no-print' : '';
     const url = BASE + file.replace(/index\.html$/, ''), jaUrl = BASE + jaFile.replace(/index\.html$/, '');
     const top = rel + '../../en/';                                   // yorozu-craft の英語のトップ
     const nav = [['', 'Planetarium'], ['calendar/', 'Sky calendar'], ['planisphere/', 'Planisphere'], ['guide.html', 'How it works']]
@@ -199,7 +200,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 <link rel="stylesheet" href="${rel}../pages.css">
 </head>
 <body>
-<header class="site"><div class="wrap">
+<header class="site${np}"><div class="wrap">
   <a class="logo" href="${rel || './'}"><img src="${rel}../favicon.svg" alt="" width="28" height="28">Web Planetarium</a>
   <nav aria-label="Site">${nav}<a href="${rel}../${jaFile.replace(/index\.html$/, '')}" hreflang="ja" lang="ja">日本語</a></nav>
 </div></header>
@@ -207,7 +208,7 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 ${body}
 <p class="small translation-note">This is an English translation of the <a href="${rel}../${jaFile.replace(/index\.html$/, '')}" hreflang="ja">Japanese page</a>. If the two differ, the Japanese version prevails.</p>
 </main>
-<footer class="site"><div class="wrap">
+<footer class="site${np}"><div class="wrap">
   <nav><a href="${top}">yorozu-craft</a><a href="${rel || './'}">Planetarium</a><a href="${rel}calendar/">Sky calendar</a><a href="${rel}planisphere/">Planisphere</a><a href="${rel}guide.html">How it works</a><a href="${top}about.html">About</a><a href="${top}privacy-policy.html">Privacy policy</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
@@ -244,11 +245,11 @@ ${script ? PAGE_SCRIPT + '\n' : ''}${BEACON}
     const inRange = events.filter(e => e.date >= O.COVERAGE.from && e.date <= O.COVERAGE.to);
     const months = [...new Set(inRange.map(e => e.date.slice(0, 7)))];
     const list = months.map(mk => `<section class="month" data-empty=""><h3>${MONTH[+mk.slice(5) - 1]} ${mk.slice(0, 4)}</h3><ul class="evlist">${inRange.filter(e => e.date.slice(0, 7) === mk).map(eventItem).join('')}</ul></section>`).join('\n');
-    const body = `<div class="crumbs"><a href="../">Planetarium</a> / Sky calendar</div>
+    const body = `<div class="crumbs no-print"><a href="../">Planetarium</a> / Sky calendar</div>
 <h1>Astronomy calendar ${yFrom}–${yTo}<small>Full moons, new moons, meteor showers, eclipses and planets</small></h1>
 <p class="lead">Upcoming sky events in date order, from the National Astronomical Observatory of Japan (NAOJ). Exact times are in UTC and in your own time zone. “See the sky” opens the planetarium for your place.</p>
 ${nextBox([['Next full moon', 'full'], ['Next new moon', 'new'], ['Next meteor shower', 'meteor']])}
-<nav class="toc" aria-label="Topics"><a href="./full-moon.html">Full moons</a><a href="./new-moon.html">New moons</a><a href="./meteor-showers.html">Meteor showers</a><a href="./perseids.html">Perseids</a><a href="./geminids.html">Geminids</a><a href="./quadrantids.html">Quadrantids</a><a href="./lunar-eclipse.html">Lunar eclipses</a><a href="./solar-eclipse.html">Solar eclipses</a><a href="./planets.html">Planets</a></nav>
+<nav class="toc no-print" aria-label="Topics"><a href="./full-moon.html">Full moons</a><a href="./new-moon.html">New moons</a><a href="./meteor-showers.html">Meteor showers</a><a href="./perseids.html">Perseids</a><a href="./geminids.html">Geminids</a><a href="./quadrantids.html">Quadrantids</a><a href="./lunar-eclipse.html">Lunar eclipses</a><a href="./solar-eclipse.html">Solar eclipses</a><a href="./planets.html">Planets</a></nav>
 <h2>Upcoming events</h2>
 ${list}
 <p class="lead">${JST_NOTE} Events after ${yTo} are added once NAOJ publishes them (each February for the next year).</p>
@@ -256,7 +257,7 @@ ${sources(inRange.flatMap(e => e.src))}`;
     files.push({ file: 'en/calendar/index.html', html: pageEn({ rel: '../', file: 'en/calendar/index.html', jaFile: 'calendar/index.html',
       title: `Astronomy Calendar ${yFrom}–${yTo}: Full Moons, Meteor Showers, Eclipses and Planets`,
       description: `Sky events for ${yFrom}–${yTo} in date order: full and new moons, meteor shower peaks, eclipses and planet viewing, from NAOJ. Times in UTC and your time zone.`,
-      current: 'calendar/', body, jsonld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Astronomy calendar', url: BASE + 'en/calendar/', inLanguage: 'en' } }) });
+      current: 'calendar/', body, jsonld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Astronomy calendar', url: BASE + 'en/calendar/', inLanguage: 'en' }, paper: true }) });
   }
 
   /* ---- 満月・新月 ---- */

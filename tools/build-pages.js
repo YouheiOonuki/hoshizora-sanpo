@@ -40,7 +40,9 @@ const hreflang = (jaFile, enFile) => `<link rel="alternate" hreflang="ja" href="
 <link rel="alternate" hreflang="en" href="${BASE + enFile.replace(/index\.html$/, '')}">
 <link rel="alternate" hreflang="x-default" href="${BASE + jaFile.replace(/index\.html$/, '')}">`;
 
-function page({ rel, file, title, description, current, body, jsonld, alt }) {
+/* paper: 紙に刷る表のページ（天文カレンダーの一覧）。サイトの見出しと下の案内に no-print を付け、紙に出さない（pages.css） */
+function page({ rel, file, title, description, current, body, jsonld, alt, paper }) {
+  const np = paper ? ' no-print' : '';
   const url = BASE + file.replace(/index\.html$/, '');
   const nav = [['', 'プラネタリウム'], ['zukan/', '星座図鑑'], ['calendar/', '天文カレンダー'], ['about.html', 'このアプリについて']]
     .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
@@ -70,14 +72,14 @@ ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 
 <link rel="stylesheet" href="${rel}pages.css">
 </head>
 <body>
-<header class="site"><div class="wrap">
+<header class="site${np}"><div class="wrap">
   <a class="logo" href="${rel}"><img src="${rel}favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
   <nav aria-label="サイト内">${nav}${alt ? `<a href="${rel}${alt.replace(/index\.html$/, '')}" hreflang="en" lang="en">English</a>` : ''}</nav>
 </div></header>
 <main class="wrap">
 ${body}
 </main>
-<footer class="site"><div class="wrap">
+<footer class="site${np}"><div class="wrap">
   <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="${rel}">プラネタリウム</a><a href="${rel}zukan/">星座図鑑</a><a href="${rel}calendar/">天文カレンダー</a><a href="${rel}hayamiban/">星座早見盤</a><a href="${rel}shinwa/">ギリシャ神話</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>

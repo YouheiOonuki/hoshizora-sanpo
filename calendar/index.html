@@ -38,12 +38,12 @@
 <link rel="stylesheet" href="../pages.css">
 </head>
 <body>
-<header class="site"><div class="wrap">
+<header class="site no-print"><div class="wrap">
   <a class="logo" href="../"><img src="../favicon.svg" alt="" width="28" height="28">ほしぞらさんぽ</a>
   <nav aria-label="サイト内"><a href=".././">プラネタリウム</a><a href="../zukan/">星座図鑑</a><a href="../calendar/" aria-current="page">天文カレンダー</a><a href="../about.html">このアプリについて</a><a href="../en/calendar/" hreflang="en" lang="en">English</a></nav>
 </div></header>
 <main class="wrap">
-<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ 天文カレンダー</div>
+<div class="crumbs no-print"><a href="../">ほしぞらさんぽ</a> ／ 天文カレンダー</div>
 <h1>天文カレンダー 2026–2027<small>流星群・満月・新月・日食・月食・惑星の見ごろ</small></h1>
 <p class="lead">これから見られる主な天文現象を日付順にまとめました。「この日の星空を見る」を押すと、プラネタリウムがその日時・その方角の空（東京）でひらきます。日付と時刻は国立天文台の発表にもとづいています。</p>
 <div class="box next">
@@ -51,7 +51,7 @@
   <div><span class="chip">次の新月</span> <span data-next="new">2026年12月9日（水） 9時52分　新月</span></div>
   <div><span class="chip">次の流星群</span> <span data-next="meteor">2026年11月13日（金）　おうし座北流星群が極大</span></div>
 </div>
-<nav class="toc" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a><a href="../tsuki/">月の出・月の入り</a></nav>
+<nav class="toc no-print" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a><a href="../tsuki/">月の出・月の入り</a></nav>
 <section class="month" data-empty=""><h2>2026年9月</h2><ul class="evlist"><li class="ev ev-moonview" data-date="2026-09-25" data-kind="moonview" data-summary="2026年9月25日（金）　中秋の名月">
   <div class="ev-date">9月25日（金）</div>
   <div class="ev-body"><span class="chip">お月見</span> <b>中秋の名月</b><span class="ev-sub">満月（9月27日）と日付が2日ずれる</span>
@@ -332,7 +332,7 @@
   <div class="ev-body"><span class="chip">新月</span> <b>新月</b><span class="ev-sub">月明かりがなく、星空の観察に向いた時期</span>
     <span class="ev-links"><a href="../?t=2027-12-28T21%3A00%2B09%3A00&amp;loc=tokyo&amp;look=az%3A180">この日の星空を見る →</a><a href="./new-moon.html">くわしく</a></span></div>
 </li></ul></section>
-<section class="box cal-sub" id="calendar-subscribe" aria-labelledby="h-cal-sub">
+<section class="box cal-sub no-print" id="calendar-subscribe" aria-labelledby="h-cal-sub">
 <p><b id="h-cal-sub">カレンダーに登録</b></p>
 <p>新月・上弦・満月・下弦、流星群の極大、日食・月食を、スマホやパソコンのカレンダーで購読できます。国立天文台の発表を見て予定を足すと、登録したカレンダーにも入ります。</p>
 <p><a class="btn" href="webcal://yorozu-craft.com/hoshizora-sanpo/data/tenmon.ics">カレンダーに登録する</a></p>
@@ -351,7 +351,7 @@ document.querySelectorAll('[data-next]').forEach(function(s){var k=s.getAttribut
 })();
 </script>
 </main>
-<footer class="site"><div class="wrap">
+<footer class="site no-print"><div class="wrap">
   <nav><a href="https://yorozu-craft.com/">yorozu-craft トップ</a><a href="../">プラネタリウム</a><a href="../zukan/">星座図鑑</a><a href="../calendar/">天文カレンダー</a><a href="../hayamiban/">星座早見盤</a><a href="../shinwa/">ギリシャ神話</a><a href="https://yorozu-craft.com/about.html">運営者情報</a><a href="https://yorozu-craft.com/privacy-policy.html">プライバシーポリシー</a></nav>
   &copy; 2026 yorozu-craft. All rights reserved.
 </div></footer>
