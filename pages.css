@@ -252,3 +252,15 @@ details.kz-all{margin:18px 0;} details.kz-all summary{cursor:pointer;color:var(-
 
 /* 印刷に要らない欄（サイトの見出し・道すじ・ページの目次・登録の欄・この道具について・下の案内）は no-print で紙に出さない（DESIGN.md の印刷の線） */
 @media print { .no-print { display: none !important; } }
+
+/* 紙に刷る表のページ（body.paper。天文カレンダーの一覧）は、紙のときだけ白い地・#111 の字に。暗い地は刷る人のインクを食う（ROADMAP 7.240 の答え）。
+   線と印は白い地で対比 3.0 以上（#767676 は 4.54、印の色は 4.9〜6.0）。画面の色は変えない */
+@media print {
+  html:has(> body.paper) { background: #fff; }
+  body.paper { --bg: #fff; --bg2: #fff; --ink: #111; --ink-dim: #111; --gold: #111; --line: #111; --edge: #767676; background: #fff; color: #111; }
+  body.paper .chip { color: #111; }
+  body.paper :is(.ev-full, .ev-moonview) .chip { border-color: #8a6a00; }
+  body.paper .ev-meteor .chip { border-color: #00718a; }
+  body.paper .ev-eclipse .chip { border-color: #b34700; }
+  body.paper .ev-planet .chip { border-color: #6a4fc0; }
+}
