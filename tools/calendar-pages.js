@@ -144,7 +144,7 @@ const monthKey = d => d.slice(0, 7);
 /** 「カレンダーに登録」（yorozu-plans ROADMAP 7.14 の 2、K129）。購読用の data/tenmon.ics（tools/build-ics.js）と共通の手順ページ /calendar-help.html */
 const ICS_PATH = 'yorozu-craft.com/hoshizora-sanpo/data/tenmon.ics';
 function subscribeBox() {
-  return `<section class="box cal-sub" id="calendar-subscribe" aria-labelledby="h-cal-sub">
+  return `<section class="box cal-sub no-print" id="calendar-subscribe" aria-labelledby="h-cal-sub">
 <p><b id="h-cal-sub">カレンダーに登録</b></p>
 <p>新月・上弦・満月・下弦、流星群の極大、日食・月食を、スマホやパソコンのカレンダーで購読できます。国立天文台の発表を見て予定を足すと、登録したカレンダーにも入ります。</p>
 <p><a class="btn" href="webcal://${ICS_PATH}">カレンダーに登録する</a></p>
@@ -160,7 +160,7 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   const events = allEvents();
   const files = [];
   // 天文カレンダーは全ページに英語版（en/calendar/、tools/calendar-pages-en.js）がある
-  const add = (file, title, description, body, jsonld) => files.push({ file, html: page({ rel: '../', file, title, description, current: 'calendar/', body: body + PAST_SCRIPT, jsonld, alt: 'en/' + file }) });
+  const add = (file, title, description, body, jsonld, paper) => files.push({ file, html: page({ rel: '../', file, title, description, current: 'calendar/', body: body + PAST_SCRIPT, jsonld, alt: 'en/' + file, paper }) });
   const crumbs = (label) => `<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ <a href="./">天文カレンダー</a> ／ ${esc(label)}</div>`;
   const breadcrumb = (name, file) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ほしぞらさんぽ', item: BASE },
@@ -180,7 +180,7 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
       return `<section class="month" data-empty=""><h2>${+y}年${+m}月</h2><ul class="evlist">${inRange.filter(e => monthKey(e.date) === mk).map(e => eventItem(e, esc)).join('')}</ul></section>`;
     }).join('\n');
     const nf = nextOf('full'), nn = nextOf('new'), nm = nextOf('meteor');
-    const body = `<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ 天文カレンダー</div>
+    const body = `<div class="crumbs no-print"><a href="../">ほしぞらさんぽ</a> ／ 天文カレンダー</div>
 <h1>天文カレンダー ${yFrom}–${yTo}<small>流星群・満月・新月・日食・月食・惑星の見ごろ</small></h1>
 <p class="lead">これから見られる主な天文現象を日付順にまとめました。「この日の星空を見る」を押すと、プラネタリウムがその日時・その方角の空（東京）でひらきます。日付と時刻は国立天文台の発表にもとづいています。</p>
 <div class="box next">
@@ -188,14 +188,14 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   <div><span class="chip">次の新月</span> <span data-next="new">${esc(summaryOf(nn))}</span></div>
   <div><span class="chip">次の流星群</span> <span data-next="meteor">${esc(summaryOf(nm))}</span></div>
 </div>
-<nav class="toc" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a><a href="../tsuki/">月の出・月の入り</a></nav>
+<nav class="toc no-print" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a><a href="../tsuki/">月の出・月の入り</a></nav>
 ${list}
 ${subscribeBox()}
 <p class="lead">${yTo}年12月より先の現象は、国立天文台が暦要項（毎年2月に翌年分を発表）や「ほしぞら情報」で発表したあとに追加します。</p>
 ${sourceList(inRange.flatMap(e => e.src), esc)}`;
     add('calendar/index.html', `天文カレンダー${yFrom}-${yTo}｜流星群・満月・日食月食・惑星の見ごろ｜ほしぞらさんぽ`,
       `${yFrom}〜${yTo}年の主な天文現象を日付順に。流星群の極大、満月・新月、日食・月食、惑星の見ごろを国立天文台の発表にもとづいて掲載。その日時の星空をプラネタリウムで見られます。`, body,
-      { '@context': 'https://schema.org', '@type': 'CollectionPage', name: '天文カレンダー', url: BASE + 'calendar/', inLanguage: 'ja' });
+      { '@context': 'https://schema.org', '@type': 'CollectionPage', name: '天文カレンダー', url: BASE + 'calendar/', inLanguage: 'ja' }, true);
   }
 
   /* ---- 満月・新月 ---- */

@@ -40,7 +40,7 @@ details.month h2{margin-top:6px;}
 @media print{
   @page{size:A4 portrait;margin:10mm;}
   html,body{background:#fff !important;color:#000;}
-  header.site,footer.site,.noprint,form,.form,.result,.month-nav,ins.adsbygoogle,.google-auto-placed,iframe[id^="aswift"],iframe[id^="google_ads"]{display:none !important;}
+  header.site,footer.site,form,.form,.result,.month-nav,ins.adsbygoogle,.google-auto-placed,iframe[id^="aswift"],iframe[id^="google_ads"]{display:none !important;}
   main{padding:0;}
   h1{color:#000;font-size:12pt;margin:0;}
   h2{color:#000;border:0;margin:0 0 4px;font-size:15pt;}
