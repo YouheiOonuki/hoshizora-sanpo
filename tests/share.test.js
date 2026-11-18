@@ -82,6 +82,8 @@ test('画面: 共有のボタンと部品。プラネタリウムに外のリン
   assert.doesNotMatch(s, /\bfetch\(|XMLHttpRequest|sendBeacon|<script|\.src\s*=/);
   assert.equal((s.match(/@keyframes/g) || []).length, 1);
   assert.match(s, /@media \(prefers-reduced-motion:reduce\)\{\.share-card\{animation:none\}\}/);
+  // URL の欄は高さ 44px 以上・下のボタンとの間 8px（Q-435。写しの側で上書きしない）
+  assert.match(s, /\.sc-url\{[^}]*min-height:44px;margin:\.5em 0 8px;/);
   // プラネタリウムでは、演出は説明シートが上がる 1 つだけ（シートは reduced-motion で止まる）
   assert.match(read('style.css'), /#sheet \.share-card\{animation:none;/);
   assert.match(read('style.css'), /@media \(prefers-reduced-motion:reduce\)\{#sheet,#sheet\.open\{transition:none;\}\}/);

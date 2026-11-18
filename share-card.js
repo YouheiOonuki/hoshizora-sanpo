@@ -17,7 +17,7 @@
     '.share-card .sc-result{margin:.15em 0;font-size:1.6em;font-weight:700;line-height:1.3}' +
     '.share-card .sc-sub{margin:.2em 0;font-size:.9em}' +
     '.share-card .sc-when{margin:.2em 0;font-size:.9em;opacity:.85}' +
-    '.share-card .sc-url{display:block;width:100%;box-sizing:border-box;margin:.5em 0;padding:8px;font:inherit;font-size:.8em;' +
+    '.share-card .sc-url{display:block;width:100%;box-sizing:border-box;min-height:44px;margin:.5em 0 8px;padding:8px;font:inherit;font-size:.8em;' +
     'border:1px solid rgba(127,127,127,.45);border-radius:6px;background:transparent;color:inherit}' +
     '.share-card .sc-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}' +
     '.share-card .sc-btns button{min-height:44px}' +
