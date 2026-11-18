@@ -452,7 +452,7 @@ ${sources(rows.map(e => e.src[0]))}`;
 <li>Tap Place and pick a city, use your location, or type a latitude and longitude.</li>
 <li>Drag to look around. Pinch or scroll to zoom.</li>
 <li>Tap a constellation, bright star, planet or the Moon for notes.</li>
-<li>Keyboard: Move the star to the center of the screen and press Enter.</li>
+<li>Keyboard: Use the arrow keys to move a star to the center of the screen, then press Enter.</li>
 <li>Open Time to move by hours, days or months, or to fast-forward.</li>
 <li>Tap Moon phase for the Moon’s phase, age and how much of it is lit.</li>
 </ol>

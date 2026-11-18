@@ -26,5 +26,5 @@ test('Enter・Space は空の絵にフォーカスがある間だけ、まん中
 
 test('使い方（日・英）にキーボードの 1 行', () => {
   assert.ok(read('about.html').includes('<dt>キーボード</dt><dd>見たい星を画面のまん中に合わせて Enter を押します。</dd>'));
-  assert.ok(read('en/guide.html').includes('<li>Keyboard: Move the star to the center of the screen and press Enter.</li>'));
+  assert.ok(read('en/guide.html').includes('<li>Keyboard: Use the arrow keys to move a star to the center of the screen, then press Enter.</li>'));
 });
