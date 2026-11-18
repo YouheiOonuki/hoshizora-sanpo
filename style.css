@@ -99,6 +99,9 @@ html,body{height:100%;margin:0;background:#050814;}
 #sky{position:absolute;inset:0;touch-action:none;cursor:grab;display:block;}
 #sky.drag{cursor:grabbing;}
 #sky:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+/* キーボードで星を選ぶときの的（Q-466。フル版の Q-438 と同じ）: 空の絵にキーボードのフォーカスがある間だけ、画面のまん中に。Enter・Space でこの点を押したことになる */
+.aim{position:absolute;left:50%;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;border:2px solid var(--gold);border-radius:50%;box-sizing:border-box;pointer-events:none;z-index:1;}
+.aim[hidden]{display:none;}
 
 /* ひらがなモードの切りかえ: .ad = おとな用、.kd = こども用 */
 body:not(.kids) .kd,body.kids .ad{display:none !important;}
