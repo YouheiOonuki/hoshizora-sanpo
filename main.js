@@ -596,7 +596,13 @@ function handleTap(x,y){
 
 /* ---------------- 操作 ---------------- */
 const ptrs=new Map(); let pinchD=0, downXY=null, downT=0, moved=false;
+// キーボードで星を選ぶ的（Q-466。フル版の Q-438 と同じ）: 空の絵にキーボードのフォーカスがある間だけ出す。ポインタで触ったら消す
+const aim=$('aim');
+const showAim=on=>{ if(aim) aim.hidden=!on; };
+cv.addEventListener('focus',()=>showAim(cv.matches(':focus-visible')));
+cv.addEventListener('blur',()=>showAim(false));
 cv.addEventListener('pointerdown',e=>{
+  showAim(false);
   try{ cv.setPointerCapture(e.pointerId); }catch(err){}
   anim=null;
   ptrs.set(e.pointerId,[e.clientX,e.clientY]);
@@ -631,6 +637,9 @@ cv.addEventListener('wheel',e=>{ e.preventDefault(); fov=clamp(fov*Math.exp(e.de
 addEventListener('keydown',e=>{
   if(e.key==='Escape'){ closeSheet(); closePanels(); $('help').classList.remove('open'); return; }
   if(e.target!==cv && e.target!==document.body) return;
+  if(e.target===cv) showAim(true);
+  // Enter・Space: 画面のまん中を押したのと同じ（星を決める計算は handleTap の 1 つだけ。クイズの答えも同じ道）
+  if(e.target===cv && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); if(!e.repeat){ const b=cv.getBoundingClientRect(); handleTap(b.left+b.width/2,b.top+b.height/2); } return; }
   const st=4*DEG*fov/80;
   if(e.key==='ArrowLeft') az0-=st; else if(e.key==='ArrowRight') az0+=st;
   else if(e.key==='ArrowUp') alt0=clamp(alt0+st,-35*DEG,89.6*DEG);
