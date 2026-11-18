@@ -452,10 +452,12 @@ ${sources(rows.map(e => e.src[0]))}`;
 <li>Tap Place and pick a city, use your location, or type a latitude and longitude.</li>
 <li>Drag to look around. Pinch or scroll to zoom.</li>
 <li>Tap a constellation, bright star, planet or the Moon for notes.</li>
+</ol>
+<ul>
 <li>Keyboard: Use the arrow keys to move a star to the center of the screen, then press Enter.</li>
 <li>Open Time to move by hours, days or months, or to fast-forward.</li>
 <li>Tap Moon phase for the Moon’s phase, age and how much of it is lit.</li>
-</ol>
+</ul>
 <p>For a paper version to take outside, <a href="planisphere/">print a planisphere</a> for your latitude.</p>
 <h2>Works for any place on Earth</h2>
 <p>Positions are calculated from your latitude, longitude and time, so the sky is right for any place. City times use that city’s time zone. For your location or typed coordinates, times use your device’s time zone.</p>
