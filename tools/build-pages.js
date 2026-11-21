@@ -40,14 +40,17 @@ const hreflang = (jaFile, enFile) => `<link rel="alternate" hreflang="ja" href="
 <link rel="alternate" hreflang="en" href="${BASE + enFile.replace(/index\.html$/, '')}">
 <link rel="alternate" hreflang="x-default" href="${BASE + jaFile.replace(/index\.html$/, '')}">`;
 
+/** 生成物の印（yorozu-plans D670）。html は doctype が 1 行目なので 2 行目に置く。src は、そのページを作る道具（repo の最上位からの道）。作る道具が出す（出来たページに手で足さない） */
+const mark = src => `<!-- 生成物。正本は hoshizora-sanpo の ${src}（node tools/build-pages.js で作る。ここは手で直さない） -->\n`;
+
 /* paper: 紙に刷る表のページ（天文カレンダーの一覧）。サイトの見出しと下の案内に no-print を付け、紙に出さない。body の paper で紙だけ白い地に（pages.css） */
-function page({ rel, file, title, description, current, body, jsonld, alt, paper }) {
+function page({ rel, file, title, description, current, body, jsonld, alt, paper, src }) {
   const np = paper ? ' no-print' : '';
   const url = BASE + file.replace(/index\.html$/, '');
   const nav = [['', 'プラネタリウム'], ['zukan/', '星座図鑑'], ['calendar/', '天文カレンダー'], ['about.html', 'このアプリについて']]
     .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
   return `<!DOCTYPE html>
-<html lang="ja" data-skin="base">
+${src ? mark(src) : ''}<html lang="ja" data-skin="base">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -439,7 +442,7 @@ fs.mkdirSync(path.join(OUT, 'zukan'), { recursive: true });
 fs.mkdirSync(path.join(OUT, 'calendar'), { recursive: true });
 fs.mkdirSync(path.join(OUT, 'en/calendar'), { recursive: true });
 const out = (file, html) => fs.writeFileSync(path.join(OUT, file), html);
-const en = buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON });
+const en = buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON, mark });
 en.files.forEach(f => out(f.file, f.html));
 out('zukan/index.html', zukanIndex());
 ordered.forEach((c, i) => out(`zukan/${c.id}.html`, conPage(c, i)));

@@ -3,7 +3,8 @@
    データと出典は tools/shinwa-data.js。系図の動き（親子をたどる）は shinwa/keizu.js */
 const D = require('./shinwa-data.js');
 
-module.exports = function buildShinwa({ page, esc, CONS }) {
+module.exports = function buildShinwa({ page: frame, esc, CONS }) {
+  const page = o => frame({ ...o, src: 'tools/shinwa-pages.js' });   // 生成物の印（D670）に、このファイルを正本として出す
   const files = [];
   const person = Object.fromEntries(D.PEOPLE.map(([id, ja, note]) => [id, { id, ja, note }]));
   const latin = Object.fromEntries(D.NAMES.map(n => [n[0], n[1]]));
