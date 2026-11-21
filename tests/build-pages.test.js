@@ -32,3 +32,22 @@ test('node tools/build-pages.js の出力がリポジトリのページと同じ
     fs.rmSync(tmp, { recursive: true, force: true });
   }
 });
+
+/* 生成物の印（yorozu-plans D670）。作る道具が html の 2 行目（doctype の次）に出す。
+   ページの一覧は道具そのものから取る（フォルダの名前で当て推量しない） */
+test('天文カレンダー・英語版・ギリシャ神話の道具が作るページの全部に、2 行目の生成物の印が在る', () => {
+  const stub = () => '';
+  const lists = {
+    'tools/calendar-pages.js': require('../tools/calendar-pages.js')({ page: stub, esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED }).files,
+    'tools/calendar-pages-en.js': require('../tools/calendar-pages-en.js')({ esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED, ADSENSE: '', BEACON: '', mark: stub }).files,
+    'tools/shinwa-pages.js': require('../tools/shinwa-pages.js')({ page: stub, esc: String, CONS: require('../data.js').CONS }).files,
+  };
+  for (const [src, files] of Object.entries(lists)) {
+    assert.ok(files.length > 0, `${src} が作るページが 0`);
+    for (const { file } of files) {
+      const lines = fs.readFileSync(path.join(ROOT, file), 'utf8').split(/\r?\n/);
+      assert.strictEqual(lines[0], '<!DOCTYPE html>', `${file} の 1 行目`);
+      assert.strictEqual(lines[1], `<!-- 生成物。正本は hoshizora-sanpo の ${src}（node tools/build-pages.js で作る。ここは手で直さない） -->`, `${file} の 2 行目`);
+    }
+  }
+});

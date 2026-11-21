@@ -160,7 +160,7 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   const events = allEvents();
   const files = [];
   // 天文カレンダーは全ページに英語版（en/calendar/、tools/calendar-pages-en.js）がある
-  const add = (file, title, description, body, jsonld, paper) => files.push({ file, html: page({ rel: '../', file, title, description, current: 'calendar/', body: body + PAST_SCRIPT, jsonld, alt: 'en/' + file, paper }) });
+  const add = (file, title, description, body, jsonld, paper) => files.push({ file, html: page({ rel: '../', file, title, description, current: 'calendar/', body: body + PAST_SCRIPT, jsonld, alt: 'en/' + file, paper, src: 'tools/calendar-pages.js' }) });
   const crumbs = (label) => `<div class="crumbs"><a href="../">ほしぞらさんぽ</a> ／ <a href="./">天文カレンダー</a> ／ ${esc(label)}</div>`;
   const breadcrumb = (name, file) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'ほしぞらさんぽ', item: BASE },

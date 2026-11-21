@@ -154,7 +154,7 @@ document.querySelectorAll('time.yt').forEach(function(e){e.textContent=f.format(
 </script>`;
 const JST_NOTE = 'Dates marked JST are Japan dates (UTC+9); in the Americas and Europe the same event may fall on the previous day.';
 
-module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
+module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON, mark }) {
   const events = eventsEn();
   const files = [];
   const yFrom = O.COVERAGE.from.slice(0, 4), yTo = O.COVERAGE.to.slice(0, 4);
@@ -171,7 +171,7 @@ module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON }) {
     const nav = [['', 'Planetarium'], ['calendar/', 'Sky calendar'], ['planisphere/', 'Planisphere'], ['guide.html', 'How it works']]
       .map(([href, label]) => `<a href="${rel}${href || './'}"${current === href ? ' aria-current="page"' : ''}>${label}</a>`).join('');
     return `<!DOCTYPE html>
-<html lang="en" data-skin="base">
+${mark('tools/calendar-pages-en.js')}<html lang="en" data-skin="base">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

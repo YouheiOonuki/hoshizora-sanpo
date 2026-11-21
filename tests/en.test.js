@@ -33,7 +33,7 @@ test('カレンダーの注記に英語がある', () => {
 
 test('英語のカレンダーは日本語版と同じ瞬間を載せる（書き写しをしていない）', () => {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const { files } = buildEn({ esc, BASE: 'https://yorozu-craft.com/hoshizora-sanpo/', UPDATED: O.COVERAGE.from, ADSENSE: '', BEACON: '' });
+  const { files } = buildEn({ esc, BASE: 'https://yorozu-craft.com/hoshizora-sanpo/', UPDATED: O.COVERAGE.from, ADSENSE: '', BEACON: '', mark: src => `<!-- 生成物。正本は ${src} -->\n` });
   const page = name => files.find(f => f.file === `en/calendar/${name}`).html;
   for (const r of O.MOON_PHASES) {
     const iso = new Date(Date.parse(r.at)).toISOString();
@@ -42,8 +42,9 @@ test('英語のカレンダーは日本語版と同じ瞬間を載せる（書�
   for (const m of O.METEOR_PEAKS.filter(m => m.peak.length > 10)) {
     assert.ok(page('meteor-showers.html').includes(`datetime="${new Date(Date.parse(m.peak)).toISOString()}"`), m.peak);
   }
+  // 画面に出る字に日本語が無いこと。2 行目の生成物の印（D670、html のコメント）は画面に出ないので見ない
   for (const f of files) {
     assert.match(f.html, /<html lang="en"[ >]/, f.file);
-    assert.ok(!/[ぁ-んァ-ン一-龯]/.test(f.html.replace(/<a [^>]*lang="ja"[^>]*>日本語<\/a>/g, '').replace(/<link[^>]*>/g, '')), `${f.file} に日本語が残っている`);
+    assert.ok(!/[ぁ-んァ-ン一-龯]/.test(f.html.replace(/<!--[\s\S]*?-->/g, '').replace(/<a [^>]*lang="ja"[^>]*>日本語<\/a>/g, '').replace(/<link[^>]*>/g, '')), `${f.file} に日本語が残っている`);
   }
 });
