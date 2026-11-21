@@ -11,9 +11,11 @@ legend{font-size:13px;color:var(--ink-dim);padding:0;margin-bottom:6px;}
 .tiles small{font-size:11.5px;color:var(--ink-dim);font-weight:400;margin-top:2px;}
 .tiles input:checked+span{border-color:var(--gold);background:rgba(240,200,110,.14);color:var(--gold);}
 .tiles input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px;}
-.seg{display:flex;flex-wrap:wrap;gap:6px 18px;}
+.seg{display:flex;flex-wrap:wrap;gap:8px 18px;}
 .seg legend{width:100%;}
 .seg label,.check{display:inline-flex;align-items:center;gap:6px;min-height:44px;}
+.seg label{min-width:44px;}
+.seg+.check{margin-top:8px;}
 .custom{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;}
 .custom label{display:inline-flex;align-items:center;gap:8px;}
 .custom input{width:8.5em;min-height:44px;padding:6px 10px;border-radius:10px;border:1px solid var(--edge);background:#0a1122;color:var(--ink);font:inherit;}
@@ -35,10 +37,13 @@ details.opt[open] summary{margin-bottom:10px;}
 .sheets-pv{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
 .sheets-pv svg{display:block;width:100%;height:auto;background:#fff;border-radius:6px;}
 #svg-links a{margin-right:10px;}
+/* 押す所 44 px（Q-809）: リンクだけの行と、画面の下の使い方へのリンク */
+.hint>a[href="../../print-help.html"],#pv-link,main.wrap>p>a[href="./guide.html"]{display:inline-flex;align-items:center;min-height:44px;}
+.custom+.hint,#about-tool+p{margin-top:8px;}
 .fixbar{position:fixed;top:0;left:0;right:0;z-index:20;height:52px;display:flex;align-items:center;justify-content:center;gap:12px;
   background:rgba(7,11,24,.94);border-bottom:1px solid var(--edge);font-size:14px;}
 .fixbar .btn{min-height:var(--tap);padding:6px 18px;}
-.btn-reset{min-height:40px;padding:6px 18px;margin-top:6px;font-size:13px;}
+.btn-reset{min-height:44px;padding:6px 18px;margin-top:6px;font-size:13px;}
 .fixbar[hidden]{display:none;}
 #print-sheets{display:none;}
 @media (max-width:520px){

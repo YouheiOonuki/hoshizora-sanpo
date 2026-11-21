@@ -28,3 +28,23 @@ test('下の案内のリンクは高さ・幅 44 px 以上、縦の間 8 px 以�
 test('早見盤の折りたたみの見出しは高さ 44 px 以上', () => {
   assert.ok(px(rule('hayamiban/hayamiban.css', 'details.opt summary'), 'min-height') >= 44);
 });
+
+// Q-809: Q-760 の後に画面に残った押す所（リンクだけの行 19〜24 px、en の A4 の丸 38 px 幅、消すボタン 40 px、間 0〜6 px）
+test('早見盤（日本語・英語）の画面の押す所は 44 px、間 8 px 以上', () => {
+  const f = 'hayamiban/hayamiban.css';
+  assert.ok(px(rule(f, '.hint>a[href="../../print-help.html"],#pv-link,main.wrap>p>a[href="./guide.html"]'), 'min-height') >= 44);
+  assert.ok(px(rule(f, '.btn-reset'), 'min-height') >= 44);
+  assert.ok(px(rule(f, '.seg label'), 'min-width') >= 44);
+  assert.ok(px(rule(f, '.seg+.check'), 'margin-top') >= 8);
+  assert.ok(px(rule(f, '.custom+.hint,#about-tool+p'), 'margin-top') >= 8);
+  const gap = rule(f, '.seg').match(/gap:\s*(\d+)px/);
+  assert.ok(gap && Number(gap[1]) >= 8, '丸どうしの縦の間');
+});
+
+test('月の出入りの画面の押す所は 44 px、間 8 px 以上', () => {
+  const f = 'tsuki/tsuki.css';
+  assert.ok(px(rule(f, '.hint>a[href="./guide.html"],#sky-link,main.wrap>p>a[href="./guide.html"]'), 'min-height') >= 44);
+  assert.ok(px(rule(f, '#sky-link-p,#about-tool+p'), 'margin-top') >= 8);
+  const m = rule(f, 'details.month').match(/margin:\s*\d+px\s+0\s+(\d+)px/);
+  assert.ok(m && Number(m[1]) >= 8, '1 か月の表と道具の説明の間');
+});
