@@ -1,4 +1,5 @@
-// 共有される結果（K124）の OG 画像（1200×630 の PNG）を作り直す。どのリポジトリでも同じもの（直したら全部に写す）
+// 共有される結果（K124）の OG 画像（1200×630 の PNG）を作り直す。
+// 正本は youheioonuki.github.io の tools/common/make-share-og.mjs。各リポジトリの tools/make-share-og.mjs は tools/sync-common.mjs が配った写しで、手で直さない（yorozu-plans D667）
 //   NODE_PATH=$(npm root -g) node tools/make-share-og.mjs [種類の名前で絞る…]
 // tools/build-share.mjs の pages() の og（HTML の文字列）か ogShot（ページを開いて撮る関数。星空など）を Playwright で撮る。
 // 画像はリポジトリに入れる（公開される静的なファイル）。着地ページの HTML は build-share.mjs が書く
