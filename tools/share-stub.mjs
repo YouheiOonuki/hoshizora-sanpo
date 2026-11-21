@@ -1,4 +1,5 @@
-// 共有される結果（yorozu-plans K124・企画書 60）の「着地ページ」と OG 画像の下書き。どのリポジトリでも同じもの（直したら全部に写す）
+// 共有される結果（yorozu-plans K124・企画書 60）の「着地ページ」と OG 画像の下書き。
+// 正本は youheioonuki.github.io の tools/common/share-stub.mjs。各リポジトリの tools/share-stub.mjs は tools/sync-common.mjs が配った写しで、手で直さない（yorozu-plans D667）
 //
 // 着地ページ（<道具>/s/<種類>.html）:
 //   - X・LINE などが読む og:image を「結果の種類」ごとに変えるためだけのページ（静的なサイトなので、# の中身ごとに OG は変えられない）
