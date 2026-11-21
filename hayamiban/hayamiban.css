@@ -29,7 +29,7 @@ legend{font-size:13px;color:var(--ink-dim);padding:0;margin-bottom:6px;}
 .preview{margin:14px 0;background:#fff;border-radius:14px;overflow:hidden;color:#1b2233;}
 .preview #pv-sky svg{display:block;width:100%;height:auto;max-width:560px;margin:0 auto;}
 .preview figcaption{font-size:13px;padding:6px 14px 10px;text-align:center;line-height:1.6;}
-details.opt summary{cursor:pointer;min-height:32px;}
+details.opt summary{cursor:pointer;min-height:44px;padding-block:7px;}
 details.opt summary span{color:var(--ink-dim);font-size:13px;}
 details.opt[open] summary{margin-bottom:10px;}
 .sheets-pv{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
