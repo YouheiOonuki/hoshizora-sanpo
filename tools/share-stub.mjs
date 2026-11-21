@@ -5,7 +5,7 @@
 //   - X・LINE などが読む og:image を「結果の種類」ごとに変えるためだけのページ（静的なサイトなので、# の中身ごとに OG は変えられない）
 //   - noindex・sitemap に載せない。AdSense は meta だけ、Cloudflare のビーコン 1 個（印刷物の着地ページ /print/ と同じ扱い）
 //   - 開くとすぐ、同じ「#」のまま道具の画面へ移る（location.replace）。JS が無いときは道具へのリンク
-// OG 画像（<道具>/s/<種類>.png、1200×630）: ogHtml() の HTML を Playwright で撮る（tools/make-share-og.cjs）
+// OG 画像（<道具>/s/<種類>.png、1200×630）: ogHtml() の HTML を Playwright で撮る（tools/make-share-og.mjs）
 // 依存パッケージなし（Node 20 以上）
 import fs from 'node:fs';
 import path from 'node:path';
