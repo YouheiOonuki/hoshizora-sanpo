@@ -1,5 +1,5 @@
 /*
- * 結果カード（yorozu-plans ROADMAP K124・企画書 60）。どのツールでも同じもの（各リポジトリの直下に写す。直したら全部に写す）
+ * 結果カード（yorozu-plans ROADMAP K124・企画書 60）。どのツールでも同じもの（正本は youheioonuki.github.io の tools/common/share-card.js。各リポジトリの直下の share-card.js は tools/sync-common.mjs が正本と比べて書いた写しで、手で直さない）
  * - 1 枚に「結果・日時・URL」。共有は Web Share API（navigator.share。端末の共有の画面を開くだけ）か、リンクのコピーだけ
  * - SNS の SDK・外部のスクリプト・外部への送信は無い。URL の中身は「#」以降なのでサーバーにも届かない（README「ツールを追加するとき」11）
  * - 演出は 1 つだけ: カードが 8px 下から浮き上がって現れる（0.4 秒）。prefers-reduced-motion: reduce では動かさない
