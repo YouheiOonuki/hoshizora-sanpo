@@ -17,6 +17,9 @@ const OG_YEAR = 2027;
 /** その月の 15 日 21 時（日本時間）の UNIX 秒 */
 const ogTime = (mo) => Date.UTC(OG_YEAR, mo - 1, 15, 21 - 9) / 1000;
 const TOKYO = '35.681,139.767';
+/** 着地ページの 2 行目（doctype の次）に生成物の印（yorozu-plans D670。tools/build-pages.js の mark と同じ形）。stubHtml は共有の写しなので、ここで足す */
+const MARK = '<!-- 生成物。正本は hoshizora-sanpo の tools/build-share.mjs（node tools/build-share.mjs で作る。ここは手で直さない） -->\n';
+const marked = (html) => html.replace(/^<!DOCTYPE html>\n/, (m) => m + MARK);
 
 const overlay = (title, sub) => `
   const d=document.createElement('div');
@@ -30,10 +33,10 @@ export function pages() {
     const mo = Number(k);
     out.push({
       file: `s/${k}.html`, image: `s/${k}.jpg`,
-      stub: stubHtml({
+      stub: marked(stubHtml({
         title: `${mo}月の夜空｜ほしぞらさんぽ`, desc: `共有された${mo}月の星空。開くと、送った人と同じ場所・同じ時刻の空がプラネタリウムで見られます。`,
         url: `${SITE}s/${k}.html`, image: `${SITE}s/${k}.jpg`, imageType: 'image/jpeg', back: '../', canonical: SITE, open: 'ほしぞらさんぽを開く',
-      }),
+      })),
       ogShot: async (page, base) => {
         await page.goto(`${base}#${TOKYO},${ogTime(mo)}`);
         await page.waitForTimeout(1500);
@@ -44,14 +47,17 @@ export function pages() {
     });
     out.push({
       file: `hayamiban/s/${k}.html`, image: `hayamiban/s/${k}.jpg`,
-      stub: stubHtml({
+      stub: marked(stubHtml({
         title: `${mo}月に合わせた星座早見盤｜ほしぞらさんぽ`, desc: `共有された星座早見盤（${mo}月）。開くと同じ場所・日時の盤が出て、A4 に印刷して作れます。`,
         url: `${SITE}hayamiban/s/${k}.html`, image: `${SITE}hayamiban/s/${k}.jpg`, imageType: 'image/jpeg', back: '../', canonical: `${SITE}hayamiban/`, open: '星座早見盤メーカーを開く',
-      }),
+      })),
       ogShot: async (page, base) => {
         await page.goto(`${base}hayamiban/#${TOKYO},${ogTime(mo)}`);
         await page.waitForSelector('#pv-sky svg', { state: 'attached' });
         const svg = await page.$eval('#pv-sky', (e) => e.innerHTML);
+        // 早見盤の画面から離れてから書き込む（同じ窓に setContent すると、app.js の IntersectionObserver が新しい文書で走り、
+        // 無い #fixbar に hidden を入れて「Cannot set properties of null (setting 'hidden')」を出していた。Q-922）
+        await page.goto('about:blank');
         await page.setContent(`<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#070b18;color:#f3ead2;font-family:"Hiragino Sans","Noto Sans JP","IPAexGothic",sans-serif}
 .l{position:absolute;left:64px;top:0;bottom:0;width:560px;display:flex;flex-direction:column;justify-content:center;gap:16px}.k{font-size:32px;opacity:.85}.b{font-size:76px;font-weight:700;line-height:1.15;color:#f0c86e}.u{font-size:21px;opacity:.75;white-space:nowrap}
 .r{position:absolute;right:48px;top:35px;width:560px;height:560px}.r svg{width:560px;height:560px}</style></head><body>
