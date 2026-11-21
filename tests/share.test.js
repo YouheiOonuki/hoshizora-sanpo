@@ -62,6 +62,8 @@ test('着地ページと OG 画像: 月ごとに 12（プラネタリウム s/�
       assert.ok(s.includes('<meta property="og:image:type" content="image/jpeg">'));
       assert.ok(s.includes('<script>location.replace("../" + location.hash);</script>'));
       assert.doesNotMatch(s, /adsbygoogle|pagead2/);
+      // 生成物の印は 2 行目（yorozu-plans D670。build-share.mjs が出す）
+      assert.equal(s.split('\n')[1], '<!-- 生成物。正本は hoshizora-sanpo の tools/build-share.mjs（node tools/build-share.mjs で作る。ここは手で直さない） -->', dir + '/' + k);
     }
   }
   assert.ok(!read('sitemap.xml').includes('/s/'));
