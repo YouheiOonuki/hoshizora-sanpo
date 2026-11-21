@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 生成物。正本は hoshizora-sanpo の tools/build-pages.js（node tools/build-pages.js で作る。ここは手で直さない） -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://yorozu-craft.com/hoshizora-sanpo/</loc>

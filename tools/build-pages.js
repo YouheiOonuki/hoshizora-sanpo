@@ -40,7 +40,8 @@ const hreflang = (jaFile, enFile) => `<link rel="alternate" hreflang="ja" href="
 <link rel="alternate" hreflang="en" href="${BASE + enFile.replace(/index\.html$/, '')}">
 <link rel="alternate" hreflang="x-default" href="${BASE + jaFile.replace(/index\.html$/, '')}">`;
 
-/** 生成物の印（yorozu-plans D670）。html は doctype が 1 行目なので 2 行目に置く。src は、そのページを作る道具（repo の最上位からの道）。作る道具が出す（出来たページに手で足さない） */
+/** 生成物の印（yorozu-plans D670）。html は doctype が 1 行目、sitemap.xml は XML の宣言が 1 行目なので、どちらも 2 行目に置く。src は、そのページを作る道具（repo の最上位からの道）。作る道具が出す（出来たページに手で足さない） */
+const SELF = 'tools/build-pages.js';   // このファイル自身が作るページ（星座図鑑・このアプリについて・プライバシーポリシー・sitemap.xml）の正本
 const mark = src => `<!-- 生成物。正本は hoshizora-sanpo の ${src}（node tools/build-pages.js で作る。ここは手で直さない） -->\n`;
 
 /* paper: 紙に刷る表のページ（天文カレンダーの一覧）。サイトの見出しと下の案内に no-print を付け、紙に出さない。body の paper で紙だけ白い地に（pages.css） */
@@ -342,7 +343,7 @@ ${nb ? `<h2>近くの星座</h2><p>${esc(c.jp)}が最も高いころの向き: $
       { '@type': 'ListItem', position: 2, name: '星座図鑑', item: BASE + 'zukan/' },
       { '@type': 'ListItem', position: 3, name: c.jp, item: `${BASE}zukan/${c.id}.html` }],
   }];
-  return page({ rel: '../', file: `zukan/${c.id}.html`, title, description, current: 'zukan/', body, jsonld });
+  return page({ rel: '../', file: `zukan/${c.id}.html`, title, description, current: 'zukan/', body, jsonld, src: SELF });
 }
 
 function zukanIndex() {
@@ -366,7 +367,7 @@ ${sections}
 </ul>`;
   const description = `黄道12星座やオリオン座・北斗七星・南十字星など${CONS.length}星座の見つけ方と神話を、星図・見ごろ・主な星つきで紹介。子ども向けのひらがな解説も。`;
   return page({ rel: '../', file: 'zukan/index.html', title: '星座図鑑｜季節の星座の見つけ方と神話｜ほしぞらさんぽ', description, current: 'zukan/', body,
-    jsonld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: '星座図鑑', description, url: BASE + 'zukan/', inLanguage: 'ja' } });
+    jsonld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: '星座図鑑', description, url: BASE + 'zukan/', inLanguage: 'ja' }, src: SELF });
 }
 
 /* ---------------- このアプリについて ---------------- */
@@ -412,14 +413,14 @@ function about() {
 <p><a href="/post/?from=/hoshizora-sanpo/about.html">ご要望・不具合の報告</a>：いただいた内容をもとに直します。お返事はしていません。</p>
 <p>運営者情報・免責事項は <a href="https://yorozu-craft.com/about.html">yorozu-craft 共通の運営者情報</a>、位置情報などデータの取り扱いは <a href="https://yorozu-craft.com/privacy-policy.html">yorozu-craft 共通のプライバシーポリシー</a> をご覧ください。</p>`;
   return page({ rel: './', file: 'about.html', title: 'このアプリについて｜ほしぞらさんぽ',
-    description: '無料のWebプラネタリウム「ほしぞらさんぽ」の使い方。ドラッグとズームで見まわし、星座・月・惑星をタップして説明を読み、時間を進めて星の動きを見る。実在の星 約3,300個の位置を歳差まで計算するしくみと精度、データの出典もまとめています。', current: 'about.html', body, alt: 'en/guide.html' });
+    description: '無料のWebプラネタリウム「ほしぞらさんぽ」の使い方。ドラッグとズームで見まわし、星座・月・惑星をタップして説明を読み、時間を進めて星の動きを見る。実在の星 約3,300個の位置を歳差まで計算するしくみと精度、データの出典もまとめています。', current: 'about.html', body, alt: 'en/guide.html', src: SELF });
 }
 
 /* ---------------- プライバシーポリシー ---------------- */
 function privacy() {
   // プライバシーポリシーは yorozu-craft 全体で共通のページに移した。古い URL で来た人をそちらへ案内する
   return `<!DOCTYPE html>
-<html lang="ja">
+${mark(SELF)}<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -464,7 +465,7 @@ const urls = [['', '1.0', 'weekly'], ['zukan/', '0.8', 'monthly'], ...ordered.ma
   // 英語版（本体の en/index.html は手で書いたもの。ほかは tools/calendar-pages-en.js で生成）
   ['en/', '0.9', 'weekly'], ['en/planisphere/', '0.8', 'monthly'], ['en/planisphere/guide.html', '0.5', 'yearly'], ...en.files.map(f => [f.file.replace(/index\.html$/, ''), f.file.endsWith('index.html') ? '0.7' : f.file.endsWith('guide.html') ? '0.4' : '0.6', f.file.endsWith('guide.html') ? 'yearly' : 'weekly'])];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${mark(SELF)}<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, p, f]) => `  <url>
     <loc>${BASE}${u}</loc>
     <changefreq>${f}</changefreq>

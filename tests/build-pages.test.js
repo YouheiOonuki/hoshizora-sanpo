@@ -35,19 +35,43 @@ test('node tools/build-pages.js の出力がリポジトリのページと同じ
 
 /* 生成物の印（yorozu-plans D670）。作る道具が html の 2 行目（doctype の次）に出す。
    ページの一覧は道具そのものから取る（フォルダの名前で当て推量しない） */
-test('天文カレンダー・英語版・ギリシャ神話の道具が作るページの全部に、2 行目の生成物の印が在る', () => {
+const MARK = src => `<!-- 生成物。正本は hoshizora-sanpo の ${src}（node tools/build-pages.js で作る。ここは手で直さない） -->`;
+const subToolPages = () => {
   const stub = () => '';
-  const lists = {
+  return {
     'tools/calendar-pages.js': require('../tools/calendar-pages.js')({ page: stub, esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED }).files,
     'tools/calendar-pages-en.js': require('../tools/calendar-pages-en.js')({ esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED, ADSENSE: '', BEACON: '', mark: stub }).files,
     'tools/shinwa-pages.js': require('../tools/shinwa-pages.js')({ page: stub, esc: String, CONS: require('../data.js').CONS }).files,
   };
-  for (const [src, files] of Object.entries(lists)) {
+};
+
+test('天文カレンダー・英語版・ギリシャ神話の道具が作るページの全部に、2 行目の生成物の印が在る', () => {
+  for (const [src, files] of Object.entries(subToolPages())) {
     assert.ok(files.length > 0, `${src} が作るページが 0`);
     for (const { file } of files) {
       const lines = fs.readFileSync(path.join(ROOT, file), 'utf8').split(/\r?\n/);
       assert.strictEqual(lines[0], '<!DOCTYPE html>', `${file} の 1 行目`);
-      assert.strictEqual(lines[1], `<!-- 生成物。正本は hoshizora-sanpo の ${src}（node tools/build-pages.js で作る。ここは手で直さない） -->`, `${file} の 2 行目`);
+      assert.strictEqual(lines[1], MARK(src), `${file} の 2 行目`);
     }
+  }
+});
+
+/* build-pages.js 自身が作るファイル（星座図鑑・このアプリについて・プライバシーポリシー・sitemap.xml）にも同じ印（D670、yorozu-plans Q-894）。
+   一覧は、道具が実際に書き出したファイルから、上の 3 つの道具の分を引いて取る（名前で当て推量しない）。
+   sitemap.xml は XML の宣言が 1 行目なので、印はその次の 2 行目 */
+test('build-pages.js が作るファイルの全部に、2 行目の生成物の印が在る', () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hoshizora-mark-'));
+  try {
+    execFileSync(process.execPath, [path.join(ROOT, 'tools/build-pages.js'), '--out', tmp], { stdio: 'pipe' });
+    const sub = new Set(Object.values(subToolPages()).flat().map(f => f.file));
+    const own = walk(tmp).map(f => path.relative(tmp, f).split(path.sep).join('/')).filter(f => !sub.has(f));
+    assert.ok(own.length >= 36, `build-pages.js 自身が作るファイルが ${own.length} 個しかない`);
+    for (const file of own) {
+      const lines = fs.readFileSync(path.join(ROOT, file), 'utf8').split(/\r?\n/);
+      assert.strictEqual(lines[0], file.endsWith('.xml') ? '<?xml version="1.0" encoding="UTF-8"?>' : '<!DOCTYPE html>', `${file} の 1 行目`);
+      assert.strictEqual(lines[1], MARK('tools/build-pages.js'), `${file} の 2 行目`);
+    }
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
   }
 });
