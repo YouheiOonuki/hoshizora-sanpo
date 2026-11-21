@@ -195,7 +195,7 @@ function outputs() {
   return { [FILE]: stamp(buildIcs, readOr(FILE)), [JSON_FILE]: stamp(buildJson, readOr(JSON_FILE)) };
 }
 
-module.exports = { buildIcs, buildJson, events, calDesc, fold, icsText, generatedOf, stamp, outputs, today, ICS_URL, JSON_URL, FILE, JSON_FILE };
+module.exports = { buildIcs, buildJson, events, generatedOf, stamp, outputs, today, FILE, JSON_FILE };
 
 if (require.main === module) {
   let bad = 0;

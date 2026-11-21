@@ -165,4 +165,4 @@ function twilight(dayMsJstMidnight, evening, loc = TOKYO) {
   return bisect(f, a, b, 60000);
 }
 
-module.exports = { phaseTime, moonPhases, quarterTime, moonQuarters, oppositions, elongations, twilight, sunAlt, TOKYO, HOUR, DAY };
+module.exports = { moonPhases, moonQuarters, oppositions, elongations, twilight, sunAlt, TOKYO, HOUR, DAY };

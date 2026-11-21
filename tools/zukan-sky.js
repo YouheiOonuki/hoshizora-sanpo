@@ -216,4 +216,4 @@ function bright(c) {
   };
 }
 
-module.exports = { ISHIGAKI, neighborDir, season, guide, bright, pointerToPolaris, targetOf, center, centerEq, dir16, transitDay, monthlyAlt, riseSet, TOKYO, SYDNEY, REF_YEAR, HIGH_MARGIN, MIN_ALT, ANCHOR_MAG, ANCHOR_MAG2, SEP_MIN, SEP_MAX };
+module.exports = { ISHIGAKI, neighborDir, season, guide, bright, pointerToPolaris, center, centerEq, dir16, transitDay, TOKYO, REF_YEAR, HIGH_MARGIN, MIN_ALT };

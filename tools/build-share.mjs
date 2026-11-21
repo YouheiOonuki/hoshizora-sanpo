@@ -15,7 +15,7 @@ const SkyShare = createRequire(import.meta.url)(path.join(ROOT, 'sky-share.js'))
 const SITE = 'https://yorozu-craft.com/hoshizora-sanpo/';
 const OG_YEAR = 2027;
 /** その月の 15 日 21 時（日本時間）の UNIX 秒 */
-export const ogTime = (mo) => Date.UTC(OG_YEAR, mo - 1, 15, 21 - 9) / 1000;
+const ogTime = (mo) => Date.UTC(OG_YEAR, mo - 1, 15, 21 - 9) / 1000;
 const TOKYO = '35.681,139.767';
 
 const overlay = (title, sub) => `

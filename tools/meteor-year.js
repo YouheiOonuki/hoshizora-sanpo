@@ -66,4 +66,4 @@ function yearCondition(rec, radiant) {
   };
 }
 
-module.exports = { yearCondition, radiantAltAz, jst, DARK_SUN, TOKYO };
+module.exports = { yearCondition, radiantAltAz, jst, TOKYO };
