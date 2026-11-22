@@ -150,7 +150,8 @@ dl.info{display:grid;grid-template-columns:8em 1fr;gap:6px 14px;margin:10px 0;}
 dl.info dt{color:var(--ink-dim);}
 dl.info dd{margin:0;}
 
-footer.site{border-top:1px solid var(--edge);padding:22px 0 30px;font-size:12.5px;color:var(--ink-dim);}
+footer.site{border-top:1px solid var(--edge);padding:22px 0 30px;color:var(--ink-dim);}
+:where(html[data-skin="base"]) footer.site{font-size:12.5px;}   /* 脚の字: 皮のページは皮の 14px（D713）。土台のページだけ小さく */
 footer.site nav{display:flex;gap:8px 16px;flex-wrap:wrap;margin-bottom:8px;}
 footer.site nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;}   /* 下の案内も押せる大きさ 44 px・間 8 px（Q-760） */
 footer.site a{color:var(--ink-dim);}
