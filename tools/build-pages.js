@@ -368,7 +368,7 @@ ${sections}
 <li>見つけ方と近くの星座の向き: その星座が最も高くなったころに、2つの星の中ほどを見上げたときの上下左右（上は天頂の側）</li>
 <li>明るさ・距離・色は、ほしぞらさんぽの星のデータ（線でつないだ星）の値</li>
 </ul>`;
-  const description = `黄道12星座やオリオン座・北斗七星・南十字星など${CONS.length}星座の見つけ方と神話を、星図・見ごろ・主な星つきで紹介。子ども向けのひらがな解説も。`;
+  const description = `黄道12星座やオリオン座・北斗七星・南十字星など${CONS.length}星座の見つけ方と神話を、星図・見ごろ・主な星つきで紹介。見ごろは東京で夜9時に見たときのめやす。子ども向けのひらがな解説も。`;
   return page({ rel: '../', file: 'zukan/index.html', title: '星座図鑑｜季節の星座の見つけ方と神話｜ほしぞらさんぽ', description, current: 'zukan/', body,
     jsonld: { '@context': 'https://schema.org', '@type': 'CollectionPage', name: '星座図鑑', description, url: BASE + 'zukan/', inLanguage: 'ja' }, src: SELF });
 }
