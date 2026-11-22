@@ -256,7 +256,8 @@ ${nextBox([['Next full moon', 'full'], ['Next new moon', 'new'], ['Next meteor s
 <p class="ev-body"><b>New moon</b><span class="ev-sub">${NEW_MOON_SUB}</span></p>
 ${list}
 <p class="lead">${JST_NOTE} Events after ${yTo} are added once NAOJ publishes them (each February for the next year).</p>
-${sources(inRange.flatMap(e => e.src))}`;
+<p><a href="./lunar-eclipse.html">Lunar eclipse calendar</a></p>
+${sources(inRange.flatMap(e => e.src))}`;   // 月食のページは本文の中から指すリンクが 0 本だった。字は行き先の h1（yorozu-plans D886・Q-1105）
     files.push({ file: 'en/calendar/index.html', html: pageEn({ rel: '../', file: 'en/calendar/index.html', jaFile: 'calendar/index.html',
       title: `Astronomy Calendar ${yFrom}–${yTo}: Full Moons, Meteor Showers, Eclipses and Planets`,
       description: `Sky events for ${yFrom}–${yTo} in date order: full and new moons, meteor shower peaks, eclipses and planet viewing, from NAOJ. Times in UTC and your time zone.`,
