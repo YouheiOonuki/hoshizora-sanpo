@@ -49,3 +49,12 @@ for (const [f, sub, lead] of [
     assert.ok(main.slice(main.indexOf('<p')).startsWith(lead), '最初の段落');
   });
 }
+
+// 月食（英語）のページへ、天文カレンダーの一覧の本文の後ろから 1 行（本文の中から 0 本だった。字は行き先の h1。yorozu-plans D886・Q-1105）
+test('en/calendar/index.html: 本文の後ろに Lunar eclipse calendar へのリンクが 1 行、字は行き先の h1', () => {
+  const html = read('en/calendar/index.html');
+  const h1 = read('en/calendar/lunar-eclipse.html').match(/<h1>([^<]+)<small>/)[1];
+  const line = `<p><a href="./lunar-eclipse.html">${h1}</a></p>`;
+  assert.strictEqual(html.split(line).length - 1, 1);
+  assert.ok(html.indexOf(line) > html.lastIndexOf('<section class="month"'), '一覧の後ろ');
+});
