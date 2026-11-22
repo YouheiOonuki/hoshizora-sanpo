@@ -74,6 +74,9 @@ function planetView(ev) {
   return isoJst(Math.round(E.twilight(mid, evening) / 60000) * 60000);
 }
 
+/* 新月の行の説明。どの新月も同じ文なので行ごとに出さず、一覧の頭に 1 回だけ置く（yorozu-plans D879・Q-1121） */
+const NEW_MOON_SUB = '月明かりがなく、星空の観察に向いた時期';
+
 /* ---------------- 全イベントを1本の日付順リストに ---------------- */
 function allEvents() {
   const ev = [];
@@ -81,7 +84,7 @@ function allEvents() {
   for (const r of O.MOON_PHASES) {
     const p = parts(r.at), full = r.type === 'full', note = full && noteOf(p.date);
     ev.push({ date: p.date, at: r.at, kind: full ? 'full' : 'new', chip: full ? '満月' : '新月',
-      title: full ? '満月' : '新月', sub: note ? note.note : (full ? '' : '月明かりがなく、星空の観察に向いた時期'),
+      title: full ? '満月' : '新月', sub: note ? note.note : '',   // 新月の行ごとの同じ文は、一覧の頭に 1 回だけ（NEW_MOON_SUB。D879・Q-1121）
       view: full ? fullMoonView(r.at) : isoJst(midnightJst(p.date) + 21 * HOUR), look: full ? 'moon' : 'az:180',
       more: full ? 'full-moon.html' : 'new-moon.html', src: note ? [r.src, note.src] : [r.src] });
   }
@@ -189,6 +192,7 @@ module.exports = function buildCalendar({ page, esc, BASE, UPDATED }) {
   <div><span class="chip">次の流星群</span> <span data-next="meteor">${esc(summaryOf(nm))}</span></div>
 </div>
 <nav class="toc no-print" aria-label="解説ページ"><a href="./full-moon.html">満月カレンダー</a><a href="./new-moon.html">新月カレンダー</a><a href="./meteor-showers.html">流星群カレンダー</a><a href="./perseids.html">ペルセウス座流星群</a><a href="./geminids.html">ふたご座流星群</a><a href="./quadrantids.html">しぶんぎ座流星群</a><a href="./lunar-eclipse.html">月食</a><a href="./solar-eclipse.html">日食</a><a href="./planets.html">惑星の見ごろ</a><a href="../tsuki/">月の出・月の入り</a></nav>
+<p class="ev-body"><b>新月</b><span class="ev-sub">${NEW_MOON_SUB}</span></p>
 ${list}
 ${subscribeBox()}
 <p class="lead">${yTo}年12月より先の現象は、国立天文台が暦要項（毎年2月に翌年分を発表）や「ほしぞら情報」で発表したあとに追加します。</p>

@@ -31,3 +31,21 @@ test('満月カレンダー（日英）のメモの列は残す', () => {
   assert.ok(table(read('calendar/full-moon.html')).includes('<th>メモ</th>'));
   assert.ok(table(read('en/calendar/full-moon.html')).includes('<th>Note</th>'));
 });
+
+// 天文カレンダーの一覧（日英）: 新月の行ごとの同じ副題を出さず、一覧の頭に 1 回だけ（yorozu-plans D879・Q-1121）。最初の段落は変えない
+for (const [f, sub, lead] of [
+  ['calendar/index.html', '月明かりがなく、星空の観察に向いた時期', '<p class="lead">これから見られる主な天文現象を日付順にまとめました。'],
+  ['en/calendar/index.html', 'No moonlight: a good time for stargazing', '<p class="lead">Upcoming sky events in date order, from the National Astronomical Observatory of Japan (NAOJ).'],
+]) {
+  test(`${f}: 新月の副題は一覧の頭に 1 回だけで、行には無い`, () => {
+    const html = read(f);
+    assert.strictEqual(html.split(sub).length - 1, 1);
+    const once = html.indexOf(sub), firstList = html.indexOf('<section class="month"');
+    assert.ok(once > 0 && once < firstList, '一覧の前に在る');
+    const rows = [...html.matchAll(/<li class="ev ev-new"[\s\S]*?<\/li>/g)].map(m => m[0]);
+    assert.ok(rows.length > 0);
+    for (const r of rows) assert.ok(!r.includes(sub), '新月の行に副題が残っている');
+    const main = html.slice(html.indexOf('<main'));
+    assert.ok(main.slice(main.indexOf('<p')).startsWith(lead), '最初の段落');
+  });
+}
