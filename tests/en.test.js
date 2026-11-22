@@ -33,7 +33,7 @@ test('カレンダーの注記に英語がある', () => {
 
 test('英語のカレンダーは日本語版と同じ瞬間を載せる（書き写しをしていない）', () => {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const { files } = buildEn({ esc, BASE: 'https://yorozu-craft.com/hoshizora-sanpo/', UPDATED: O.COVERAGE.from, ADSENSE: '', BEACON: '', mark: src => `<!-- 生成物。正本は ${src} -->\n` });
+  const { files } = buildEn({ esc, BASE: 'https://yorozu-craft.com/hoshizora-sanpo/', UPDATED: O.COVERAGE.from, adFor: () => '', BEACON: '', mark: src => `<!-- 生成物。正本は ${src} -->\n` });
   const page = name => files.find(f => f.file === `en/calendar/${name}`).html;
   for (const r of O.MOON_PHASES) {
     const iso = new Date(Date.parse(r.at)).toISOString();
