@@ -199,10 +199,11 @@ ${sourceList(inRange.flatMap(e => e.src), esc)}`;
   }
 
   /* ---- 満月・新月 ---- */
+  // メモの列は満月だけ（行ごとに違う注記が入る）。新月は全部の行が同じ文になるので列を持たず、表の前に 1 文（ROADMAP 7.269 Q-1094）
   const moonTable = (kind) => {
-    const rows = events.filter(e => e.kind === kind);
-    return `<div class="scroll" tabindex="0" data-empty="次の予定は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>時刻</th><th>メモ</th><th><span class="visually-hidden">プラネタリウム</span></th></tr></thead><tbody>${rows.map(e =>
-      `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${dayLabel(e.date)}</td><td class="num">${timeLabel(e.at)}</td><td>${esc(e.sub)}</td><td><a href="${skyLink(e.view, e.look)}">星空を見る →</a></td></tr>`).join('')}</tbody></table></div>`;
+    const rows = events.filter(e => e.kind === kind), memo = kind === 'full';
+    return `<div class="scroll" tabindex="0" data-empty="次の予定は、国立天文台の発表を確認してから掲載します。"><table class="evtable"><thead><tr><th>日付</th><th>時刻</th>${memo ? '<th>メモ</th>' : ''}<th><span class="visually-hidden">プラネタリウム</span></th></tr></thead><tbody>${rows.map(e =>
+      `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${dayLabel(e.date)}</td><td class="num">${timeLabel(e.at)}</td>${memo ? `<td>${esc(e.sub)}</td>` : ''}<td><a href="${skyLink(e.view, e.look)}">星空を見る →</a></td></tr>`).join('')}</tbody></table></div>`;
   };
   {
     const nf = nextOf('full');
@@ -231,6 +232,7 @@ ${sourceList([...O.MOON_PHASES.map(r => r.src), ...O.MOON_NOTES.map(n => n.src),
     const body = `${crumbs('新月カレンダー')}
 <h1>新月カレンダー<small>星がいちばんよく見える夜はいつ？ ${yFrom}–${yTo}年の新月</small></h1>
 <div class="box next"><div><span class="chip">次の新月</span> <span data-next="new">${esc(summaryOf(nn))}</span></div></div>
+<p>新月の前後は月明かりが無く、暗い星まで見えます。</p>
 ${moonTable('new')}
 <h2>新月とは</h2>
 <p>月が太陽と同じ方向にきた瞬間が「新月（朔）」です。月は太陽の光が当たっていない側を地球に向けているうえ、太陽といっしょに昇って沈むので、夜空に月は見えません。</p>
