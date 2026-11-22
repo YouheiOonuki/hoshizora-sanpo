@@ -190,7 +190,7 @@ ${subnav('./', 'hyoki.html')}
 ${groups}
 <h2 class="hyoki-h">星座・星・元素の名</h2><p class="names">${D.ASTRO.map(esc).join('・')}</p>
 <p class="lead">${SRC_LINE}</p>`;
-    const description = 'ギリシャ神話の固有名のカタカナ表記の一覧。ゼウス／ユピテル、エウロペ／エウロパなど、このサイトで使う表記とラテン文字、使わない表記。';
+    const description = 'ギリシャ神話の固有名のカタカナ表記の一覧。ゼウス／ユピテル、エウロペ／エウロパなど、このサイトで使う表記とラテン文字、使わない表記。ギリシャの神と人はギリシャ語の名から、ローマの神はラテン語の名から。';
     files.push({ file, html: page({ rel: '../', file, title: 'ギリシャ神話の表記の一覧｜ほしぞらさんぽ', description, current: 'shinwa/', body,
       jsonld: breadcrumbLd([['ほしぞらさんぽ', BASE], ['ギリシャ神話', BASE + 'shinwa/'], ['表記の一覧', BASE + file]]) }) });
   }
