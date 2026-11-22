@@ -40,7 +40,7 @@ const subToolPages = () => {
   const stub = () => '';
   return {
     'tools/calendar-pages.js': require('../tools/calendar-pages.js')({ page: stub, esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED }).files,
-    'tools/calendar-pages-en.js': require('../tools/calendar-pages-en.js')({ esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED, ADSENSE: '', BEACON: '', mark: stub }).files,
+    'tools/calendar-pages-en.js': require('../tools/calendar-pages-en.js')({ esc: String, BASE: '', UPDATED: require('../tools/official-events.js').CHECKED, adFor: () => '', BEACON: '', mark: stub }).files,
     'tools/shinwa-pages.js': require('../tools/shinwa-pages.js')({ page: stub, esc: String, CONS: require('../data.js').CONS }).files,
   };
 };

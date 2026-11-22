@@ -33,6 +33,9 @@ const ADSENSE = `<meta name="google-adsense-account" content="ca-pub-53752679560
 // 通ったら本文を足したページからここを外して戻す（サイト本体 tools/check-site.mjs の REVIEW_NO_AD_PAGES と同じ）
 const ADSENSE_META = ADSENSE.split('\n')[0];
 const reviewNoAd = file => /^zukan\/[a-z]+\.html$/.test(file) || file === 'shinwa/seiza/index.html';
+// 審査員の目で広告を外した読み物（yorozu-plans ROADMAP 7.269・D863。サイト本体 tools/ad-lists.mjs の META_ONLY_PAGES と同じ。審査の後も戻さない）
+const NO_AD = new Set(['shinwa/index.html', 'shinwa/keizu.html', 'shinwa/hyoki.html', 'calendar/new-moon.html', 'en/calendar/new-moon.html']);
+const adFor = file => (reviewNoAd(file) || NO_AD.has(file) ? ADSENSE_META : ADSENSE);
 const BEACON = `<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b79bf821e1fd4b6683866d493b1de426"}'></script><!-- End Cloudflare Web Analytics -->`;
 
 /** 日英の対（README「ツールを追加するとき」23）: 両方のページに ja・en・x-default（＝日本語）の 3 行 */
@@ -72,7 +75,7 @@ ${alt ? hreflang(file, alt) + '\n' : ''}<meta property="og:title" content="${esc
 <link rel="icon" href="${rel}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${rel}apple-touch-icon.png">
 <link rel="manifest" href="${rel}manifest.webmanifest">
-${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${reviewNoAd(file) ? ADSENSE_META : ADSENSE}
+${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${adFor(file)}
 <link rel="stylesheet" href="${rel}pages.css">
 </head>
 <body${paper ? ' class="paper"' : ''}>
@@ -443,7 +446,7 @@ fs.mkdirSync(path.join(OUT, 'zukan'), { recursive: true });
 fs.mkdirSync(path.join(OUT, 'calendar'), { recursive: true });
 fs.mkdirSync(path.join(OUT, 'en/calendar'), { recursive: true });
 const out = (file, html) => fs.writeFileSync(path.join(OUT, file), html);
-const en = buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON, mark });
+const en = buildEn({ esc, BASE, UPDATED, adFor, BEACON, mark });
 en.files.forEach(f => out(f.file, f.html));
 out('zukan/index.html', zukanIndex());
 ordered.forEach((c, i) => out(`zukan/${c.id}.html`, conPage(c, i)));

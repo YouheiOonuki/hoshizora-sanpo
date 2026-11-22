@@ -154,7 +154,7 @@ document.querySelectorAll('time.yt').forEach(function(e){e.textContent=f.format(
 </script>`;
 const JST_NOTE = 'Dates marked JST are Japan dates (UTC+9); in the Americas and Europe the same event may fall on the previous day.';
 
-module.exports = function buildEn({ esc, BASE, UPDATED, ADSENSE, BEACON, mark }) {
+module.exports = function buildEn({ esc, BASE, UPDATED, adFor, BEACON, mark }) {
   const events = eventsEn();
   const files = [];
   const yFrom = O.COVERAGE.from.slice(0, 4), yTo = O.COVERAGE.to.slice(0, 4);
@@ -196,7 +196,7 @@ ${mark('tools/calendar-pages-en.js')}<html lang="en" data-skin="base">
 <link rel="icon" href="${rel}../favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/hoshizora-sanpo/manifest.webmanifest">
 <link rel="apple-touch-icon" href="${rel}../apple-touch-icon.png">
-${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${ADSENSE}
+${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}${adFor(file)}
 <link rel="stylesheet" href="${rel}../pages.css">
 </head>
 <body${paper ? ' class="paper"' : ''}>
