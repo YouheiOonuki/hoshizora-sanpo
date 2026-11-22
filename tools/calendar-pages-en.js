@@ -261,8 +261,9 @@ ${sources(inRange.flatMap(e => e.src))}`;
   }
 
   /* ---- 満月・新月 ---- */
-  const moonTable = kind => `<div class="scroll" tabindex="0" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date and time (UTC)</th><th>Your time</th><th>Note</th><th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${events.filter(e => e.kind === kind).map(e =>
-    `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${utcLabel(e.ms)}<br><span class="num">${utcTime(e.ms)}</span></td><td>${localTime(e.ms)}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('')}</tbody></table></div>`;
+  // Note の列は満月だけ。新月は全部の行が同じ文になるので列を持たず、表の前に 1 文（ROADMAP 7.269 Q-1094）
+  const moonTable = kind => `<div class="scroll" tabindex="0" data-empty="The next dates will be added after checking NAOJ’s announcement."><table class="evtable"><thead><tr><th>Date and time (UTC)</th><th>Your time</th>${kind === 'full' ? '<th>Note</th>' : ''}<th><span class="visually-hidden">Planetarium</span></th></tr></thead><tbody>${events.filter(e => e.kind === kind).map(e =>
+    `<tr data-date="${e.date}" data-kind="${kind}" data-summary="${esc(summaryOf(e))}"><td>${utcLabel(e.ms)}<br><span class="num">${utcTime(e.ms)}</span></td><td>${localTime(e.ms)}</td>${kind === 'full' ? `<td>${esc(e.sub)}</td>` : ''}<td><a href="${e.link}">See the sky →</a></td></tr>`).join('')}</tbody></table></div>`;
   {
     const views = events.filter(e => e.kind === 'moonview').map(e => `<tr data-date="${e.date}"><td>${jstDateLabel(e.date)}</td><td>${esc(TSUKIMI[O.MOON_VIEWING.find(v => v.date === e.date).name])}</td><td>${esc(e.sub)}</td><td><a href="${e.link}">See the sky →</a></td></tr>`).join('');
     const body = `${crumbs('Full moons')}
@@ -287,6 +288,7 @@ ${sources([...O.MOON_PHASES.map(r => r.src), ...O.MOON_NOTES.map(n => n.src), ..
     const body = `${crumbs('New moons')}
 <h1>New moon calendar<small>Dark nights for stargazing: new moon dates and times ${yFrom}–${yTo}</small></h1>
 ${nextBox([['Next new moon', 'new']])}
+<p>Around a new moon the sky is free of moonlight, so faint stars are easier to see.</p>
 ${moonTable('new')}
 <h2>What is a new moon?</h2>
 <p>A new moon is the moment the Moon is in the same direction as the Sun. Its unlit side faces Earth, and it rises and sets with the Sun, so you cannot see it at night.</p>
