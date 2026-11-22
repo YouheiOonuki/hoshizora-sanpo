@@ -9,6 +9,8 @@ const A = require('../astro.js');
 const O = require('./official-events.js');
 const C = require('./calendar-pages.js');
 const { CONS } = require('../data.js');
+/* 新月の行の説明。どの新月も同じ文なので行ごとに出さず、一覧の頭に 1 回だけ置く（yorozu-plans D879・Q-1121） */
+const NEW_MOON_SUB = 'No moonlight: a good time for stargazing';
 
 const DEG = A.DEG, HOUR = 3600000, DAY = 86400000;
 const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -99,7 +101,7 @@ function eventsEn() {
       const note = e.kind === 'full' && O.MOON_NOTES.find(n => n.date === e.date);
       x.chip = 'Moon';
       x.title = e.kind === 'full' ? 'Full moon' : 'New moon';
-      x.sub = note ? note.en : e.kind === 'new' ? 'No moonlight: a good time for stargazing' : '';
+      x.sub = note ? note.en : '';   // 新月の行ごとの同じ文は、一覧の頭に 1 回だけ（NEW_MOON_SUB。D879・Q-1121）
       x.link = sky({ lt: `${x.date}T21:00`, look: e.kind === 'full' ? 'moon' : '' });
       x.more = e.kind === 'full' ? 'full-moon.html' : 'new-moon.html';
     } else if (e.kind === 'moonview') {
@@ -251,6 +253,7 @@ ${script ? PAGE_SCRIPT + '\n' : ''}${BEACON}
 ${nextBox([['Next full moon', 'full'], ['Next new moon', 'new'], ['Next meteor shower', 'meteor']])}
 <nav class="toc no-print" aria-label="Topics"><a href="./full-moon.html">Full moons</a><a href="./new-moon.html">New moons</a><a href="./meteor-showers.html">Meteor showers</a><a href="./perseids.html">Perseids</a><a href="./geminids.html">Geminids</a><a href="./quadrantids.html">Quadrantids</a><a href="./lunar-eclipse.html">Lunar eclipses</a><a href="./solar-eclipse.html">Solar eclipses</a><a href="./planets.html">Planets</a></nav>
 <h2>Upcoming events</h2>
+<p class="ev-body"><b>New moon</b><span class="ev-sub">${NEW_MOON_SUB}</span></p>
 ${list}
 <p class="lead">${JST_NOTE} Events after ${yTo} are added once NAOJ publishes them (each February for the next year).</p>
 ${sources(inRange.flatMap(e => e.src))}`;
