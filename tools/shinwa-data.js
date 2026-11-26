@@ -38,7 +38,7 @@ const SOURCES = {
   ciaaw: { title: 'IUPAC 原子量および同位体存在度委員会（CIAAW）の元素のページ', short: 'CIAAW',
     ed: 'https://www.ciaaw.org/<英語名>.htm の名前の由来の段落', url: 'https://www.ciaaw.org/', where: '' },
   lanl: { title: 'ロスアラモス国立研究所（米国エネルギー省）の周期表', short: 'LANL',
-    ed: 'https://periodic.lanl.gov/<原子番号>.shtml（CIAAW にページの無い 61・93・94 番）', url: 'https://periodic.lanl.gov/', where: '' },
+    ed: 'https://www.lanl.gov/science-engineering/periodic-table/element/<英語名>（CIAAW にページの無い 61・93・94 番）', url: 'https://www.lanl.gov/science-engineering/periodic-table', where: '' },
 };
 const cite = ([k, at]) => `${SOURCES[k].short}${at ? ' ' + at : ''}`;
 
