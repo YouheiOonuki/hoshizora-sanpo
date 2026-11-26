@@ -1,0 +1,23 @@
+{
+  "html": {
+    "shinwa/hyoki.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/index.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/kamigami.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/keizu.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/namae.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/ari.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/cen.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/crb.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/gem.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/index.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/lyr.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/oph.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/ori.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/per.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/psc.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/tau.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/uma.html": "tools/shinwa-data.js#CHECKED",
+    "shinwa/seiza/vir.html": "tools/shinwa-data.js#CHECKED",
+    "tsuki/guide.html": "tests/fixtures/naoj-moon.json#retrieved"
+  }
+}
